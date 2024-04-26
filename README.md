@@ -1,4 +1,12 @@
-### Hi there 👋
+### Opa! Eu sou Caique Pessan. 👋
+Tenho 21 anos, e sou fascinado por tecnologia.
+Desenvolver para mim é uma paixão.
+
+## Minha linguagem principal é ![Python](https://img.shields.io/badge/Python-14354C?style=for-the-badge&logo=python&logoColor=white) e sou especializado em desenvolvimento para o **Discord**.
+
+[![Discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/astroverso)  [![Linkedln](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/caique-pessan-02205324b/)  [![Youtube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/channel/UCzuT7Xvy7t3Eeo4APoQC8PA)
+
+![CaiquePessan GitHub stats](https://github-readme-stats.vercel.app/api?username=caiquepessan&show_icons=true&theme=dracula)
 
 <!--
 **caiquepessan/caiquepessan** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
