@@ -37,7 +37,7 @@ class CaiquePessan:
 
 Tenho **23 anos** 🎉 e sou apaixonado por tecnologia. Minha base é **Python** com
 especialização profunda no ecossistema **Discord** e em arquiteturas de **backend
-escaláveis** — mas gosto de descer a stack toda quando o projeto pede.
+escaláveis**, mas gosto de descer a stack toda quando o projeto pede.
 
 ---
 
@@ -124,12 +124,12 @@ escaláveis** — mas gosto de descer a stack toda quando o projeto pede.
 
 ## 📂 Projetos em Destaque
 
-- 🤖 **Bots Discord** — sistemas de economia e moderação avançados.
-- 🌐 **APIs RESTful** — performáticas e seguras.
+- 🤖 **Bots Discord**: sistemas de economia e moderação avançados.
+- 🌐 **APIs RESTful**: performáticas e seguras.
 - 📱 **Aplicações Full Stack** modernas (como o **Clippr!**).
-- 🟣 **[twitch-auto-claim](https://github.com/caiquepessan/twitch-auto-claim)** — extensão MV3 que automatiza resgates na Twitch.
+- 🟣 **[twitch-auto-claim](https://github.com/caiquepessan/twitch-auto-claim)**: extensão MV3 que automatiza resgates na Twitch.
 
-> Explore tudo no meu [GitHub »](https://github.com/caiquepessan?tab=repositories)
+> Explore tudo no meu [GitHub](https://github.com/caiquepessan?tab=repositories)
 
 ---
 
