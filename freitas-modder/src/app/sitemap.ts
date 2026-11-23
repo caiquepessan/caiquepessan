@@ -6,9 +6,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteConfig.url;
   return [
     { url: base, changeFrequency: "weekly", priority: 1 },
-    { url: `${base}/contas`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${base}/loja`, changeFrequency: "weekly", priority: 0.9 },
     ...products.map((p) => ({
-      url: `${base}/contas/${p.slug}`,
+      url: `${base}/loja/${p.slug}`,
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),

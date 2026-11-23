@@ -20,8 +20,12 @@ import { findVariant, getProduct, platforms, type Platform } from "@/data/produc
 import { cn, formatBRL } from "@/lib/utils";
 import { useConsole } from "@/store/console";
 
-const product = getProduct("conta-pro")!;
-const specs = product.specs.filter((spec) => spec.label !== "Dinheiro").slice(0, 3);
+/** O pacote em destaque no topo. */
+const product = getProduct("dinheiro-500-milhoes")!;
+const specs = [
+  ...product.specs.filter((spec) => spec.label !== "Dinheiro"),
+  { label: "Onde entra", value: "No seu personagem" },
+].slice(0, 3);
 const money = `$${new Intl.NumberFormat("pt-BR").format(product.amount ?? 0)}`;
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -75,7 +79,7 @@ function useConsoleReady() {
 }
 
 /**
- * Dois cards em 3D: na frente a Conta Pro do console escolhido, atrás a
+ * Dois cards em 3D: na frente o pacote de $500 milhões no console escolhido, atrás o
  * do outro console. Ao trocar de console, os dois giram e trocam de lado.
  */
 export function HeroCards() {
@@ -409,13 +413,13 @@ function Face({
             )}
             style={depth(16)}
           >
-            {product.name}
+            {product.tag ?? product.name}
           </p>
         </div>
 
         <div className="mt-9 backface-hidden" style={depth(46)}>
           <p className={cn("text-[15px] font-medium", red ? "text-white/80" : "text-stone-400")}>
-            Dinheiro no banco
+            Dinheiro na sua conta
           </p>
           <div
             className={cn(
@@ -457,7 +461,7 @@ function Face({
           </div>
           {front ? (
             <Link
-              href={`/contas/${product.slug}`}
+              href={`/loja/${product.slug}`}
               prefetch
               data-cursor="link"
               style={depth(52)}
@@ -468,7 +472,7 @@ function Face({
                   : "bg-brand-500 shadow-[0_10px_28px_-10px_rgba(232,24,44,0.9)] hover:bg-brand-600",
               )}
             >
-              Ver conta
+              Ver pacote
               <ArrowRight className="size-4 transition-transform duration-200 group-hover/link:translate-x-0.5" />
             </Link>
           ) : (
@@ -478,7 +482,7 @@ function Face({
                 red ? "bg-ink-950" : "bg-brand-500",
               )}
             >
-              Ver conta
+              Ver pacote
             </span>
           )}
         </div>

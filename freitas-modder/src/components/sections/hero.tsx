@@ -37,13 +37,13 @@ export function Hero() {
             className="after-intro mt-7 max-w-md animate-fade-up text-pretty text-lg leading-relaxed text-stone-300"
             style={delay(420)}
           >
-            Dinheiro, nível alto, carros modificados e tudo desbloqueado. Você paga
-            no Pix e recebe a conta no WhatsApp.
+            Milhões no banco, level alto e Unlock All com Corrida Modder, direto no
+            seu personagem. Você paga no Pix e combina tudo pelo WhatsApp.
           </p>
           <div className="after-intro mt-8 flex animate-fade-up flex-wrap gap-3" style={delay(500)}>
             <Magnetic>
-              <ButtonLink href="/contas" size="lg">
-                Ver contas
+              <ButtonLink href="/loja" size="lg">
+                Ver preços
                 <ArrowRight className="size-5 transition-transform duration-200 group-hover/btn:translate-x-1" />
               </ButtonLink>
             </Magnetic>
@@ -67,7 +67,7 @@ export function Hero() {
           >
             <div>
               <dt className="text-sm text-stone-500">Entrega</dt>
-              <dd className="mt-1 font-semibold">Até {business.avgDeliveryMinutes} min</dd>
+              <dd className="mt-1 font-semibold">Rápida</dd>
             </div>
             <div>
               <dt className="text-sm text-stone-500">Garantia</dt>

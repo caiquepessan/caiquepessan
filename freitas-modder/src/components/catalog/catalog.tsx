@@ -4,12 +4,12 @@ import { AnimatePresence, motion } from "motion/react";
 import { useSearchParams } from "next/navigation";
 import { ConsoleSwitch } from "@/components/product/console-switch";
 import { ProductCard } from "@/components/product/product-card";
-import { categories, products, type Category } from "@/data/products";
+import { categories, categoryOrder, products, type Category } from "@/data/products";
 import { cn } from "@/lib/utils";
 
 type CategoryFilter = Category | "all";
 
-const options: CategoryFilter[] = ["all", "conta", "dinheiro", "servico"];
+const options: CategoryFilter[] = ["all", ...categoryOrder];
 
 function parseCategory(value: string | null): CategoryFilter {
   return value && value in categories ? (value as Category) : "all";
@@ -55,7 +55,7 @@ function CatalogView({
           })}
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[15px] text-stone-400">Preços para</span>
+          <span className="text-[15px] text-stone-400">Seu console</span>
           <ConsoleSwitch />
         </div>
       </div>
@@ -86,7 +86,7 @@ function CatalogView({
   );
 }
 
-/** Catálogo com a categoria salva na URL (?categoria=conta). */
+/** Catálogo com a categoria salva na URL (?categoria=dinheiro). */
 export function Catalog() {
   const searchParams = useSearchParams();
   const category = parseCategory(searchParams.get("categoria"));

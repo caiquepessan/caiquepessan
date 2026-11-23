@@ -2,14 +2,17 @@
  * ============================================================
  *  CATÁLOGO: adicione, remova ou edite produtos aqui
  * ============================================================
- *  - `slug` vira a URL do produto: /contas/<slug>
+ *  - `slug` vira a URL do produto: /loja/<slug>
  *  - `variants` tem o preço de cada console. Se o produto não existir
  *    para um console, é só não colocar a variante dele.
- *  - Preços, números e textos abaixo são EXEMPLOS.
+ *  - Produto com preço combinado no WhatsApp (ex.: conta única):
+ *    deixe `variants: []`. O site mostra "Preço no WhatsApp" e um botão
+ *    para perguntar, em vez do carrinho.
+ *  - Preços da tabela do Freitas (mesmo valor no PS4 e no PS5).
  */
 
 export type Platform = "ps4" | "ps5";
-export type Category = "conta" | "dinheiro" | "servico";
+export type Category = "dinheiro" | "level" | "servico" | "conta";
 /** Cor do painel do produto. */
 export type Tone = "graphite" | "red" | "wine" | "black";
 
@@ -28,18 +31,19 @@ export interface Product {
   /** Texto da página do produto. */
   description: string;
   category: Category;
-  /** Destaque grande do painel, ex.: { value: "$1 BI", label: "no banco" }. */
+  /** Destaque grande do painel, ex.: { value: "$500 MI", label: "na sua conta" }. */
   headline: { value: string; label: string };
   /** Valor em dinheiro do jogo, para o contador animado (opcional). */
   amount?: number;
   specs: { label: string; value: string }[];
   includes: string[];
+  /** Vazio = preço combinado no WhatsApp. */
   variants: ProductVariant[];
   delivery: string;
   tone: Tone;
-  /** Etiqueta opcional, ex.: "Mais pedida". */
+  /** Etiqueta opcional, ex.: "Melhor preço". */
   tag?: string;
-  /** Opcional: print real do produto em /public (ex.: "/produtos/conta-pro.jpg"). */
+  /** Opcional: print real do produto em /public (ex.: "/produtos/conta-level-120.jpg"). */
   image?: string;
 }
 
@@ -51,259 +55,235 @@ export const platforms: Record<Platform, { label: string; long: string }> = {
 export const platformOrder: Platform[] = ["ps4", "ps5"];
 
 export const categories: Record<Category, { label: string; short: string }> = {
-  conta: { label: "Contas prontas", short: "Contas" },
   dinheiro: { label: "Dinheiro na sua conta", short: "Dinheiro" },
-  servico: { label: "Serviços na sua conta", short: "Serviços" },
+  level: { label: "Up de level / RP", short: "Level" },
+  servico: { label: "Combo promocional", short: "Unlock All" },
+  conta: { label: "Conta pronta", short: "Contas" },
 };
 
+/** Ordem das categorias no site. */
+export const categoryOrder: Category[] = ["dinheiro", "level", "servico", "conta"];
+
+/** Mesmo preço no PS4 e no PS5. */
+function both(price: number): ProductVariant[] {
+  return platformOrder.map((platform) => ({ platform, price }));
+}
+
+const PIX_E_CONSOLE = "No PS4 ou no PS5, pelo mesmo preço";
+
 export const products: Product[] = [
-  // ----------------------------- CONTAS -----------------------------
+  // ------------------------- DINHEIRO NA SUA CONTA -------------------------
   {
-    slug: "conta-starter",
-    name: "Conta Starter",
-    summary: "Pra começar o online sem farmar do zero.",
+    slug: "dinheiro-20-milhoes",
+    name: "$20 milhões",
+    summary: "Pra comprar aquele carro ou começar um negócio.",
     description:
-      "Personagem criado, dinheiro pra montar a garagem e alguns carros já no máximo. É a forma mais barata de entrar no online com tudo andando.",
-    category: "conta",
-    headline: { value: "$300 MI", label: "no banco" },
-    amount: 300_000_000,
+      "A gente coloca 20 milhões direto no seu personagem do GTA Online, sem você precisar farmar. Sai a R$ 0,50 o milhão.",
+    category: "dinheiro",
+    headline: { value: "$20 MI", label: "na sua conta" },
+    amount: 20_000_000,
     specs: [
-      { label: "Nível", value: "120+" },
-      { label: "Dinheiro", value: "$300 milhões" },
-      { label: "Carros", value: "15 modificados" },
+      { label: "Dinheiro", value: "$20 milhões" },
+      { label: "Sai a", value: "R$ 0,50 o milhão" },
+      { label: "Entrega", value: "Rápida" },
     ],
-    includes: [
-      "Conta PSN com e-mail e senha que você troca",
-      "Personagem pronto no online",
-      "15 carros com melhorias no máximo",
-      "Apartamento com garagem",
-    ],
-    variants: [
-      { platform: "ps4", price: 39.9 },
-      { platform: "ps5", price: 49.9 },
-    ],
-    delivery: "Imediata",
+    includes: ["$20 milhões no seu personagem", PIX_E_CONSOLE, "Pagamento no Pix"],
+    variants: both(10),
+    delivery: "Rápida",
     tone: "graphite",
   },
   {
-    slug: "conta-pro",
-    name: "Conta Pro",
-    summary: "Um bilhão no banco e garagem cheia.",
+    slug: "dinheiro-50-milhoes",
+    name: "$50 milhões",
+    summary: "Dá pra montar a garagem e ainda sobra.",
     description:
-      "Nível 350, um bilhão de dinheiro, 40 carros modificados e as armas liberadas. Dá pra comprar os negócios principais e começar a lucrar no primeiro dia.",
-    category: "conta",
-    headline: { value: "$1 BI", label: "no banco" },
-    amount: 1_000_000_000,
+      "A gente coloca 50 milhões direto no seu personagem do GTA Online, sem você precisar farmar. Sai a R$ 0,40 o milhão.",
+    category: "dinheiro",
+    headline: { value: "$50 MI", label: "na sua conta" },
+    amount: 50_000_000,
     specs: [
-      { label: "Nível", value: "350+" },
-      { label: "Dinheiro", value: "$1 bilhão" },
-      { label: "Carros", value: "40 modificados" },
-      { label: "Armas", value: "Todas liberadas" },
+      { label: "Dinheiro", value: "$50 milhões" },
+      { label: "Sai a", value: "R$ 0,40 o milhão" },
+      { label: "Entrega", value: "Rápida" },
     ],
-    includes: [
-      "Conta PSN com e-mail e senha que você troca",
-      "$1 bilhão no banco",
-      "40 carros modificados",
-      "Armas liberadas com melhorias",
-      "Negócios principais comprados",
-    ],
-    variants: [
-      { platform: "ps4", price: 79.9 },
-      { platform: "ps5", price: 89.9 },
-    ],
-    delivery: "Imediata",
-    tone: "red",
-    tag: "Mais pedida",
-  },
-  {
-    slug: "conta-elite",
-    name: "Conta Elite",
-    summary: "Tudo desbloqueado, roupas modadas e $3 bi.",
-    description:
-      "Unlock All completo, roupas modadas, 80 carros e três bilhões no banco. Pra quem quer chegar no online com tudo que o jogo tem.",
-    category: "conta",
-    headline: { value: "$3 BI", label: "no banco" },
-    amount: 3_000_000_000,
-    specs: [
-      { label: "Nível", value: "800+" },
-      { label: "Dinheiro", value: "$3 bilhões" },
-      { label: "Carros", value: "80 modificados" },
-      { label: "Unlock All", value: "Completo" },
-    ],
-    includes: [
-      "Conta PSN com e-mail e senha que você troca",
-      "$3 bilhões no banco",
-      "80 carros modificados",
-      "Unlock All: troféus, tatuagens, roupas e pinturas",
-      "Roupas modadas",
-    ],
-    variants: [
-      { platform: "ps4", price: 149.9 },
-      { platform: "ps5", price: 169.9 },
-    ],
-    delivery: "Imediata",
+    includes: ["$50 milhões no seu personagem", PIX_E_CONSOLE, "Pagamento no Pix"],
+    variants: both(20),
+    delivery: "Rápida",
     tone: "wine",
   },
   {
-    slug: "conta-lendaria",
-    name: "Conta Lendária",
-    summary: "A conta mais completa da loja.",
+    slug: "dinheiro-100-milhoes",
+    name: "$100 milhões",
+    summary: "Pra comprar os negócios e começar a lucrar.",
     description:
-      "Nível 8000, dez bilhões no banco, mais de 150 carros modificados, roupas raras e tudo desbloqueado. Não falta nada.",
-    category: "conta",
-    headline: { value: "$10 BI", label: "no banco" },
-    amount: 10_000_000_000,
+      "A gente coloca 100 milhões direto no seu personagem do GTA Online, sem você precisar farmar. Sai a R$ 0,35 o milhão.",
+    category: "dinheiro",
+    headline: { value: "$100 MI", label: "na sua conta" },
+    amount: 100_000_000,
     specs: [
-      { label: "Nível", value: "8000" },
-      { label: "Dinheiro", value: "$10 bilhões" },
-      { label: "Carros", value: "150+ modificados" },
-      { label: "Unlock All", value: "Completo" },
+      { label: "Dinheiro", value: "$100 milhões" },
+      { label: "Sai a", value: "R$ 0,35 o milhão" },
+      { label: "Entrega", value: "Rápida" },
     ],
-    includes: [
-      "Conta PSN com e-mail e senha que você troca",
-      "$10 bilhões no banco",
-      "Mais de 150 carros modificados",
-      "Unlock All e habilidades no máximo",
-      "Roupas modadas raras",
-      "Todas as propriedades e negócios",
-    ],
-    variants: [
-      { platform: "ps4", price: 299.9 },
-      { platform: "ps5", price: 349.9 },
-    ],
-    delivery: "Imediata",
+    includes: ["$100 milhões no seu personagem", PIX_E_CONSOLE, "Pagamento no Pix"],
+    variants: both(35),
+    delivery: "Rápida",
     tone: "black",
   },
-
-  // ------------------------- DINHEIRO NA CONTA -------------------------
   {
     slug: "dinheiro-500-milhoes",
     name: "$500 milhões",
-    summary: "Meio bilhão direto no seu personagem.",
+    summary: "O pacote que mais compensa: sai a R$ 0,24 o milhão.",
     description:
-      "A gente coloca $500 milhões na sua própria conta, sem você precisar começar outra. Bom pra comprar aquele carro, a cobertura ou o negócio que você tá de olho.",
+      "A gente coloca 500 milhões direto no seu personagem do GTA Online, sem você precisar farmar. É o pacote com o menor preço por milhão: R$ 0,24.",
     category: "dinheiro",
     headline: { value: "$500 MI", label: "na sua conta" },
     amount: 500_000_000,
     specs: [
-      { label: "Valor", value: "$500 milhões" },
-      { label: "Onde", value: "Na sua conta" },
-      { label: "Prazo", value: "Até 1 hora" },
+      { label: "Dinheiro", value: "$500 milhões" },
+      { label: "Sai a", value: "R$ 0,24 o milhão" },
+      { label: "Entrega", value: "Rápida" },
     ],
-    includes: [
-      "Dinheiro depositado no seu personagem",
-      "Acompanhamento pelo WhatsApp",
-      "Garantia de reposição",
+    includes: ["$500 milhões no seu personagem", PIX_E_CONSOLE, "Pagamento no Pix"],
+    variants: both(120),
+    delivery: "Rápida",
+    tone: "red",
+    tag: "Melhor preço",
+  },
+
+  // ---------------------------- UP DE LEVEL / RP ----------------------------
+  {
+    slug: "level-30",
+    name: "30 levels",
+    summary: "Pra sair do começo sem ficar repetindo missão.",
+    description:
+      "Sobe 30 levels (RP) no seu personagem sem você precisar farmar. Sai a R$ 0,33 o level.",
+    category: "level",
+    headline: { value: "+30", label: "levels" },
+    specs: [
+      { label: "Levels", value: "+30" },
+      { label: "Sai a", value: "R$ 0,33 o level" },
+      { label: "Entrega", value: "Rápida" },
     ],
-    variants: [
-      { platform: "ps4", price: 29.9 },
-      { platform: "ps5", price: 34.9 },
-    ],
-    delivery: "Até 1 hora",
+    includes: ["+30 levels (RP) no seu personagem", PIX_E_CONSOLE, "Pagamento no Pix"],
+    variants: both(10),
+    delivery: "Rápida",
     tone: "graphite",
   },
   {
-    slug: "dinheiro-2-bilhoes",
-    name: "$2 bilhões",
-    summary: "Dois bilhões direto no seu personagem.",
+    slug: "level-75",
+    name: "75 levels",
+    summary: "Libera mais armas, roupas e veículos de rank.",
     description:
-      "Dois bilhões na sua própria conta pra montar o império inteiro: carros, propriedades e todos os negócios.",
-    category: "dinheiro",
-    headline: { value: "$2 BI", label: "na sua conta" },
-    amount: 2_000_000_000,
+      "Sobe 75 levels (RP) no seu personagem sem você precisar farmar. Sai a R$ 0,26 o level.",
+    category: "level",
+    headline: { value: "+75", label: "levels" },
     specs: [
-      { label: "Valor", value: "$2 bilhões" },
-      { label: "Onde", value: "Na sua conta" },
-      { label: "Prazo", value: "Até 2 horas" },
+      { label: "Levels", value: "+75" },
+      { label: "Sai a", value: "R$ 0,26 o level" },
+      { label: "Entrega", value: "Rápida" },
     ],
-    includes: [
-      "Dinheiro depositado no seu personagem",
-      "Acompanhamento pelo WhatsApp",
-      "Garantia de reposição",
-    ],
-    variants: [
-      { platform: "ps4", price: 69.9 },
-      { platform: "ps5", price: 79.9 },
-    ],
-    delivery: "Até 2 horas",
-    tone: "red",
-  },
-
-  // ------------------------------ SERVIÇOS ------------------------------
-  {
-    slug: "unlock-all",
-    name: "Unlock All",
-    summary: "Libera troféus, tatuagens, roupas e melhorias de armas.",
-    description:
-      "Desbloqueia de uma vez o que levaria meses: troféus, tatuagens, roupas, pinturas, melhorias de armas e habilidades no máximo.",
-    category: "servico",
-    headline: { value: "100%", label: "desbloqueado" },
-    specs: [
-      { label: "O que libera", value: "Tudo" },
-      { label: "Onde", value: "Na sua conta" },
-      { label: "Prazo", value: "Até 1 hora" },
-    ],
-    includes: [
-      "Troféus, tatuagens e roupas",
-      "Pinturas e melhorias de armas",
-      "Habilidades do personagem no máximo",
-    ],
-    variants: [
-      { platform: "ps4", price: 39.9 },
-      { platform: "ps5", price: 44.9 },
-    ],
-    delivery: "Até 1 hora",
+    includes: ["+75 levels (RP) no seu personagem", PIX_E_CONSOLE, "Pagamento no Pix"],
+    variants: both(20),
+    delivery: "Rápida",
     tone: "wine",
   },
   {
-    slug: "upar-nivel",
-    name: "Upar nível",
-    summary: "Sobe seu personagem até o nível 500.",
+    slug: "level-150",
+    name: "150 levels",
+    summary: "Um salto grande de level de uma vez.",
     description:
-      "Leva seu personagem do nível atual até o 500, com os desbloqueios de rank que vêm junto. Sem horas repetindo missão.",
-    category: "servico",
-    headline: { value: "500", label: "de nível" },
+      "Sobe 150 levels (RP) no seu personagem sem você precisar farmar. Sai a R$ 0,23 o level.",
+    category: "level",
+    headline: { value: "+150", label: "levels" },
     specs: [
-      { label: "Até o nível", value: "500" },
-      { label: "Onde", value: "Na sua conta" },
-      { label: "Prazo", value: "Até 1 hora" },
+      { label: "Levels", value: "+150" },
+      { label: "Sai a", value: "R$ 0,23 o level" },
+      { label: "Entrega", value: "Rápida" },
     ],
-    includes: [
-      "Qualquer nível até o 500",
-      "Desbloqueios de rank inclusos",
-      "Garantia de reposição",
-    ],
-    variants: [
-      { platform: "ps4", price: 34.9 },
-      { platform: "ps5", price: 39.9 },
-    ],
-    delivery: "Até 1 hora",
-    tone: "graphite",
+    includes: ["+150 levels (RP) no seu personagem", PIX_E_CONSOLE, "Pagamento no Pix"],
+    variants: both(35),
+    delivery: "Rápida",
+    tone: "black",
   },
   {
-    slug: "pack-carros-modificados",
-    name: "Pack de carros",
-    summary: "10 carros com rodas e pinturas fora do padrão.",
+    slug: "level-500",
+    name: "500 levels",
+    summary: "O que mais compensa: sai a R$ 0,18 o level.",
     description:
-      "Dez carros com modificações que não existem na loja do jogo: rodas especiais, pinturas cromadas e combinações exclusivas. Você escolhe os modelos.",
-    category: "servico",
-    headline: { value: "10", label: "carros modificados" },
+      "Sobe 500 levels (RP) no seu personagem sem você precisar farmar. É o pacote com o menor preço por level: R$ 0,18.",
+    category: "level",
+    headline: { value: "+500", label: "levels" },
     specs: [
-      { label: "Carros", value: "10" },
-      { label: "Modelos", value: "Você escolhe" },
-      { label: "Prazo", value: "Até 2 horas" },
+      { label: "Levels", value: "+500" },
+      { label: "Sai a", value: "R$ 0,18 o level" },
+      { label: "Entrega", value: "Rápida" },
+    ],
+    includes: ["+500 levels (RP) no seu personagem", PIX_E_CONSOLE, "Pagamento no Pix"],
+    variants: both(90),
+    delivery: "Rápida",
+    tone: "red",
+    tag: "Melhor custo-benefício",
+  },
+
+  // ------------------------ UNLOCK ALL + CORRIDA MODDER ------------------------
+  {
+    slug: "unlock-all-corrida-modder",
+    name: "Unlock All + Corrida Modder",
+    summary: "Tudo liberado e o personagem correndo muito mais rápido.",
+    description:
+      "Desbloqueio completo do personagem com a Corrida Modder ativada: ele corre muito mais rápido e fica mais ágil no PvP. O preço é por personagem.",
+    category: "servico",
+    headline: { value: "100%", label: "liberado + corrida modder" },
+    specs: [
+      { label: "Unlock All", value: "Completo" },
+      { label: "Corrida Modder", value: "Ativada" },
+      { label: "Preço", value: "Por personagem" },
     ],
     includes: [
-      "10 carros modificados na sua garagem",
-      "Rodas e pinturas especiais",
-      "Modelos à sua escolha",
+      "Desbloqueio completo (Unlock All)",
+      "Todas as tatuagens",
+      "Todas as estampas de armas",
+      "Tudo liberado na Los Santos Customs",
+      "Skills e habilidades no máximo",
+      "Corrida Modder: o personagem corre muito mais rápido",
+      "Movimentação mais ágil no PvP",
+      "Desbloqueio definitivo",
     ],
-    variants: [
-      { platform: "ps4", price: 44.9 },
-      { platform: "ps5", price: 49.9 },
+    variants: both(35),
+    delivery: "Rápida",
+    tone: "wine",
+    tag: "Combo",
+  },
+
+  // ------------------------------ CONTA PRONTA ------------------------------
+  {
+    slug: "conta-level-120",
+    name: "Conta Level 120",
+    summary: "Level 120, mais de $466 milhões no banco e K/D 10.",
+    description:
+      "Conta pronta com personagem level 120, mais de 466 milhões no banco, K/D 10.00, habilidades no máximo e trajes modder. É unidade única: chama no WhatsApp pra saber o preço e o console.",
+    category: "conta",
+    headline: { value: "$466 MI", label: "no banco · level 120" },
+    amount: 466_000_000,
+    specs: [
+      { label: "Level", value: "120" },
+      { label: "Dinheiro", value: "+$466 milhões" },
+      { label: "K/D", value: "10.00" },
+      { label: "Habilidades", value: "No máximo" },
+      { label: "Trajes", value: "Modder" },
     ],
-    delivery: "Até 2 horas",
+    includes: [
+      "Personagem level 120",
+      "Mais de $466 milhões no banco",
+      "K/D 10.00",
+      "Habilidades no máximo",
+      "Trajes modder",
+    ],
+    variants: [],
+    delivery: "Logo após o pagamento",
     tone: "black",
+    tag: "Oportunidade",
   },
 ];
 
@@ -316,6 +296,19 @@ export function getProduct(slug: string) {
 /** Variante do console escolhido, ou undefined se não existir. */
 export function findVariant(product: Product, platform: Platform) {
   return product.variants.find((v) => v.platform === platform);
+}
+
+/** Sem preço fixo: combinado no WhatsApp. */
+export function priceOnRequest(product: Product) {
+  return product.variants.length === 0;
+}
+
+/** O mesmo preço em todos os consoles. */
+export function samePriceEverywhere(product: Product) {
+  return (
+    product.variants.length === platformOrder.length &&
+    new Set(product.variants.map((v) => v.price)).size === 1
+  );
 }
 
 export function getRelatedProducts(product: Product, limit = 3) {

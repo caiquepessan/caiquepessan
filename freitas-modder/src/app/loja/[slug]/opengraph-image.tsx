@@ -1,4 +1,4 @@
-import { getProduct, products, type Tone } from "@/data/products";
+import { getProduct, priceOnRequest, products, type Tone } from "@/data/products";
 import { ogSize, renderOgImage } from "@/lib/og";
 import { formatBRL } from "@/lib/utils";
 
@@ -22,13 +22,15 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const product = getProduct(slug);
 
   if (!product) {
-    return renderOgImage({ kicker: "GTA V Online · PS4 e PS5", title: "Conta modada, pronta pra jogar" });
+    return renderOgImage({ kicker: "GTA V Online · PS4 e PS5", title: "Dinheiro, level e tudo liberado" });
   }
 
-  const from = Math.min(...product.variants.map((v) => v.price));
+  const price = priceOnRequest(product)
+    ? "preço no WhatsApp"
+    : formatBRL(Math.min(...product.variants.map((v) => v.price)));
 
   return renderOgImage({
-    kicker: `${product.headline.value} ${product.headline.label} · a partir de ${formatBRL(from)}`,
+    kicker: `${product.headline.value} ${product.headline.label} · ${price}`,
     title: product.name,
     footer: product.specs
       .slice(0, 3)

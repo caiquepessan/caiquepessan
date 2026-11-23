@@ -3,11 +3,12 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { RevealGroup, RevealItem } from "@/components/effects/reveal";
-import { findVariant, platforms, type Product } from "@/data/products";
+import { findVariant, platforms, priceOnRequest, type Product } from "@/data/products";
 import { useConsole } from "@/store/console";
 import { AddButton } from "./add-button";
 import { AnimatedPrice } from "./animated-price";
 import { ProductSwatch } from "./product-panel";
+import { QuoteButton } from "./quote-button";
 
 /** Lista de preços (dinheiro e serviços na conta do cliente). */
 export function ServiceList({ items }: { items: Product[] }) {
@@ -17,6 +18,7 @@ export function ServiceList({ items }: { items: Product[] }) {
     <RevealGroup className="overflow-hidden rounded-3xl border border-white/[0.07] bg-ink-900">
       {items.map((product, i) => {
         const variant = findVariant(product, platform);
+        const onRequest = priceOnRequest(product);
         return (
           <RevealItem key={product.slug}>
             <div
@@ -41,7 +43,7 @@ export function ServiceList({ items }: { items: Product[] }) {
               <div className="min-w-0">
                 <h3 className="text-lg font-semibold leading-tight">
                   <Link
-                    href={`/contas/${product.slug}`}
+                    href={`/loja/${product.slug}`}
                     prefetch
                     className="inline-flex items-center gap-1 outline-none after:absolute after:inset-0 after:content-['']"
                   >
@@ -55,7 +57,11 @@ export function ServiceList({ items }: { items: Product[] }) {
                 Entrega: <span className="text-stone-300">{product.delivery.toLowerCase()}</span>
               </p>
               <div className="col-span-2 flex items-center justify-between gap-4 md:col-span-1 md:justify-end">
-                {variant ? (
+                {onRequest ? (
+                  <span className="font-display text-2xl font-extrabold leading-none">
+                    Preço no WhatsApp
+                  </span>
+                ) : variant ? (
                   <AnimatedPrice
                     value={variant.price}
                     className="font-display text-[1.75rem] font-extrabold leading-none"
@@ -65,7 +71,7 @@ export function ServiceList({ items }: { items: Product[] }) {
                     Indisponível no {platforms[platform].label}
                   </span>
                 )}
-                <AddButton product={product} />
+                {onRequest ? <QuoteButton product={product} label="Perguntar" /> : <AddButton product={product} />}
               </div>
             </div>
           </RevealItem>

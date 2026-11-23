@@ -1,8 +1,8 @@
-import { Accounts } from "@/components/sections/accounts";
 import { Faq } from "@/components/sections/faq";
 import { FinalCta } from "@/components/sections/final-cta";
 import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
+import { Money } from "@/components/sections/money";
 import { Proofs } from "@/components/sections/proofs";
 import { Services } from "@/components/sections/services";
 import { Strip } from "@/components/sections/strip";
@@ -33,7 +33,7 @@ function JsonLd() {
         itemListElement: products.map((p, i) => ({
           "@type": "ListItem",
           position: i + 1,
-          url: `${siteConfig.url}/contas/${p.slug}`,
+          url: `${siteConfig.url}/loja/${p.slug}`,
           name: p.name,
         })),
       },
@@ -54,7 +54,7 @@ export default function HomePage() {
       <JsonLd />
       <Hero />
       <Strip />
-      <Accounts />
+      <Money />
       <Services />
       <HowItWorks />
       <Proofs />

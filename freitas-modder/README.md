@@ -1,7 +1,8 @@
 # Freitas Modder
 
-Loja online de contas modadas e serviços de GTA V para PS4 e PS5: tema
-vermelho, carrinho e pedido pelo WhatsApp. Publicada na Vercel.
+Loja online de dinheiro, up de level, Unlock All com Corrida Modder e contas
+prontas de GTA V para PS4 e PS5: tema vermelho, carrinho e pedido pelo
+WhatsApp. Publicada na Vercel.
 
 ## Stack
 
@@ -52,27 +53,41 @@ npm run typecheck  # checagem de tipos
 
 ### Produtos
 
-Cada produto tem um `slug` (vira a URL `/contas/<slug>`), uma categoria
-(`conta`, `dinheiro` ou `servico`), uma cor de painel (`tone`: `graphite`,
-`red`, `wine` ou `black`), o número em destaque (`headline`) e o preço de cada
-console:
+Os preços são os da tabela do Freitas: dinheiro (20, 50, 100 e 500 milhões),
+up de level (30, 75, 150 e 500), o combo Unlock All + Corrida Modder (por
+personagem) e a conta Level 120, com preço combinado no WhatsApp.
+
+Cada produto tem um `slug` (vira a URL `/loja/<slug>`), uma categoria
+(`dinheiro`, `level`, `servico` ou `conta`), uma cor de painel (`tone`:
+`graphite`, `red`, `wine` ou `black`), o número em destaque (`headline`) e o
+preço de cada console. Hoje o preço é o mesmo nos dois, então usamos o atalho
+`both`:
 
 ```ts
+variants: both(35), // R$ 35 no PS4 e no PS5
+// ou, se um dia mudar:
 variants: [
-  { platform: "ps4", price: 79.9 },
-  { platform: "ps5", price: 89.9 },
+  { platform: "ps4", price: 30 },
+  { platform: "ps5", price: 35 },
 ],
 ```
 
 Se um produto não existir para um console, é só não colocar a variante dele: o
 site mostra "Indisponível no PS4" (ou PS5) e bloqueia o botão.
 
+**Preço no WhatsApp:** para algo sem preço fixo (como uma conta única), use
+`variants: []`. No lugar do carrinho, o site mostra "Preço no WhatsApp" e um
+botão que abre a conversa perguntando o preço.
+
+**Endereço antigo:** a loja ficava em `/contas`. Esses links continuam
+funcionando e levam para `/loja`.
+
 **Console:** o visitante escolhe PS4 ou PS5 na barra do topo, e todos os preços
 do site seguem essa escolha (ela fica salva no navegador).
 
 **Imagens:** por padrão cada produto aparece como um painel colorido com o número
 principal. Para usar um print real, coloque a imagem em `public/produtos/` e
-informe no produto, por exemplo `image: "/produtos/conta-elite.jpg"`.
+informe no produto, por exemplo `image: "/produtos/conta-level-120.jpg"`.
 
 **Entregas:** a seção com prints de clientes só aparece quando houver imagens.
 Coloque os prints em `public/provas/` e liste em `src/data/proofs.ts`.
@@ -160,7 +175,7 @@ Os dados abaixo são **exemplos** e precisam ser trocados pelos reais:
 
 ```
 src/
-├── app/                 rotas (home, /contas, /contas/[slug], /termos, 404, SEO)
+├── app/                 rotas (home, /loja, /loja/[slug], /termos, 404, SEO)
 ├── assets/fonts/        fontes usadas nas imagens de compartilhamento
 ├── components/
 │   ├── cart/            carrinho lateral

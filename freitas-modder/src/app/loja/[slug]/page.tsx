@@ -15,6 +15,7 @@ import {
   getProduct,
   getRelatedProducts,
   platforms,
+  priceOnRequest,
   products,
 } from "@/data/products";
 
@@ -24,7 +25,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps<"/contas/[slug]">): Promise<Metadata> {
+}: PageProps<"/loja/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const product = getProduct(slug);
   if (!product) notFound();
@@ -32,8 +33,8 @@ export async function generateMetadata({
   return {
     title,
     description: `${product.summary} ${product.description}`,
-    alternates: { canonical: `/contas/${product.slug}` },
-    openGraph: { title, description: product.summary, url: `/contas/${product.slug}` },
+    alternates: { canonical: `/loja/${product.slug}` },
+    openGraph: { title, description: product.summary, url: `/loja/${product.slug}` },
   };
 }
 
@@ -57,7 +58,7 @@ function ProductSkeleton() {
   );
 }
 
-export default function ProductPage({ params }: PageProps<"/contas/[slug]">) {
+export default function ProductPage({ params }: PageProps<"/loja/[slug]">) {
   return (
     <Suspense fallback={<ProductSkeleton />}>
       <ProductContent params={params} />
@@ -65,26 +66,28 @@ export default function ProductPage({ params }: PageProps<"/contas/[slug]">) {
   );
 }
 
-async function ProductContent({ params }: { params: PageProps<"/contas/[slug]">["params"] }) {
+async function ProductContent({ params }: { params: PageProps<"/loja/[slug]">["params"] }) {
   const { slug } = await params;
   const product = getProduct(slug);
   if (!product) notFound();
 
   const related = getRelatedProducts(product, 3);
-  const isAccount = product.category === "conta";
-  const steps = isAccount
-    ? [
-        "Você finaliza o pedido pelo carrinho ou direto no WhatsApp.",
-        "Paga no Pix (ou cartão) e a gente confirma.",
-        `O e-mail e a senha da conta chegam no seu WhatsApp em até ${siteConfig.business.avgDeliveryMinutes} minutos.`,
-        "Você troca o e-mail e a senha, e a conta é sua.",
-      ]
-    : [
-        "Você finaliza o pedido pelo carrinho ou direto no WhatsApp.",
-        "Paga no Pix (ou cartão) e passa o acesso da sua PSN no chat.",
-        `A gente faz o serviço no prazo combinado (${product.delivery.toLowerCase()}).`,
-        "Quando terminar, a gente avisa e você troca a senha.",
-      ];
+  const steps =
+    product.category === "conta"
+      ? [
+          priceOnRequest(product)
+            ? "Você chama no WhatsApp e combina o preço."
+            : "Você finaliza o pedido pelo carrinho ou direto no WhatsApp.",
+          "Paga no Pix (ou cartão) e a gente confirma.",
+          "O e-mail e a senha da conta chegam no seu WhatsApp.",
+          "Você troca o e-mail e a senha, e a conta é sua.",
+        ]
+      : [
+          "Você finaliza o pedido pelo carrinho ou direto no WhatsApp.",
+          "Paga no Pix (ou cartão) e a gente confirma.",
+          "A gente combina com você no WhatsApp como fazer no seu personagem.",
+          "Quando terminar, a gente avisa e você já pode jogar.",
+        ];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -93,13 +96,13 @@ async function ProductContent({ params }: { params: PageProps<"/contas/[slug]">[
     description: product.description,
     category: categories[product.category].label,
     brand: { "@type": "Brand", name: siteConfig.name },
-    offers: product.variants.map((v) => ({
+    offers: product.variants.length === 0 ? undefined : product.variants.map((v) => ({
       "@type": "Offer",
       name: `${product.name} (${platforms[v.platform].label})`,
       price: v.price.toFixed(2),
       priceCurrency: "BRL",
       availability: "https://schema.org/InStock",
-      url: `${siteConfig.url}/contas/${product.slug}`,
+      url: `${siteConfig.url}/loja/${product.slug}`,
     })),
   };
 
@@ -119,7 +122,7 @@ async function ProductContent({ params }: { params: PageProps<"/contas/[slug]">[
               </li>
               <li aria-hidden>/</li>
               <li>
-                <Link href="/contas" className="transition-colors hover:text-white">Contas</Link>
+                <Link href="/loja" className="transition-colors hover:text-white">Loja</Link>
               </li>
               <li aria-hidden>/</li>
               <li aria-current="page" className="text-stone-300">{product.name}</li>

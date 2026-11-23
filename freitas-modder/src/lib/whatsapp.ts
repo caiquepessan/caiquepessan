@@ -37,4 +37,9 @@ export function buildProductMessage(name: string, platformLabel: string, price: 
   return buildOrderMessage([{ name, platformLabel, qty: 1, unitPrice: price }]);
 }
 
+/** Produto sem preço fixo: pergunta o preço e se ainda está disponível. */
+export function buildQuoteMessage(name: string, platformLabel: string) {
+  return `Oi! Vi a ${name} no site. Ainda está disponível? Qual o preço? Meu console é ${platformLabel}.`;
+}
+
 export const defaultWhatsappMessage = "Oi! Vim pelo site e queria tirar uma dúvida.";

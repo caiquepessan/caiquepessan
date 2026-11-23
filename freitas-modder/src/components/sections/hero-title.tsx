@@ -36,16 +36,16 @@ export function HeroTitle() {
   return (
     <h1 className="mt-5 font-display text-[3.4rem] font-extrabold uppercase leading-[0.86] xs:text-[4rem] sm:text-[5.5rem] lg:text-[5rem] xl:text-[6rem]">
       <Line delay={80} progress={progress} distance={20}>
-        Conta modada
+        Dinheiro,
       </Line>
       <Line delay={160} progress={progress} distance={45}>
-        de GTA V,
+        level e tudo
       </Line>
       <Line delay={240} progress={progress} distance={70}>
-        pronta pra
+        liberado no
       </Line>
       <Line delay={320} progress={progress} distance={100}>
-        <span className="text-brand-500">jogar.</span>
+        <span className="text-brand-500">seu GTA V.</span>
       </Line>
     </h1>
   );

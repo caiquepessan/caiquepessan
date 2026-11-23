@@ -4,17 +4,17 @@ import { siteConfig } from "@/config/site";
 const front = [
   "PS4 e PS5",
   "Pagamento no Pix",
-  "Entrega pelo WhatsApp",
+  "Entrega rápida",
   `Garantia de ${siteConfig.business.warrantyDays} dias`,
-  "Dinheiro, nível e carros",
+  "Dinheiro e level",
 ];
 
 const back = [
-  "E-mail e senha trocáveis",
   "Unlock All",
+  "Corrida Modder",
+  "Melhor preço",
   "Atendimento todo dia",
-  "Contas prontas",
-  "Serviços na sua conta",
+  "Direto no seu personagem",
 ];
 
 /** Duas faixas cruzadas que aceleram com a rolagem da página. */

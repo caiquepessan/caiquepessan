@@ -16,7 +16,7 @@ export function Proofs() {
           description={
             siteConfig.contact.instagram ? (
               <>
-                Prints de clientes recebendo as contas. Tem mais no{" "}
+                Prints de clientes recebendo os pacotes. Tem mais no{" "}
                 <a
                   href={siteConfig.contact.instagram}
                   target="_blank"
@@ -28,7 +28,7 @@ export function Proofs() {
                 .
               </>
             ) : (
-              "Prints de clientes recebendo as contas."
+              "Prints de clientes recebendo os pacotes."
             )
           }
         />

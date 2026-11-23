@@ -22,6 +22,13 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
+  // A loja ficava em /contas antes de ter dinheiro, level e Unlock All.
+  async redirects() {
+    return [
+      { source: "/contas", destination: "/loja", permanent: true },
+      { source: "/contas/:slug", destination: "/loja/:slug", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

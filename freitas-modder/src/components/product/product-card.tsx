@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { Tilt } from "@/components/effects/tilt";
-import { findVariant, platforms, type Product } from "@/data/products";
+import { findVariant, platforms, priceOnRequest, type Product } from "@/data/products";
 import { cn } from "@/lib/utils";
 import { useConsole } from "@/store/console";
 import { AddButton } from "./add-button";
 import { AnimatedPrice } from "./animated-price";
 import { ProductPanel } from "./product-panel";
+import { QuoteButton } from "./quote-button";
 
 export function ProductCard({
   product,
@@ -18,6 +19,7 @@ export function ProductCard({
 }) {
   const platform = useConsole((s) => s.platform);
   const variant = findVariant(product, platform);
+  const onRequest = priceOnRequest(product);
 
   return (
     <Tilt max={7} className="h-full rounded-3xl">
@@ -33,7 +35,7 @@ export function ProductCard({
       <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
         <h3 className="text-xl font-semibold leading-tight">
           <Link
-            href={`/contas/${product.slug}`}
+            href={`/loja/${product.slug}`}
             prefetch
             className="outline-none after:absolute after:inset-0 after:rounded-3xl after:content-['']"
           >
@@ -53,8 +55,12 @@ export function ProductCard({
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-5">
           <div className="min-w-0">
-            <p className="text-[13px] text-stone-500">{platforms[platform].label} · no Pix</p>
-            {variant ? (
+            <p className="text-[13px] text-stone-500">
+              {onRequest ? "Preço" : `${platforms[platform].label} · no Pix`}
+            </p>
+            {onRequest ? (
+              <p className="pt-1 font-display text-2xl font-extrabold leading-none">No WhatsApp</p>
+            ) : variant ? (
               <AnimatedPrice
                 value={variant.price}
                 className="font-display text-[2rem] font-extrabold leading-none"
@@ -65,7 +71,11 @@ export function ProductCard({
               </p>
             )}
           </div>
-          <AddButton product={product} compact />
+          {onRequest ? (
+            <QuoteButton product={product} compact />
+          ) : (
+            <AddButton product={product} compact />
+          )}
         </div>
       </div>
     </article>

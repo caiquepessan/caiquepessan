@@ -26,9 +26,10 @@ const columns = [
   {
     title: "Loja",
     links: [
-      { href: "/contas?categoria=conta", label: "Contas prontas" },
-      { href: "/contas?categoria=dinheiro", label: "Dinheiro na conta" },
-      { href: "/contas?categoria=servico", label: "Serviços" },
+      { href: "/loja?categoria=dinheiro", label: "Dinheiro na conta" },
+      { href: "/loja?categoria=level", label: "Up de level" },
+      { href: "/loja?categoria=servico", label: "Unlock All + Corrida" },
+      { href: "/loja?categoria=conta", label: "Conta pronta" },
     ],
   },
   {
@@ -49,8 +50,8 @@ export function Footer() {
           <div className="max-w-xs">
             <Logo className="h-8" />
             <p className="mt-4 text-[15px] leading-relaxed text-stone-400">
-              Contas e serviços de GTA V pra PS4 e PS5. Pagamento no Pix, entrega
-              pelo WhatsApp.
+              Dinheiro, level e Unlock All no GTA V pra PS4 e PS5. Pagamento no
+              Pix, entrega pelo WhatsApp.
             </p>
           </div>
 

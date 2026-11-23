@@ -14,7 +14,7 @@ export function FinalCta() {
         <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="max-w-md font-display text-5xl font-extrabold uppercase leading-[0.9] sm:text-7xl">
-              <SplitWords text="Qual conta vai ser?" />
+              <SplitWords text="Qual pacote vai ser?" />
             </h2>
             <p className="mt-4 max-w-md text-lg leading-relaxed text-stone-600">
               Escolhe no site ou chama no WhatsApp que a gente te ajuda a decidir.
@@ -23,8 +23,8 @@ export function FinalCta() {
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
             <Magnetic>
-              <ButtonLink href="/contas" size="lg">
-                Ver contas
+              <ButtonLink href="/loja" size="lg">
+                Ver preços
                 <ArrowRight className="size-5 transition-transform duration-200 group-hover/btn:translate-x-1" />
               </ButtonLink>
             </Magnetic>

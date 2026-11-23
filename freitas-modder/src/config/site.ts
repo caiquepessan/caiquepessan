@@ -17,16 +17,18 @@ function resolveSiteUrl() {
 
 export const siteConfig = {
   name: "Freitas Modder",
-  title: "Freitas Modder | Contas modadas de GTA V para PS4 e PS5",
+  title: "Freitas Modder | Dinheiro, level e Unlock All no GTA V para PS4 e PS5",
   description:
-    "Contas modadas de GTA V para PS4 e PS5: dinheiro, nível alto, carros modificados e tudo desbloqueado. Pagamento no Pix e entrega pelo WhatsApp.",
+    "Dinheiro, up de level e Unlock All com Corrida Modder no GTA V Online para PS4 e PS5, direto no seu personagem. Pagamento no Pix e entrega rápida pelo WhatsApp.",
   url: resolveSiteUrl(),
   locale: "pt_BR",
   keywords: [
-    "conta modada gta 5 ps4",
-    "conta modada gta 5 ps5",
-    "dinheiro gta online ps5",
-    "unlock all gta ps4",
+    "dinheiro gta 5 online ps4",
+    "dinheiro gta 5 online ps5",
+    "up de level gta 5",
+    "unlock all gta ps5",
+    "corrida modder gta",
+    "conta modada gta 5",
     "freitas modder",
   ],
 
@@ -45,7 +47,7 @@ export const siteConfig = {
   business: {
     warrantyDays: 30,
     supportHours: "Todo dia, das 9h às 23h",
-    /** Tempo médio de entrega das contas prontas, em minutos. */
+    /** Tempo médio de entrega, em minutos (hoje o site só diz "rápida"). */
     avgDeliveryMinutes: 10,
   },
 } as const;

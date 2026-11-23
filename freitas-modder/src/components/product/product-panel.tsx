@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import type { Product, Tone } from "@/data/products";
+import { categories, type Product, type Tone } from "@/data/products";
 import { cn } from "@/lib/utils";
 
 export const toneStyles: Record<
@@ -36,7 +36,7 @@ export const toneStyles: Record<
 /** Nome curto que aparece no canto do painel. */
 export function plateLabel(product: Product) {
   if (product.category === "conta") return product.name.replace(/^Conta\s+/i, "");
-  return product.category === "dinheiro" ? "Dinheiro" : "Serviço";
+  return categories[product.category].short;
 }
 
 /**

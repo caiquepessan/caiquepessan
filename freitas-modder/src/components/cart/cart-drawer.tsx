@@ -102,14 +102,14 @@ export function CartDrawer() {
                   <ShoppingBag className="size-10 text-stone-600" strokeWidth={1.5} />
                   <p className="mt-4 text-lg font-semibold">Seu carrinho está vazio</p>
                   <p className="mt-1 max-w-60 text-[15px] text-stone-400">
-                    Escolha uma conta ou um serviço pra começar.
+                    Escolha um pacote pra começar.
                   </p>
                   <Link
-                    href="/contas"
+                    href="/loja"
                     onClick={close}
                     className="mt-5 text-[15px] font-semibold text-brand-400 hover:text-brand-300"
                   >
-                    Ver contas
+                    Ver preços
                   </Link>
                 </div>
               ) : (
@@ -129,7 +129,7 @@ export function CartDrawer() {
                           <div className="flex items-start justify-between gap-3">
                             <div className="min-w-0">
                               <Link
-                                href={`/contas/${item.slug}`}
+                                href={`/loja/${item.slug}`}
                                 onClick={close}
                                 className="block truncate font-semibold hover:text-brand-400"
                               >

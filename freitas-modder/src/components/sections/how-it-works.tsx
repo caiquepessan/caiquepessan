@@ -11,7 +11,7 @@ const { business } = siteConfig;
 const steps = [
   {
     title: "Escolha",
-    text: "Escolha a conta ou o serviço e o seu console, PS4 ou PS5.",
+    text: "Escolha o pacote e o seu console, PS4 ou PS5. O preço é o mesmo.",
   },
   {
     title: "Pague no Pix",
@@ -19,7 +19,7 @@ const steps = [
   },
   {
     title: "Receba e jogue",
-    text: `A conta chega no seu WhatsApp em até ${business.avgDeliveryMinutes} minutos. Nos serviços, a gente avisa quando terminar.`,
+    text: "A gente faz no seu personagem e te avisa no WhatsApp quando estiver pronto.",
   },
 ];
 

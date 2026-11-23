@@ -18,7 +18,7 @@ const sections = [
   {
     title: "A loja",
     body: [
-      `A ${siteConfig.name} vende contas e serviços para o GTA V Online no PS4 e no PS5. É uma loja independente, sem vínculo com a Rockstar Games, a Take-Two Interactive ou a Sony.`,
+      `A ${siteConfig.name} vende dinheiro, level, Unlock All e contas prontas para o GTA V Online no PS4 e no PS5. É uma loja independente, sem vínculo com a Rockstar Games, a Take-Two Interactive ou a Sony.`,
       "Pra comprar, você precisa ter 18 anos ou a autorização de um responsável.",
     ],
   },

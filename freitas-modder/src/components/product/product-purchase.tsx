@@ -3,19 +3,51 @@
 import { WhatsAppIcon } from "@/components/icons/brand-icons";
 import { ButtonAnchor } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
-import { findVariant, platforms, type Product } from "@/data/products";
+import {
+  findVariant,
+  platforms,
+  priceOnRequest,
+  samePriceEverywhere,
+  type Product,
+} from "@/data/products";
 import { formatBRL } from "@/lib/utils";
 import { buildProductMessage, whatsappLink } from "@/lib/whatsapp";
 import { useConsole } from "@/store/console";
 import { AddButton } from "./add-button";
 import { AnimatedPrice } from "./animated-price";
 import { ConsoleSwitch } from "./console-switch";
+import { QuoteButton } from "./quote-button";
 
 /** Bloco de compra da página do produto. */
 export function ProductPurchase({ product }: { product: Product }) {
   const platform = useConsole((s) => s.platform);
   const variant = findVariant(product, platform);
   const label = platforms[platform].label;
+
+  if (priceOnRequest(product)) {
+    return (
+      <div className="rounded-3xl border border-white/[0.08] bg-ink-850 p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="text-[15px] text-stone-400">Seu console</p>
+          <ConsoleSwitch />
+        </div>
+        <div className="mt-6 border-t border-white/[0.07] pt-6">
+          <p className="font-display text-5xl font-extrabold uppercase leading-none">
+            Preço no WhatsApp
+          </p>
+          <p className="mt-3 text-[15px] leading-relaxed text-stone-400">
+            É unidade única, então o preço é combinado na conversa. Chama pra saber se
+            ainda está disponível.
+          </p>
+        </div>
+        <QuoteButton product={product} className="mt-6 h-12 w-full" />
+        <p className="mt-5 text-sm text-stone-500">
+          Entrega: {product.delivery.toLowerCase()} · Garantia de{" "}
+          {siteConfig.business.warrantyDays} dias
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-3xl border border-white/[0.08] bg-ink-850 p-5 sm:p-6">
@@ -37,7 +69,10 @@ export function ProductPurchase({ product }: { product: Product }) {
               )}
             </div>
             <p className="mt-2 text-[15px] text-stone-400">
-              No Pix, versão de {label}. Também aceitamos cartão.
+              {samePriceEverywhere(product)
+                ? "No Pix, o mesmo preço no PS4 e no PS5."
+                : `No Pix, versão de ${label}.`}{" "}
+              Também aceitamos cartão.
             </p>
           </>
         ) : (

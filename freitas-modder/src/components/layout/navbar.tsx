@@ -17,8 +17,9 @@ import { defaultWhatsappMessage, whatsappLink } from "@/lib/whatsapp";
 import { cartTotals, resolveCartItems, useCart } from "@/store/cart";
 
 const links = [
-  { href: "/contas", label: "Contas" },
-  { href: "/#servicos", label: "Serviços" },
+  { href: "/loja", label: "Preços" },
+  { href: "/#dinheiro", label: "Dinheiro" },
+  { href: "/#servicos", label: "Level" },
   { href: "/#como-funciona", label: "Como funciona" },
   { href: "/#duvidas", label: "Dúvidas" },
 ];

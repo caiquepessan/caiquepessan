@@ -17,12 +17,12 @@ export default function NotFound() {
           Essa página não existe
         </h1>
         <p className="mt-4 max-w-md text-lg text-stone-400">
-          Pode ter mudado de lugar ou o endereço está errado. As contas continuam no
-          mesmo lugar.
+          Pode ter mudado de lugar ou o endereço está errado. Os preços continuam na
+          loja.
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <ButtonLink href="/contas" size="lg">
-            Ver contas
+          <ButtonLink href="/loja" size="lg">
+            Ver preços
           </ButtonLink>
           <ButtonLink href="/" size="lg" variant="secondary">
             Voltar ao início
