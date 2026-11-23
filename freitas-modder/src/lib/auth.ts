@@ -1,4 +1,5 @@
 import "server-only";
+import { and, eq } from "drizzle-orm";
 import { betterAuth, type BetterAuthOptions } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
@@ -33,6 +34,19 @@ export function isAdminDiscordId(discordId: string | null | undefined) {
   return Boolean(discordId) && adminDiscordIds().includes(discordId!);
 }
 
+/**
+ * ID do Discord da pessoa. Vem da tabela de contas, que só o login com o
+ * Discord preenche (ninguém consegue editar pelo site).
+ */
+async function findDiscordId(userId: string) {
+  const [row] = await getDb()
+    .select({ id: schema.account.accountId })
+    .from(schema.account)
+    .where(and(eq(schema.account.userId, userId), eq(schema.account.providerId, "discord")))
+    .limit(1);
+  return row?.id ?? null;
+}
+
 function createAuth() {
   const options = {
     appName: siteConfig.name,
@@ -47,17 +61,10 @@ function createAuth() {
         verification: schema.verification,
       },
     }),
-    user: {
-      additionalFields: {
-        discordId: { type: "string", required: false, input: false },
-      },
-    },
     socialProviders: {
       discord: {
         clientId: process.env.DISCORD_CLIENT_ID!,
         clientSecret: process.env.DISCORD_CLIENT_SECRET!,
-        // Guarda o ID do Discord no usuário: é ele que diz quem é admin.
-        mapProfileToUser: (profile) => ({ discordId: profile.id }),
       },
     },
     // Guarda a sessão num cookie assinado por 5 minutos: menos idas ao banco.
@@ -68,13 +75,10 @@ function createAuth() {
     ...options,
     plugins: [
       // Diz na sessão se a pessoa é admin (o botão Painel usa isso).
-      customSession(
-        async ({ user, session }) => ({
-          user: { ...user, isAdmin: isAdminDiscordId(user.discordId) },
-          session,
-        }),
-        options,
-      ),
+      customSession(async ({ user, session }) => {
+        const discordId = await findDiscordId(user.id);
+        return { user: { ...user, discordId, isAdmin: isAdminDiscordId(discordId) }, session };
+      }, options),
       nextCookies(),
     ],
   });

@@ -70,8 +70,6 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull().default(false),
   image: text("image"),
-  /** ID do usuário no Discord (quem é admin sai daqui). */
-  discordId: text("discord_id"),
   ...timestamps,
 });
 

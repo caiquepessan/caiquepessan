@@ -67,6 +67,11 @@ export function NoAccessCard({ name, discordId }: { name: string; discordId: str
         Oi, {name}. Seu Discord ainda não tem acesso ao painel. Se você é o Freitas,
         mande este ID para quem cuida do site liberar:
       </p>
+      {!discordId && (
+        <p className="mt-5 rounded-xl bg-ink-950 px-4 py-3.5 text-stone-400 ring-1 ring-inset ring-white/10">
+          Não consegui ler o ID do seu Discord. Saia e entre de novo.
+        </p>
+      )}
       {discordId && (
         <button
           type="button"
