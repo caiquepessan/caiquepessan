@@ -13,9 +13,12 @@ import { QuoteButton } from "./quote-button";
 export function ProductCard({
   product,
   className,
+  preview = false,
 }: {
   product: Product;
   className?: string;
+  /** Prévia do painel: sem link e sem botão de compra. */
+  preview?: boolean;
 }) {
   const platform = useConsole((s) => s.platform);
   const variant = findVariant(product, platform);
@@ -34,13 +37,17 @@ export function ProductCard({
 
       <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
         <h3 className="text-xl font-semibold leading-tight">
-          <Link
-            href={`/loja/${product.slug}`}
-            prefetch
-            className="outline-none after:absolute after:inset-0 after:rounded-3xl after:content-['']"
-          >
-            {product.name}
-          </Link>
+          {preview ? (
+            product.name
+          ) : (
+            <Link
+              href={`/loja/${product.slug}`}
+              prefetch
+              className="outline-none after:absolute after:inset-0 after:rounded-3xl after:content-['']"
+            >
+              {product.name}
+            </Link>
+          )}
         </h3>
         <p className="mt-1.5 text-[15px] leading-snug text-stone-400">{product.summary}</p>
 
@@ -71,7 +78,7 @@ export function ProductCard({
               </p>
             )}
           </div>
-          {onRequest ? (
+          {preview ? null : onRequest ? (
             <QuoteButton product={product} compact />
           ) : (
             <AddButton product={product} compact />

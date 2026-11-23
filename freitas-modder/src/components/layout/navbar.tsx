@@ -15,6 +15,7 @@ import { getLenis, lockScroll, scrollToTarget, unlockScroll } from "@/lib/lenis"
 import { cn } from "@/lib/utils";
 import { defaultWhatsappMessage, whatsappLink } from "@/lib/whatsapp";
 import { useCatalog } from "@/components/catalog-provider";
+import { AccountButton, MobileAccount } from "./account-button";
 import { cartTotals, resolveCartItems, useCart } from "@/store/cart";
 
 const links = [
@@ -141,6 +142,7 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-2.5">
+            <AccountButton className="hidden sm:block" />
             <ConsoleSwitch size="sm" className="hidden sm:inline-flex" />
             <CartButton />
             <button
@@ -195,6 +197,7 @@ export function Navbar() {
               transition={{ delay: 0.3, duration: 0.45, ease: EASE }}
               className="mt-8 flex flex-col gap-6"
             >
+              <MobileAccount onNavigate={() => setMenuOpen(false)} />
               <div className="flex items-center justify-between">
                 <span className="text-stone-400">Seu console</span>
                 <ConsoleSwitch />

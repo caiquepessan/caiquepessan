@@ -11,6 +11,18 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  // O botão "Entrar" só aparece quando o login com Discord está configurado.
+  env: {
+    NEXT_PUBLIC_DISCORD_LOGIN:
+      process.env.DISCORD_CLIENT_ID && process.env.BETTER_AUTH_SECRET ? "1" : "",
+  },
+  images: {
+    remotePatterns: [
+      // Fotos enviadas pelo painel (Vercel Blob) e avatares do Discord
+      { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+      { protocol: "https", hostname: "cdn.discordapp.com" },
+    ],
+  },
   turbopack: {
     rules: {
       "*.css": {

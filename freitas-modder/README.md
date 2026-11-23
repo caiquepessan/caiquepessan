@@ -17,6 +17,9 @@ WhatsApp. Publicada na Vercel.
 | Fontes | Barlow e Barlow Condensed |
 | Avisos | Sonner |
 | Ícones | Lucide + Simple Icons (marcas) |
+| Banco | [Neon](https://neon.tech) (Postgres) + [Drizzle](https://orm.drizzle.team) |
+| Login | [Better Auth](https://www.better-auth.com) com Discord |
+| Fotos do painel | Vercel Blob |
 | Métricas | Vercel Analytics |
 
 ## Rodando no computador
@@ -38,14 +41,20 @@ npm run build      # build de produção
 npm run start      # roda o build de produção
 npm run lint       # ESLint
 npm run typecheck  # checagem de tipos
+npm run db:generate  # cria a migração depois de mudar src/db/schema.ts
+npm run db:test      # testa migrações e produtos num Postgres em memória
 ```
+
+No computador, sem `DATABASE_URL`, o site usa os produtos iniciais de
+`src/data/seed-products.ts` e o painel fica desligado.
 
 ## Onde editar cada coisa
 
 | O quê | Arquivo |
 | --- | --- |
 | WhatsApp, Discord, redes, e-mail, garantia, horário, números da loja | `src/config/site.ts` |
-| Produtos, preços por plataforma, estoque, selos | `src/data/products.ts` |
+| Produtos, preços, fotos e etiquetas | Painel do site (`/painel`) |
+| Produtos que entram na primeira vez | `src/data/seed-products.ts` |
 | Prints de entregas (seção "Entregas") | `src/data/proofs.ts` + `public/provas/` |
 | Perguntas frequentes | `src/data/faq.ts` |
 | Termos e garantia | `src/app/termos/page.tsx` |
@@ -53,31 +62,21 @@ npm run typecheck  # checagem de tipos
 
 ### Produtos
 
-Os preços são os da tabela do Freitas: dinheiro (20, 50, 100 e 500 milhões),
-up de level (30, 75, 150 e 500), o combo Unlock All + Corrida Modder (por
-personagem) e a conta Level 120, com preço combinado no WhatsApp.
+Os produtos ficam no banco (Neon) e o Freitas mexe neles pelo painel. Na
+primeira vez, o banco recebe a tabela dele: dinheiro (20, 50, 100 e 500
+milhões), up de level (30, 75, 150 e 500), o combo Unlock All + Corrida Modder
+(por personagem) e a conta Level 120, com preço combinado no WhatsApp.
 
-Cada produto tem um `slug` (vira a URL `/loja/<slug>`), uma categoria
-(`dinheiro`, `level`, `servico` ou `conta`), uma cor de painel (`tone`:
-`graphite`, `red`, `wine` ou `black`), o número em destaque (`headline`) e o
-preço de cada console. Hoje o preço é o mesmo nos dois, então usamos o atalho
-`both`:
+Cada produto tem um endereço (`/loja/<slug>`), uma categoria (dinheiro, level,
+combo ou conta), uma cor de card, o destaque grande do card e o preço de cada
+console. Hoje o preço é o mesmo nos dois.
 
-```ts
-variants: both(35), // R$ 35 no PS4 e no PS5
-// ou, se um dia mudar:
-variants: [
-  { platform: "ps4", price: 30 },
-  { platform: "ps5", price: 35 },
-],
-```
-
-Se um produto não existir para um console, é só não colocar a variante dele: o
-site mostra "Indisponível no PS4" (ou PS5) e bloqueia o botão.
-
-**Preço no WhatsApp:** para algo sem preço fixo (como uma conta única), use
-`variants: []`. No lugar do carrinho, o site mostra "Preço no WhatsApp" e um
-botão que abre a conversa perguntando o preço.
+- **Sem preço num console:** deixe o campo vazio. O site mostra "Indisponível
+  no PS4" (ou PS5) e bloqueia o botão.
+- **Preço no WhatsApp:** para algo sem preço fixo (como uma conta única), marque
+  essa opção. No lugar do carrinho aparece um botão que pergunta o preço.
+- **Esconder:** desligar "Mostrar no site" tira o produto do site sem apagar
+  (bom para conta vendida).
 
 **Endereço antigo:** a loja ficava em `/contas`. Esses links continuam
 funcionando e levam para `/loja`.
@@ -85,12 +84,37 @@ funcionando e levam para `/loja`.
 **Console:** o visitante escolhe PS4 ou PS5 na barra do topo, e todos os preços
 do site seguem essa escolha (ela fica salva no navegador).
 
-**Imagens:** por padrão cada produto aparece como um painel colorido com o número
-principal. Para usar um print real, coloque a imagem em `public/produtos/` e
-informe no produto, por exemplo `image: "/produtos/conta-level-120.jpg"`.
+**Imagens:** por padrão cada produto aparece como um painel colorido com o
+destaque. Uma foto enviada pelo painel (print da conta, por exemplo) aparece
+por trás do destaque. As fotos ficam no Vercel Blob.
 
 **Entregas:** a seção com prints de clientes só aparece quando houver imagens.
 Coloque os prints em `public/provas/` e liste em `src/data/proofs.ts`.
+
+## Painel e login com Discord
+
+O painel fica em `/painel`. Só entra quem logar com um Discord liberado. O
+botão "Entrar" do site também aparece para clientes (por enquanto só mostra a
+foto e o nome).
+
+Para ligar, o projeto na Vercel precisa destas variáveis de ambiente:
+
+| Variável | O que é |
+| --- | --- |
+| `DATABASE_URL` | Já vem da integração com o Neon |
+| `BETTER_AUTH_SECRET` | Chave aleatória que assina as sessões |
+| `DISCORD_CLIENT_ID` e `DISCORD_CLIENT_SECRET` | Do app criado no Discord Developer Portal |
+| `ADMIN_DISCORD_IDS` | ID do Discord de quem pode usar o painel (vários: separe por vírgula) |
+
+No Discord Developer Portal, em OAuth2, o endereço de retorno (Redirect) é
+`https://freitas-modder.vercel.app/api/auth/callback/discord`.
+
+Quem entra sem estar liberado vê o próprio ID do Discord na tela, e é só
+colocar esse número em `ADMIN_DISCORD_IDS` e publicar de novo.
+
+**Banco:** as migrações ficam em `drizzle/` e rodam sozinhas no começo de cada
+deploy (`scripts/db-setup.ts`). O site guarda o catálogo em cache e atualiza na
+hora quando alguém salva no painel.
 
 ## Logo
 
@@ -166,7 +190,7 @@ Sem a variável, o site usa automaticamente o domínio `.vercel.app` do projeto.
 Os dados abaixo são **exemplos** e precisam ser trocados pelos reais:
 
 - [ ] Número do WhatsApp, link do Discord, redes e e-mail (`src/config/site.ts`)
-- [ ] Preços, números e descrições dos produtos (`src/data/products.ts`)
+- [ ] Preços, números e descrições dos produtos (no painel, `/painel`)
 - [ ] Prazo de garantia, tempo de entrega e horário (`src/config/site.ts`)
 - [ ] Texto dos termos (`src/app/termos/page.tsx`)
 - [ ] Opcional: prints reais de entregas (`src/data/proofs.ts`)
