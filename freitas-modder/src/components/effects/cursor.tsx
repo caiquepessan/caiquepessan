@@ -4,7 +4,10 @@ import { motion, useMotionValue, useSpring } from "motion/react";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 
-type Mode = "default" | "link" | "view" | "hidden";
+type Mode = "default" | "link" | "view" | "swap" | "hidden";
+
+/** Modos em que a mira vira um círculo cheio com texto. */
+const LABELS: Partial<Record<Mode, string>> = { view: "Ver", swap: "Trocar" };
 
 const QUERY = "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
 
@@ -63,7 +66,8 @@ export function Cursor() {
 
   if (!enabled) return null;
 
-  const isView = mode === "view";
+  const label = LABELS[mode];
+  const isView = label !== undefined;
   const isLink = mode === "link";
 
   return (
@@ -103,7 +107,7 @@ export function Cursor() {
               animate={{ opacity: 1, scale: 1 }}
               className="absolute inset-0 grid place-items-center text-sm font-semibold text-white"
             >
-              Ver
+              {label}
             </motion.span>
           )}
         </motion.div>

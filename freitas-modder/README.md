@@ -105,7 +105,14 @@ sistema (nesse caso quase tudo fica parado):
 - Abertura com a marca e uma cortina vermelha (só na primeira visita da sessão)
 - Rastros de luz de carros passando no fundo do topo (canvas, pausa fora da tela)
 - Cursor em forma de mira no computador, que vira "Ver" em cima dos produtos
-- Título do topo com parallax e cards com inclinação 3D, reflexo e brilho
+  e "Trocar" em cima do card de trás do topo
+- Cards 3D no topo (`src/components/sections/hero-cards.tsx`): cada card tem
+  duas faces (PS5 vermelha, PS4 preta), espessura, camadas em alturas
+  diferentes, plaquinha holográfica e reflexo que anda com o giro. Ao trocar
+  o console, os dois cards giram em cascata; clicar no card de trás também
+  troca. Sozinhos eles balançam devagar (animação de CSS, para o texto ficar
+  nítido) e, com o mouse em cima, seguem o mouse
+- Título do topo com parallax e cards de produto com inclinação 3D e reflexo
 - Contador de dinheiro que gira como um odômetro
 - Faixas cruzadas que aceleram e invertem com a rolagem
 - Cards que entram como cartas sendo distribuídas
