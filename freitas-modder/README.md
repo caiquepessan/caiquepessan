@@ -77,6 +77,26 @@ informe no produto, por exemplo `image: "/produtos/conta-elite.jpg"`.
 **Entregas:** a seção com prints de clientes só aparece quando houver imagens.
 Coloque os prints em `public/provas/` e liste em `src/data/proofs.ts`.
 
+## Logo
+
+Os arquivos da marca ficam em `public/brand/` (também publicados em
+`/brand/...` no site):
+
+| Arquivo | Uso |
+| --- | --- |
+| `freitas-modder-logo.svg` | Logo principal, para fundo escuro |
+| `freitas-modder-logo-fundo-claro.svg` | Logo para fundo claro |
+| `freitas-modder-logo-branca.svg` | Toda branca, para usar sobre vermelho ou foto |
+| `freitas-modder-logo-vertical.svg` (e `-fundo-claro`) | Versão empilhada |
+| `freitas-modder-simbolo.svg` (e `-branco`) | Só o símbolo |
+| `freitas-modder-icone.svg` | Ícone de app (quadrado arredondado) |
+| `freitas-modder-avatar.svg` | Foto de perfil redonda (Instagram, WhatsApp, Discord) |
+
+O símbolo é um F formado por três faixas inclinadas, como listras de carro de
+corrida. O nome usa Barlow Condensed itálico, com "FREITAS" grosso e "MODDER"
+mais leve, tudo convertido em contorno (não depende de fonte instalada).
+Cores: vermelho `#E8182C`, preto `#09090A` e papel `#F2EFE9`.
+
 ## Efeitos
 
 Ficam em `src/components/effects/` e respeitam a opção "reduzir movimento" do

@@ -1,9 +1,14 @@
 import { ImageResponse } from "next/og";
+import { LOGO_SYMBOL } from "@/components/ui/logo-paths";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
 export default function AppleIcon() {
+  const inner = 100;
+  const scale = inner / LOGO_SYMBOL.height;
+  const width = LOGO_SYMBOL.width * scale;
+
   return new ImageResponse(
     (
       <div
@@ -13,15 +18,11 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#e8182c",
+          background: "#E8182C",
         }}
       >
-        <svg width={150} height={150} viewBox="0 0 48 48">
-          <path
-            d="M17 12.5h17.5v6.25h-10v4.75H33v6H24.5v6h-7.5Z"
-            fill="#ffffff"
-            transform="translate(24 24) skewX(-9) translate(-24 -24)"
-          />
+        <svg width={width} height={inner} viewBox={`0 0 ${LOGO_SYMBOL.width} ${LOGO_SYMBOL.height}`} style={{ marginLeft: 4 }}>
+          <path fill="#FFFFFF" d={LOGO_SYMBOL.d} />
         </svg>
       </div>
     ),

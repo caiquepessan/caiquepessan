@@ -16,7 +16,7 @@ export function BigWordmark() {
       whileInView="show"
       viewport={{ once: true, amount: 0.4 }}
       variants={{ hidden: {}, show: { transition: { staggerChildren: 0.035 } } }}
-      className="flex select-none justify-between font-display text-[length:min(calc((100vw-48px)/6.35),11rem)] font-extrabold uppercase leading-[0.8]"
+      className="flex select-none justify-between pr-[0.06em] font-display text-[length:min(calc((100vw-48px)/6.5),11rem)] font-extrabold uppercase italic leading-[0.8]"
     >
       {words.map((word) => (
         <span key={word.text} className={`flex ${word.className}`}>

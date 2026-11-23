@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
+import { LOGO_LOCKUP, LOGO_SYMBOL } from "@/components/ui/logo-paths";
 import { siteConfig } from "@/config/site";
 
 export const ogSize = { width: 1200, height: 630 };
@@ -17,15 +18,16 @@ const fonts = [
   { name: "Text", data: textFont, weight: 600 as const, style: "normal" as const },
 ];
 
-function Mark({ size, background, color }: { size: number; background: string; color: string }) {
+/** Logo completa (símbolo + nome) para as imagens. */
+function Lockup({ height, symbolColor }: { height: number; symbolColor: string }) {
+  const { width, height: h, symbolScale, textX, textY, freitas, modder } = LOGO_LOCKUP;
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48">
-      <rect width="48" height="48" rx="13" fill={background} />
-      <path
-        d="M17 12.5h17.5v6.25h-10v4.75H33v6H24.5v6h-7.5Z"
-        fill={color}
-        transform="translate(24 24) skewX(-9) translate(-24 -24)"
-      />
+    <svg width={(width / h) * height} height={height} viewBox={`0 0 ${width} ${h}`}>
+      <path fill={symbolColor} transform={`scale(${symbolScale})`} d={LOGO_SYMBOL.d} />
+      <g transform={`translate(${textX} ${textY})`}>
+        <path fill="#ffffff" d={freitas} />
+        <path fill="#ffffff" d={modder} />
+      </g>
     </svg>
   );
 }
@@ -59,15 +61,8 @@ export function renderOgImage({
           fontFamily: "Text",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <Mark
-            size={60}
-            background={background === "#e8182c" ? "#09090a" : "#e8182c"}
-            color="#ffffff"
-          />
-          <span style={{ fontFamily: "Condensed", fontSize: 40, letterSpacing: 0.5 }}>
-            FREITAS MODDER
-          </span>
+        <div style={{ display: "flex" }}>
+          <Lockup height={52} symbolColor={background === "#e8182c" ? "#ffffff" : "#E8182C"} />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>

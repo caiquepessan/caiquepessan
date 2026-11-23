@@ -47,7 +47,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-5 pb-10 pt-16">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1.3fr]">
           <div className="max-w-xs">
-            <Logo />
+            <Logo className="h-8" />
             <p className="mt-4 text-[15px] leading-relaxed text-stone-400">
               Contas e serviços de GTA V pra PS4 e PS5. Pagamento no Pix, entrega
               pelo WhatsApp.

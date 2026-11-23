@@ -117,7 +117,7 @@ export function Navbar() {
         />
         <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-6 px-5">
           <Link href="/" onClick={handleLogoClick} aria-label={`${siteConfig.name}, início`}>
-            <Logo />
+            <Logo className="h-6 sm:h-7" />
           </Link>
 
           <nav aria-label="Principal" className="hidden items-center gap-7 lg:flex">

@@ -1,4 +1,4 @@
-import { LogoMark } from "@/components/ui/logo";
+import { LogoSymbol, LogoWordmark } from "@/components/ui/logo";
 
 /**
  * Script que roda antes da primeira pintura: decide se a abertura toca
@@ -25,11 +25,11 @@ export function Intro() {
       <div className="intro-bg" />
       <div className="intro-brand">
         <span className="intro-mark">
-          <LogoMark className="size-14" />
+          <LogoSymbol className="h-14 sm:h-16" />
         </span>
-        <span className="intro-word font-display text-4xl font-extrabold uppercase leading-none">
+        <span className="intro-word">
           <span>
-            Freitas <span className="text-brand-500">Modder</span>
+            <LogoWordmark className="h-9 text-[#f5f4f2] sm:h-11" />
           </span>
         </span>
       </div>
