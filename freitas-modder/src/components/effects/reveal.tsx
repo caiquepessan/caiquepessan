@@ -3,71 +3,53 @@
 import { motion, type Variants } from "motion/react";
 import type { ReactNode } from "react";
 
-export const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
+export const EASE = [0.22, 1, 0.36, 1] as const;
 
-interface RevealProps {
-  children: ReactNode;
-  className?: string;
-  delay?: number;
-  y?: number;
-  duration?: number;
-  blur?: boolean;
-}
-
-/** Surge suavemente quando entra na tela (uma vez). */
+/** Sobe e aparece quando entra na tela (uma vez). */
 export function Reveal({
   children,
   className,
   delay = 0,
-  y = 28,
-  duration = 0.8,
-  blur = true,
-}: RevealProps) {
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y, filter: blur ? "blur(8px)" : "blur(0px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration, delay, ease: EASE_OUT_EXPO }}
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.7, delay, ease: EASE }}
     >
       {children}
     </motion.div>
   );
 }
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 34, filter: "blur(8px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.75, ease: EASE_OUT_EXPO },
-  },
+const item: Variants = {
+  hidden: { opacity: 0, y: 22 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: EASE } },
 };
 
-/** Container que anima os filhos <RevealItem> em sequência. */
+/** Container que faz os <RevealItem> aparecerem em sequência. */
 export function RevealGroup({
   children,
   className,
-  stagger = 0.08,
-  delay = 0,
+  stagger = 0.07,
 }: {
   children: ReactNode;
   className?: string;
   stagger?: number;
-  delay?: number;
 }) {
   return (
     <motion.div
       className={className}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.12 }}
-      variants={{
-        hidden: {},
-        show: { transition: { staggerChildren: stagger, delayChildren: delay } },
-      }}
+      viewport={{ once: true, amount: 0.1 }}
+      variants={{ hidden: {}, show: { transition: { staggerChildren: stagger } } }}
     >
       {children}
     </motion.div>
@@ -82,7 +64,7 @@ export function RevealItem({
   className?: string;
 }) {
   return (
-    <motion.div className={className} variants={itemVariants}>
+    <motion.div className={className} variants={item}>
       {children}
     </motion.div>
   );

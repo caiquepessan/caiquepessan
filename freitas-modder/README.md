@@ -1,7 +1,7 @@
 # Freitas Modder
 
-Loja online de contas modadas e serviços de GTA V: tema vermelho, animações,
-carrinho e checkout pelo WhatsApp. Pronta para publicar na Vercel.
+Loja online de contas modadas e serviços de GTA V para PS4 e PS5: tema
+vermelho, carrinho e pedido pelo WhatsApp. Publicada na Vercel.
 
 ## Stack
 
@@ -10,9 +10,10 @@ carrinho e checkout pelo WhatsApp. Pronta para publicar na Vercel.
 | Framework | [Next.js 16](https://nextjs.org) (App Router, Cache Components, páginas estáticas) |
 | Linguagem | TypeScript |
 | Estilo | Tailwind CSS v4 |
-| Animações | [Motion](https://motion.dev) + CSS + canvas (brasas) |
+| Animações | [Motion](https://motion.dev) + CSS |
 | Scroll suave | [Lenis](https://lenis.darkroom.engineering) |
-| Carrinho | Zustand (salvo no navegador) |
+| Carrinho e console escolhido | Zustand (salvos no navegador) |
+| Fontes | Barlow e Barlow Condensed |
 | Avisos | Sonner |
 | Ícones | Lucide + Simple Icons (marcas) |
 | Métricas | Vercel Analytics |
@@ -44,7 +45,7 @@ npm run typecheck  # checagem de tipos
 | --- | --- |
 | WhatsApp, Discord, redes, e-mail, garantia, horário, números da loja | `src/config/site.ts` |
 | Produtos, preços por plataforma, estoque, selos | `src/data/products.ts` |
-| Avaliações de clientes | `src/data/testimonials.ts` |
+| Prints de entregas (seção "Entregas") | `src/data/proofs.ts` + `public/provas/` |
 | Perguntas frequentes | `src/data/faq.ts` |
 | Termos e garantia | `src/app/termos/page.tsx` |
 | Cores, fontes e animações globais | `src/app/globals.css` |
@@ -52,22 +53,29 @@ npm run typecheck  # checagem de tipos
 ### Produtos
 
 Cada produto tem um `slug` (vira a URL `/contas/<slug>`), uma categoria
-(`conta`, `dinheiro` ou `servico`), um tier visual (`starter`, `pro`, `elite`
-ou `lendaria`) e uma lista de `variants` com o preço de cada plataforma:
+(`conta`, `dinheiro` ou `servico`), uma cor de painel (`tone`: `graphite`,
+`red`, `wine` ou `black`), o número em destaque (`headline`) e o preço de cada
+console:
 
 ```ts
 variants: [
-  { platform: "pc", price: 79.9, oldPrice: 119.9 },
-  { platform: "playstation", price: 89.9 },
+  { platform: "ps4", price: 79.9 },
+  { platform: "ps5", price: 89.9 },
 ],
 ```
 
-Se o produto não existir para uma plataforma, é só não colocar a variante: ele
-some do filtro dessa plataforma automaticamente.
+Se um produto não existir para um console, é só não colocar a variante dele: o
+site mostra "Indisponível no PS4" (ou PS5) e bloqueia o botão.
 
-**Imagens:** por padrão cada produto ganha uma "capa" gerada (gradiente + emblema).
-Para usar prints reais, coloque a imagem em `public/produtos/` e informe no
-produto, por exemplo `image: "/produtos/conta-elite.jpg"`.
+**Console:** o visitante escolhe PS4 ou PS5 na barra do topo, e todos os preços
+do site seguem essa escolha (ela fica salva no navegador).
+
+**Imagens:** por padrão cada produto aparece como um painel colorido com o número
+principal. Para usar um print real, coloque a imagem em `public/produtos/` e
+informe no produto, por exemplo `image: "/produtos/conta-elite.jpg"`.
+
+**Entregas:** a seção com prints de clientes só aparece quando houver imagens.
+Coloque os prints em `public/provas/` e liste em `src/data/proofs.ts`.
 
 ## Como funciona a compra
 
@@ -81,7 +89,11 @@ exemplo) usando um Route Handler do Next.js, sem mudar o visual.
 
 ## Publicando na Vercel
 
-1. Na Vercel, clique em **Add New → Project** e importe este repositório.
+O projeto `freitas-modder` já existe na Vercel e o site está em
+<https://freitas-modder.vercel.app>. Ele não está ligado a um repositório, então
+cada atualização é publicada manualmente. Para ligar a um repositório próprio:
+
+1. Na Vercel, clique em **Add New → Project** e importe o repositório.
 2. Em **Root Directory**, escolha `freitas-modder`.
 3. O framework (Next.js) é detectado sozinho. Clique em **Deploy**.
 4. Depois de ligar um domínio próprio, crie a variável de ambiente
@@ -96,10 +108,10 @@ Sem a variável, o site usa automaticamente o domínio `.vercel.app` do projeto.
 Os dados abaixo são **exemplos** e precisam ser trocados pelos reais:
 
 - [ ] Número do WhatsApp, link do Discord, redes e e-mail (`src/config/site.ts`)
-- [ ] Números da loja: contas entregues, clientes, nota e avaliações (`src/config/site.ts`)
-- [ ] Preços, descrições e estoque dos produtos (`src/data/products.ts`)
-- [ ] Avaliações: substituir pelas reais dos clientes (`src/data/testimonials.ts`)
-- [ ] Prazo de garantia, horário de atendimento e texto dos termos
+- [ ] Preços, números e descrições dos produtos (`src/data/products.ts`)
+- [ ] Prazo de garantia, tempo de entrega e horário (`src/config/site.ts`)
+- [ ] Texto dos termos (`src/app/termos/page.tsx`)
+- [ ] Opcional: prints reais de entregas (`src/data/proofs.ts`)
 
 ## Estrutura
 
@@ -110,21 +122,22 @@ src/
 ├── components/
 │   ├── cart/            carrinho lateral
 │   ├── catalog/         catálogo com filtros
-│   ├── effects/         animações reutilizáveis (reveal, tilt, brasas, marquee…)
+│   ├── effects/         animações reutilizáveis (reveal, faixa rolando, scroll suave)
 │   ├── icons/           ícones de marcas
 │   ├── layout/          navbar, footer, botão do WhatsApp
-│   ├── product/         card, capa, seletor de plataforma, bloco de compra
+│   ├── product/         card, painel, contador, seletor de console, bloco de compra
 │   ├── sections/        seções da home
 │   └── ui/              botões, logo, títulos
 ├── config/site.ts       dados da loja
-├── data/                produtos, avaliações e FAQ
+├── data/                produtos, FAQ e prints de entregas
 ├── lib/                 utilitários (preço, WhatsApp, scroll, imagem OG)
-└── store/cart.ts        estado do carrinho
+└── store/               carrinho e console escolhido
 ```
 
 ## Créditos
 
-- Fontes Anton e Chakra Petch (Google Fonts, licença SIL Open Font License).
+- Fontes Barlow e Barlow Condensed (Google Fonts, licença SIL Open Font License).
 - Ícones de marcas do [Simple Icons](https://simpleicons.org) (CC0).
-- O Freitas Modder não tem vínculo com a Rockstar Games ou a Take-Two
-  Interactive. GTA é marca registrada de seus respectivos donos.
+- O Freitas Modder não tem vínculo com a Rockstar Games, a Take-Two
+  Interactive ou a Sony. GTA, PlayStation, PS4 e PS5 são marcas dos seus
+  respectivos donos.

@@ -1,9 +1,7 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
-import { Anton, Chakra_Petch, Geist, Geist_Mono } from "next/font/google";
+import { Barlow, Barlow_Condensed } from "next/font/google";
 import { CartDrawer } from "@/components/cart/cart-drawer";
-import { CursorGlow } from "@/components/effects/cursor-glow";
-import { ScrollProgress } from "@/components/effects/scroll-progress";
 import { SmoothScroll } from "@/components/effects/smooth-scroll";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { Footer } from "@/components/layout/footer";
@@ -12,29 +10,20 @@ import { Providers } from "@/components/providers";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
-const anton = Anton({
-  weight: "400",
+// Barlow foi desenhada a partir das placas de carro e sinalização
+// da Califórnia, o que combina com o clima de GTA.
+const barlow = Barlow({
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-anton",
+  variable: "--font-barlow",
   display: "swap",
 });
 
-const chakra = Chakra_Petch({
-  weight: ["500", "600", "700"],
+const barlowCondensed = Barlow_Condensed({
+  weight: ["700", "800"],
+  style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-chakra",
-  display: "swap",
-});
-
-const geist = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist",
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-barlow-condensed",
   display: "swap",
 });
 
@@ -65,29 +54,24 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#060304",
+  themeColor: "#09090a",
   colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="pt-BR"
-      className={`${anton.variable} ${chakra.variable} ${geist.variable} ${geistMono.variable}`}
-    >
-      <body className="min-h-dvh bg-ink-950 font-sans text-bone-50 antialiased">
+    <html lang="pt-BR" className={`${barlow.variable} ${barlowCondensed.variable}`}>
+      <body className="min-h-dvh bg-ink-950 font-sans text-[#f5f4f2] antialiased">
         <Providers>
           <SmoothScroll />
-          <ScrollProgress />
-          <CursorGlow />
           <a
             href="#conteudo"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-blood-600 focus:px-4 focus:py-2 focus:text-white"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-brand-500 focus:px-4 focus:py-2 focus:text-white"
           >
             Pular para o conteúdo
           </a>
           <Navbar />
-          <main id="conteudo" className="relative z-10 overflow-x-clip">
+          <main id="conteudo" className="overflow-x-clip">
             {children}
           </main>
           <Footer />

@@ -1,67 +1,64 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/components/effects/reveal";
 import { PageHeader } from "@/components/ui/page-header";
 import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   title: "Termos e garantia",
-  description: `Condições de compra, entrega e garantia de ${siteConfig.business.warrantyDays} dias da ${siteConfig.name}.`,
+  description: `Como funcionam a compra, a entrega e a garantia de ${siteConfig.business.warrantyDays} dias da ${siteConfig.name}.`,
   alternates: { canonical: "/termos" },
 };
 
 const { warrantyDays, supportHours } = siteConfig.business;
 
 /**
- * ⚠️ Texto-base. Revise com o dono da loja (prazos, reembolso, regras)
- * antes de publicar.
+ * ⚠️ Texto-base. Revise com o dono da loja (prazos, reembolso e regras)
+ * antes de divulgar o site.
  */
 const sections = [
   {
-    title: "1. Sobre a loja",
+    title: "A loja",
     body: [
-      `A ${siteConfig.name} é uma loja independente que vende contas e serviços para o modo online de GTA V. Não temos qualquer vínculo com a Rockstar Games ou a Take-Two Interactive.`,
-      "Ao comprar, você declara ter mais de 18 anos ou autorização de um responsável.",
+      `A ${siteConfig.name} vende contas e serviços para o GTA V Online no PS4 e no PS5. É uma loja independente, sem vínculo com a Rockstar Games, a Take-Two Interactive ou a Sony.`,
+      "Pra comprar, você precisa ter 18 anos ou a autorização de um responsável.",
     ],
   },
   {
-    title: "2. Pedidos e pagamento",
+    title: "Pedido e pagamento",
     body: [
-      "Os pedidos são finalizados pelo WhatsApp (ou Discord). O pagamento é feito via PIX ou cartão de crédito, conforme as instruções enviadas na conversa.",
-      "O pedido só é considerado confirmado após a compensação do pagamento.",
+      "Os pedidos são fechados pelo WhatsApp. O pagamento é no Pix ou no cartão de crédito, com os dados enviados na conversa.",
+      "O pedido só vale depois que o pagamento é confirmado.",
     ],
   },
   {
-    title: "3. Entrega",
+    title: "Entrega",
     body: [
-      "Contas prontas são entregues com os dados de acesso (e-mail e senha) pelo mesmo canal do pedido. Serviços feitos na sua conta seguem o prazo informado na página de cada produto.",
-      `Atendimento: ${supportHours}. Pedidos feitos fora desse horário são entregues assim que o atendimento é retomado.`,
+      "Nas contas prontas, você recebe o e-mail e a senha da conta PSN pelo WhatsApp. Nos serviços feitos na sua conta, o prazo é o que aparece na página de cada produto.",
+      `Atendimento: ${supportHours.toLowerCase()}. Pedido feito fora desse horário é entregue quando o atendimento volta.`,
     ],
   },
   {
-    title: `4. Garantia de ${warrantyDays} dias`,
+    title: `Garantia de ${warrantyDays} dias`,
     body: [
-      `Todos os produtos têm garantia de ${warrantyDays} dias a partir da entrega. Se houver qualquer problema com o que foi comprado nesse período, fazemos a reposição ou resolvemos sem custo.`,
-      "A garantia não cobre problemas causados por compartilhamento da conta com terceiros, uso de outros programas de modificação após a entrega ou descumprimento das orientações de segurança enviadas no atendimento.",
+      `Tudo tem garantia de ${warrantyDays} dias a partir da entrega. Se acontecer algum problema com o que você comprou nesse prazo, a gente repõe ou resolve sem custo.`,
+      "A garantia não cobre problemas causados por compartilhar a conta com outras pessoas, usar outros programas de modificação depois da entrega ou não seguir as orientações de segurança passadas no atendimento.",
     ],
   },
   {
-    title: "5. Riscos",
+    title: "Riscos",
     body: [
-      "Modificações em jogos online vão contra os termos de uso do jogo. Usamos métodos testados para reduzir riscos, mas nenhuma loja consegue garantir risco zero. Por isso existe a garantia de reposição dentro do prazo.",
+      "Modificar contas vai contra as regras do jogo. A gente usa métodos testados pra diminuir o risco, mas ninguém consegue garantir risco zero. Por isso existe a garantia de reposição.",
     ],
   },
   {
-    title: "6. Segurança da sua conta",
+    title: "Segurança",
     body: [
-      "Após receber uma conta, troque imediatamente e-mail e senha. Nos serviços feitos na sua própria conta, recomendamos trocar a senha assim que o serviço for concluído.",
-      "Nunca pedimos dados de cartão pelo chat. Desconfie de perfis que se passam pela loja: os canais oficiais são apenas os listados neste site.",
+      "Assim que receber uma conta, troque o e-mail e a senha. Nos serviços feitos na sua conta, troque a senha quando a gente avisar que terminou.",
+      "A gente nunca pede dados de cartão pelo chat. Os únicos canais oficiais são os que estão neste site.",
     ],
   },
   {
-    title: "7. Contato",
-    body: [
-      `WhatsApp: ${siteConfig.contact.whatsappDisplay}. E-mail: ${siteConfig.contact.email}.`,
-    ],
+    title: "Contato",
+    body: [`WhatsApp ${siteConfig.contact.whatsappDisplay} · ${siteConfig.contact.email}`],
   },
 ];
 
@@ -70,26 +67,28 @@ export default function TermsPage() {
     <>
       <PageHeader
         breadcrumb={[{ href: "/", label: "Início" }, { label: "Termos e garantia" }]}
-        eyebrow="Transparência"
-        title="Termos &"
-        highlight="garantia"
-        description="Tudo o que você precisa saber antes de comprar, sem letras miúdas."
+        title="Termos e garantia"
+        description="O que você precisa saber antes de comprar."
       />
-      <section className="mx-auto max-w-7xl px-4 pb-28 sm:px-6">
-        <div className="flex max-w-3xl flex-col gap-5">
-          {sections.map((section) => (
-            <Reveal key={section.title}>
-              <article className="rounded-2xl border border-white/[0.07] bg-ink-850/70 p-6 sm:p-8">
-                <h2 className="font-display text-3xl uppercase tracking-wide text-bone-50">
-                  {section.title}
-                </h2>
-                <div className="mt-4 flex flex-col gap-3 leading-relaxed text-bone-400">
+      <section className="mx-auto max-w-6xl px-5 pb-28">
+        <div className="max-w-3xl border-t border-white/[0.08]">
+          {sections.map((section, i) => (
+            <article
+              key={section.title}
+              className="grid gap-3 border-b border-white/[0.08] py-8 sm:grid-cols-[3rem_1fr] sm:gap-6"
+            >
+              <span className="font-display text-2xl font-extrabold italic text-brand-500">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h2 className="text-xl font-semibold">{section.title}</h2>
+                <div className="mt-3 flex flex-col gap-3 text-[17px] leading-relaxed text-stone-400">
                   {section.body.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
                   ))}
                 </div>
-              </article>
-            </Reveal>
+              </div>
+            </article>
           ))}
         </div>
       </section>

@@ -11,14 +11,9 @@ export function useAddToCart() {
   const open = useCart((s) => s.open);
 
   return useCallback(
-    (product: Product, platform: Platform, options?: { openCart?: boolean }) => {
+    (product: Product, platform: Platform) => {
       add(product.slug, platform);
-      if (options?.openCart) {
-        open();
-        return;
-      }
-      toast.success(`${product.name} no carrinho`, {
-        description: `Plataforma: ${platforms[platform].label}`,
+      toast(`${product.name} (${platforms[platform].label}) no carrinho`, {
         action: { label: "Ver carrinho", onClick: () => open() },
       });
     },

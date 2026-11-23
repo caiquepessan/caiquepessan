@@ -3,99 +3,57 @@
  *  CATÁLOGO: adicione, remova ou edite produtos aqui
  * ============================================================
  *  - `slug` vira a URL do produto: /contas/<slug>
- *  - `variants` define em quais plataformas o produto existe e o preço
- *    de cada uma (oldPrice é opcional e aparece riscado).
- *  - Preços, quantidades e descrições abaixo são EXEMPLOS.
+ *  - `variants` tem o preço de cada console. Se o produto não existir
+ *    para um console, é só não colocar a variante dele.
+ *  - Preços, números e textos abaixo são EXEMPLOS.
  */
 
-export type Platform = "pc" | "playstation" | "xbox";
+export type Platform = "ps4" | "ps5";
 export type Category = "conta" | "dinheiro" | "servico";
-export type Tier = "starter" | "pro" | "elite" | "lendaria";
-export type StatIcon =
-  | "level"
-  | "money"
-  | "cars"
-  | "unlock"
-  | "outfit"
-  | "property"
-  | "weapon"
-  | "speed";
+/** Cor do painel do produto. */
+export type Tone = "graphite" | "red" | "wine" | "black";
 
 export interface ProductVariant {
   platform: Platform;
   price: number;
+  /** Opcional: preço antigo, aparece riscado. */
   oldPrice?: number;
-}
-
-export interface ProductStat {
-  icon: StatIcon;
-  label: string;
-  value: string;
 }
 
 export interface Product {
   slug: string;
   name: string;
-  tagline: string;
+  /** Uma frase curta para o card. */
+  summary: string;
+  /** Texto da página do produto. */
   description: string;
   category: Category;
-  tier: Tier;
-  badge?: "MAIS VENDIDA" | "PROMO" | "NOVO" | "TOP";
+  /** Destaque grande do painel, ex.: { value: "$1 BI", label: "no banco" }. */
+  headline: { value: string; label: string };
+  /** Valor em dinheiro do jogo, para o contador animado (opcional). */
+  amount?: number;
+  specs: { label: string; value: string }[];
+  includes: string[];
   variants: ProductVariant[];
-  stats: ProductStat[];
-  features: string[];
   delivery: string;
-  /** Opcional: deixe sem valor para não mostrar o aviso de estoque. */
-  stock?: number;
-  /** Opcional: imagem em /public (ex.: "/produtos/conta-elite.jpg"). */
+  tone: Tone;
+  /** Etiqueta opcional, ex.: "Mais pedida". */
+  tag?: string;
+  /** Opcional: print real do produto em /public (ex.: "/produtos/conta-pro.jpg"). */
   image?: string;
 }
 
-export const platforms: Record<
-  Platform,
-  { label: string; long: string; short: string }
-> = {
-  pc: { label: "PC", long: "PC (Steam, Epic e Rockstar)", short: "PC" },
-  playstation: { label: "PlayStation", long: "PS4 e PS5", short: "PS" },
-  xbox: { label: "Xbox", long: "Xbox One e Series X|S", short: "XB" },
+export const platforms: Record<Platform, { label: string; long: string }> = {
+  ps4: { label: "PS4", long: "PlayStation 4" },
+  ps5: { label: "PS5", long: "PlayStation 5" },
 };
 
-export const platformOrder: Platform[] = ["pc", "playstation", "xbox"];
+export const platformOrder: Platform[] = ["ps4", "ps5"];
 
 export const categories: Record<Category, { label: string; short: string }> = {
-  conta: { label: "Contas modadas", short: "Contas" },
+  conta: { label: "Contas prontas", short: "Contas" },
   dinheiro: { label: "Dinheiro na sua conta", short: "Dinheiro" },
-  servico: { label: "Serviços", short: "Serviços" },
-};
-
-export const tiers: Record<
-  Tier,
-  { label: string; accent: string; glow: string; gradient: string }
-> = {
-  starter: {
-    label: "Starter",
-    accent: "#ff7a8a",
-    glow: "rgba(255, 95, 115, 0.35)",
-    gradient: "from-[#3a0a14] via-[#1c0a0e] to-[#0b0607]",
-  },
-  pro: {
-    label: "Pro",
-    accent: "#ff2a47",
-    glow: "rgba(255, 42, 71, 0.45)",
-    gradient: "from-[#5c0718] via-[#250910] to-[#0b0607]",
-  },
-  elite: {
-    label: "Elite",
-    accent: "#ff6a2b",
-    glow: "rgba(255, 94, 31, 0.45)",
-    gradient: "from-[#6b1208] via-[#2a0b0a] to-[#0b0607]",
-  },
-  lendaria: {
-    label: "Lendária",
-    accent: "#ffc94d",
-    glow: "rgba(255, 201, 77, 0.4)",
-    gradient: "from-[#5a3306] via-[#2a0d0a] to-[#0b0607]",
-  },
+  servico: { label: "Serviços na sua conta", short: "Serviços" },
 };
 
 export const products: Product[] = [
@@ -103,251 +61,249 @@ export const products: Product[] = [
   {
     slug: "conta-starter",
     name: "Conta Starter",
-    tagline: "O jeito mais barato de sair do zero",
+    summary: "Pra começar o online sem farmar do zero.",
     description:
-      "Ideal pra quem quer começar o online sem perder semanas farmando. Personagem pronto, dinheiro pra montar a garagem e carros já tunados.",
+      "Personagem criado, dinheiro pra montar a garagem e alguns carros já no máximo. É a forma mais barata de entrar no online com tudo andando.",
     category: "conta",
-    tier: "starter",
+    headline: { value: "$300 MI", label: "no banco" },
+    amount: 300_000_000,
+    specs: [
+      { label: "Nível", value: "120+" },
+      { label: "Dinheiro", value: "$300 milhões" },
+      { label: "Carros", value: "15 modificados" },
+    ],
+    includes: [
+      "Conta PSN com e-mail e senha que você troca",
+      "Personagem pronto no online",
+      "15 carros com melhorias no máximo",
+      "Apartamento com garagem",
+    ],
     variants: [
-      { platform: "pc", price: 39.9, oldPrice: 59.9 },
-      { platform: "playstation", price: 49.9, oldPrice: 69.9 },
-      { platform: "xbox", price: 49.9, oldPrice: 69.9 },
-    ],
-    stats: [
-      { icon: "level", label: "Nível", value: "120+" },
-      { icon: "money", label: "Dinheiro", value: "$300 mi" },
-      { icon: "cars", label: "Carros modded", value: "15" },
-    ],
-    features: [
-      "Acesso completo: você troca e-mail e senha",
-      "Personagem criado e pronto pra jogar",
-      "15 carros com upgrades no máximo",
-      "Apartamento de luxo com garagem",
-      "Entrega imediata após o pagamento",
+      { platform: "ps4", price: 39.9 },
+      { platform: "ps5", price: 49.9 },
     ],
     delivery: "Imediata",
+    tone: "graphite",
   },
   {
     slug: "conta-pro",
     name: "Conta Pro",
-    tagline: "O equilíbrio perfeito entre preço e poder",
+    summary: "Um bilhão no banco e garagem cheia.",
     description:
-      "A mais vendida da loja. Bilhão na conta, garagem cheia de carros modificados e as principais propriedades já compradas pra você lucrar desde o primeiro dia.",
+      "Nível 350, um bilhão de dinheiro, 40 carros modificados e as armas liberadas. Dá pra comprar os negócios principais e começar a lucrar no primeiro dia.",
     category: "conta",
-    tier: "pro",
-    badge: "MAIS VENDIDA",
+    headline: { value: "$1 BI", label: "no banco" },
+    amount: 1_000_000_000,
+    specs: [
+      { label: "Nível", value: "350+" },
+      { label: "Dinheiro", value: "$1 bilhão" },
+      { label: "Carros", value: "40 modificados" },
+      { label: "Armas", value: "Todas liberadas" },
+    ],
+    includes: [
+      "Conta PSN com e-mail e senha que você troca",
+      "$1 bilhão no banco",
+      "40 carros modificados",
+      "Armas liberadas com melhorias",
+      "Negócios principais comprados",
+    ],
     variants: [
-      { platform: "pc", price: 79.9, oldPrice: 119.9 },
-      { platform: "playstation", price: 89.9, oldPrice: 129.9 },
-      { platform: "xbox", price: 89.9, oldPrice: 129.9 },
-    ],
-    stats: [
-      { icon: "level", label: "Nível", value: "350+" },
-      { icon: "money", label: "Dinheiro", value: "$1 bi" },
-      { icon: "cars", label: "Carros modded", value: "40" },
-    ],
-    features: [
-      "Acesso completo: você troca e-mail e senha",
-      "$1 bilhão em dinheiro na conta",
-      "40 carros modificados e raros",
-      "Principais negócios e propriedades comprados",
-      "Armas desbloqueadas com melhorias",
-      "Entrega imediata após o pagamento",
+      { platform: "ps4", price: 79.9 },
+      { platform: "ps5", price: 89.9 },
     ],
     delivery: "Imediata",
-    stock: 7,
+    tone: "red",
+    tag: "Mais pedida",
   },
   {
     slug: "conta-elite",
     name: "Conta Elite",
-    tagline: "Tudo desbloqueado, sem limite de diversão",
+    summary: "Tudo desbloqueado, roupas modadas e $3 bi.",
     description:
-      "Pra quem quer chegar chegando. Unlock All completo, roupas modadas, bilhões na conta e uma garagem que faz inveja em qualquer sessão.",
+      "Unlock All completo, roupas modadas, 80 carros e três bilhões no banco. Pra quem quer chegar no online com tudo que o jogo tem.",
     category: "conta",
-    tier: "elite",
-    variants: [
-      { platform: "pc", price: 149.9, oldPrice: 219.9 },
-      { platform: "playstation", price: 169.9, oldPrice: 239.9 },
-      { platform: "xbox", price: 169.9, oldPrice: 239.9 },
+    headline: { value: "$3 BI", label: "no banco" },
+    amount: 3_000_000_000,
+    specs: [
+      { label: "Nível", value: "800+" },
+      { label: "Dinheiro", value: "$3 bilhões" },
+      { label: "Carros", value: "80 modificados" },
+      { label: "Unlock All", value: "Completo" },
     ],
-    stats: [
-      { icon: "level", label: "Nível", value: "800+" },
-      { icon: "money", label: "Dinheiro", value: "$3 bi" },
-      { icon: "cars", label: "Carros modded", value: "80" },
-    ],
-    features: [
-      "Acesso completo: você troca e-mail e senha",
-      "$3 bilhões em dinheiro na conta",
-      "80 carros modificados e raros",
+    includes: [
+      "Conta PSN com e-mail e senha que você troca",
+      "$3 bilhões no banco",
+      "80 carros modificados",
       "Unlock All: troféus, tatuagens, roupas e pinturas",
-      "Roupas modadas exclusivas",
-      "Todas as propriedades principais",
-      "Suporte prioritário",
+      "Roupas modadas",
+    ],
+    variants: [
+      { platform: "ps4", price: 149.9 },
+      { platform: "ps5", price: 169.9 },
     ],
     delivery: "Imediata",
-    stock: 4,
+    tone: "wine",
   },
   {
     slug: "conta-lendaria",
     name: "Conta Lendária",
-    tagline: "O topo da cadeia alimentar do online",
+    summary: "A conta mais completa da loja.",
     description:
-      "A conta mais completa da Freitas Modder. Nível absurdo, dez bilhões na conta, mais de 150 carros modificados, outfits raríssimos e absolutamente tudo desbloqueado.",
+      "Nível 8000, dez bilhões no banco, mais de 150 carros modificados, roupas raras e tudo desbloqueado. Não falta nada.",
     category: "conta",
-    tier: "lendaria",
-    badge: "TOP",
-    variants: [
-      { platform: "pc", price: 299.9, oldPrice: 449.9 },
-      { platform: "playstation", price: 349.9, oldPrice: 499.9 },
-      { platform: "xbox", price: 349.9, oldPrice: 499.9 },
+    headline: { value: "$10 BI", label: "no banco" },
+    amount: 10_000_000_000,
+    specs: [
+      { label: "Nível", value: "8000" },
+      { label: "Dinheiro", value: "$10 bilhões" },
+      { label: "Carros", value: "150+ modificados" },
+      { label: "Unlock All", value: "Completo" },
     ],
-    stats: [
-      { icon: "level", label: "Nível", value: "8000" },
-      { icon: "money", label: "Dinheiro", value: "$10 bi" },
-      { icon: "cars", label: "Carros modded", value: "150+" },
-    ],
-    features: [
-      "Acesso completo: você troca e-mail e senha",
-      "$10 bilhões em dinheiro na conta",
-      "Mais de 150 carros modificados e raros",
-      "Unlock All completo + habilidades no máximo",
-      "Outfits modados raríssimos",
+    includes: [
+      "Conta PSN com e-mail e senha que você troca",
+      "$10 bilhões no banco",
+      "Mais de 150 carros modificados",
+      "Unlock All e habilidades no máximo",
+      "Roupas modadas raras",
       "Todas as propriedades e negócios",
-      "Suporte VIP direto com o Freitas",
+    ],
+    variants: [
+      { platform: "ps4", price: 299.9 },
+      { platform: "ps5", price: 349.9 },
     ],
     delivery: "Imediata",
-    stock: 2,
+    tone: "black",
   },
 
   // ------------------------- DINHEIRO NA CONTA -------------------------
   {
     slug: "dinheiro-500-milhoes",
-    name: "$500 Milhões",
-    tagline: "Meio bilhão direto na sua conta",
+    name: "$500 milhões",
+    summary: "Meio bilhão direto no seu personagem.",
     description:
-      "Coloque meio bilhão na sua própria conta, sem precisar criar outra. Perfeito pra comprar aquele carro, a cobertura ou o negócio que você está de olho.",
+      "A gente coloca $500 milhões na sua própria conta, sem você precisar começar outra. Bom pra comprar aquele carro, a cobertura ou o negócio que você tá de olho.",
     category: "dinheiro",
-    tier: "pro",
-    variants: [
-      { platform: "pc", price: 29.9 },
-      { platform: "playstation", price: 34.9 },
-      { platform: "xbox", price: 34.9 },
+    headline: { value: "$500 MI", label: "na sua conta" },
+    amount: 500_000_000,
+    specs: [
+      { label: "Valor", value: "$500 milhões" },
+      { label: "Onde", value: "Na sua conta" },
+      { label: "Prazo", value: "Até 1 hora" },
     ],
-    stats: [
-      { icon: "money", label: "Dinheiro", value: "$500 mi" },
-      { icon: "speed", label: "Entrega", value: "Até 1h" },
-    ],
-    features: [
-      "Dinheiro depositado na SUA conta",
-      "Sem precisar começar do zero",
-      "Atendimento acompanhando o serviço",
+    includes: [
+      "Dinheiro depositado no seu personagem",
+      "Acompanhamento pelo WhatsApp",
       "Garantia de reposição",
     ],
+    variants: [
+      { platform: "ps4", price: 29.9 },
+      { platform: "ps5", price: 34.9 },
+    ],
     delivery: "Até 1 hora",
+    tone: "graphite",
   },
   {
     slug: "dinheiro-2-bilhoes",
-    name: "$2 Bilhões",
-    tagline: "Compre tudo que quiser, quantas vezes quiser",
+    name: "$2 bilhões",
+    summary: "Dois bilhões direto no seu personagem.",
     description:
-      "Dois bilhões na sua conta pra montar o império completo: carros, propriedades, negócios e tudo que a cidade tem pra oferecer.",
+      "Dois bilhões na sua própria conta pra montar o império inteiro: carros, propriedades e todos os negócios.",
     category: "dinheiro",
-    tier: "elite",
-    badge: "PROMO",
-    variants: [
-      { platform: "pc", price: 69.9, oldPrice: 99.9 },
-      { platform: "playstation", price: 79.9, oldPrice: 109.9 },
-      { platform: "xbox", price: 79.9, oldPrice: 109.9 },
+    headline: { value: "$2 BI", label: "na sua conta" },
+    amount: 2_000_000_000,
+    specs: [
+      { label: "Valor", value: "$2 bilhões" },
+      { label: "Onde", value: "Na sua conta" },
+      { label: "Prazo", value: "Até 2 horas" },
     ],
-    stats: [
-      { icon: "money", label: "Dinheiro", value: "$2 bi" },
-      { icon: "speed", label: "Entrega", value: "Até 2h" },
-    ],
-    features: [
-      "Dinheiro depositado na SUA conta",
-      "Quantia ideal pra comprar tudo",
-      "Atendimento acompanhando o serviço",
+    includes: [
+      "Dinheiro depositado no seu personagem",
+      "Acompanhamento pelo WhatsApp",
       "Garantia de reposição",
     ],
+    variants: [
+      { platform: "ps4", price: 69.9 },
+      { platform: "ps5", price: 79.9 },
+    ],
     delivery: "Até 2 horas",
+    tone: "red",
   },
 
   // ------------------------------ SERVIÇOS ------------------------------
   {
     slug: "unlock-all",
     name: "Unlock All",
-    tagline: "Tudo desbloqueado na sua conta",
+    summary: "Libera troféus, tatuagens, roupas e melhorias de armas.",
     description:
-      "Desbloqueie de uma vez tudo aquilo que levaria meses: troféus, tatuagens, roupas, pinturas, melhorias de armas e habilidades no máximo.",
+      "Desbloqueia de uma vez o que levaria meses: troféus, tatuagens, roupas, pinturas, melhorias de armas e habilidades no máximo.",
     category: "servico",
-    tier: "elite",
-    variants: [
-      { platform: "pc", price: 39.9 },
-      { platform: "playstation", price: 44.9 },
-      { platform: "xbox", price: 44.9 },
+    headline: { value: "100%", label: "desbloqueado" },
+    specs: [
+      { label: "O que libera", value: "Tudo" },
+      { label: "Onde", value: "Na sua conta" },
+      { label: "Prazo", value: "Até 1 hora" },
     ],
-    stats: [
-      { icon: "unlock", label: "Desbloqueios", value: "100%" },
-      { icon: "speed", label: "Entrega", value: "Até 1h" },
-    ],
-    features: [
-      "Troféus, tatuagens e roupas exclusivas",
+    includes: [
+      "Troféus, tatuagens e roupas",
       "Pinturas e melhorias de armas",
       "Habilidades do personagem no máximo",
-      "Feito na sua própria conta",
+    ],
+    variants: [
+      { platform: "ps4", price: 39.9 },
+      { platform: "ps5", price: 44.9 },
     ],
     delivery: "Até 1 hora",
+    tone: "wine",
   },
   {
     slug: "upar-nivel",
-    name: "Upar Nível",
-    tagline: "Suba até o nível 500 sem farmar",
+    name: "Upar nível",
+    summary: "Sobe seu personagem até o nível 500.",
     description:
-      "Seu personagem do nível atual até o nível 500, com todos os desbloqueios de rank que vêm junto. Chega de horas repetindo missão.",
+      "Leva seu personagem do nível atual até o 500, com os desbloqueios de rank que vêm junto. Sem horas repetindo missão.",
     category: "servico",
-    tier: "starter",
-    variants: [
-      { platform: "pc", price: 34.9 },
-      { platform: "playstation", price: 39.9 },
-      { platform: "xbox", price: 39.9 },
+    headline: { value: "500", label: "de nível" },
+    specs: [
+      { label: "Até o nível", value: "500" },
+      { label: "Onde", value: "Na sua conta" },
+      { label: "Prazo", value: "Até 1 hora" },
     ],
-    stats: [
-      { icon: "level", label: "Até o nível", value: "500" },
-      { icon: "speed", label: "Entrega", value: "Até 1h" },
-    ],
-    features: [
+    includes: [
       "Qualquer nível até o 500",
       "Desbloqueios de rank inclusos",
-      "Feito na sua própria conta",
       "Garantia de reposição",
     ],
+    variants: [
+      { platform: "ps4", price: 34.9 },
+      { platform: "ps5", price: 39.9 },
+    ],
     delivery: "Até 1 hora",
+    tone: "graphite",
   },
   {
-    slug: "pack-carros-modded",
-    name: "Pack Carros Modded",
-    tagline: "10 carros modificados na sua garagem",
+    slug: "pack-carros-modificados",
+    name: "Pack de carros",
+    summary: "10 carros com rodas e pinturas fora do padrão.",
     description:
-      "Dez carros com modificações que não existem no jogo normal: rodas especiais, pinturas cromadas e combinações exclusivas pra você chamar atenção em qualquer sessão.",
+      "Dez carros com modificações que não existem na loja do jogo: rodas especiais, pinturas cromadas e combinações exclusivas. Você escolhe os modelos.",
     category: "servico",
-    tier: "pro",
-    badge: "NOVO",
-    variants: [
-      { platform: "pc", price: 44.9 },
-      { platform: "playstation", price: 49.9 },
-      { platform: "xbox", price: 49.9 },
+    headline: { value: "10", label: "carros modificados" },
+    specs: [
+      { label: "Carros", value: "10" },
+      { label: "Modelos", value: "Você escolhe" },
+      { label: "Prazo", value: "Até 2 horas" },
     ],
-    stats: [
-      { icon: "cars", label: "Carros modded", value: "10" },
-      { icon: "speed", label: "Entrega", value: "Até 2h" },
-    ],
-    features: [
-      "10 carros com modificações exclusivas",
+    includes: [
+      "10 carros modificados na sua garagem",
       "Rodas e pinturas especiais",
-      "Você escolhe os modelos",
-      "Feito na sua própria conta",
+      "Modelos à sua escolha",
+    ],
+    variants: [
+      { platform: "ps4", price: 44.9 },
+      { platform: "ps5", price: 49.9 },
     ],
     delivery: "Até 2 horas",
+    tone: "black",
   },
 ];
 
@@ -357,19 +313,9 @@ export function getProduct(slug: string) {
   return products.find((p) => p.slug === slug);
 }
 
-export function getVariant(product: Product, platform?: Platform) {
-  return (
-    product.variants.find((v) => v.platform === platform) ?? product.variants[0]
-  );
-}
-
-export function getStartingPrice(product: Product) {
-  return Math.min(...product.variants.map((v) => v.price));
-}
-
-export function getDiscount(variant: ProductVariant) {
-  if (!variant.oldPrice || variant.oldPrice <= variant.price) return 0;
-  return Math.round((1 - variant.price / variant.oldPrice) * 100);
+/** Variante do console escolhido, ou undefined se não existir. */
+export function findVariant(product: Product, platform: Platform) {
+  return product.variants.find((v) => v.platform === platform);
 }
 
 export function getRelatedProducts(product: Product, limit = 3) {

@@ -2,9 +2,9 @@
  * ============================================================
  *  CONFIGURAÇÃO DA LOJA: edite aqui os dados do Freitas Modder
  * ============================================================
- *  Tudo que aparece no site (contato, redes, números, garantia)
- *  sai deste arquivo. Os valores abaixo são EXEMPLOS: troque pelos
- *  dados reais antes de publicar.
+ *  Contato, redes, garantia e horário que aparecem no site saem
+ *  deste arquivo. Os valores abaixo são EXEMPLOS: troque pelos
+ *  dados reais antes de divulgar o site.
  */
 
 function resolveSiteUrl() {
@@ -17,17 +17,16 @@ function resolveSiteUrl() {
 
 export const siteConfig = {
   name: "Freitas Modder",
-  title: "Freitas Modder | Contas modadas de GTA V",
+  title: "Freitas Modder | Contas modadas de GTA V para PS4 e PS5",
   description:
-    "Contas modadas de GTA V para PC, PlayStation e Xbox. Nível alto, bilhões em dinheiro, carros modificados e tudo desbloqueado. Entrega imediata, pagamento via PIX e garantia.",
+    "Contas modadas de GTA V para PS4 e PS5: dinheiro, nível alto, carros modificados e tudo desbloqueado. Pagamento no Pix e entrega pelo WhatsApp.",
   url: resolveSiteUrl(),
   locale: "pt_BR",
   keywords: [
-    "contas modadas gta 5",
-    "conta modada gta v",
-    "gta 5 online conta",
-    "dinheiro gta online",
-    "unlock all gta",
+    "conta modada gta 5 ps4",
+    "conta modada gta 5 ps5",
+    "dinheiro gta online ps5",
+    "unlock all gta ps4",
     "freitas modder",
   ],
 
@@ -36,26 +35,18 @@ export const siteConfig = {
     whatsappNumber: "5511999999999",
     whatsappDisplay: "(11) 99999-9999",
     email: "contato@freitasmodder.com.br",
-    /** Links das redes. Deixe "" para esconder o ícone. */
+    /** Links das redes. Deixe "" para esconder. */
     discord: "https://discord.gg/SEU-CONVITE",
     instagram: "https://instagram.com/freitasmodder",
-    tiktok: "https://www.tiktok.com/@freitasmodder",
+    tiktok: "",
     youtube: "",
   },
 
   business: {
     warrantyDays: 30,
-    supportHours: "Todos os dias, das 9h às 23h",
+    supportHours: "Todo dia, das 9h às 23h",
+    /** Tempo médio de entrega das contas prontas, em minutos. */
     avgDeliveryMinutes: 10,
-    paymentMethods: ["PIX", "Cartão de crédito"],
-  },
-
-  /** Números exibidos no site. Use números reais da loja. */
-  stats: {
-    delivered: 5000,
-    customers: 3200,
-    rating: 4.9,
-    reviews: 1200,
   },
 } as const;
 

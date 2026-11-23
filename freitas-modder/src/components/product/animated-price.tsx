@@ -1,10 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { formatBRL } from "@/lib/utils";
-import { cn } from "@/lib/utils";
+import { cn, formatBRL } from "@/lib/utils";
 
-/** Preço que "rola" quando o valor muda (ex.: troca de plataforma). */
+/** Preço que desliza quando o valor muda (ex.: troca de console). */
 export function AnimatedPrice({
   value,
   className,
@@ -17,10 +16,10 @@ export function AnimatedPrice({
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
           key={value}
-          initial={{ y: "100%", opacity: 0 }}
+          initial={{ y: "70%", opacity: 0 }}
           animate={{ y: "0%", opacity: 1 }}
-          exit={{ y: "-100%", opacity: 0 }}
-          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+          exit={{ y: "-70%", opacity: 0 }}
+          transition={{ type: "spring", stiffness: 420, damping: 34 }}
           className="inline-block tabular-nums"
         >
           {formatBRL(value)}

@@ -4,11 +4,14 @@ import { MotionConfig } from "motion/react";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "sonner";
 import { useCart } from "@/store/cart";
+import { useConsole } from "@/store/console";
 
 export function Providers({ children }: { children: ReactNode }) {
   useEffect(() => {
-    // Carrega o carrinho salvo no navegador só depois da hidratação.
+    // Carrinho e console salvos no navegador só carregam depois da
+    // hidratação, para o HTML do servidor e o do navegador baterem.
     useCart.persist.rehydrate();
+    useConsole.persist.rehydrate();
   }, []);
 
   return (
@@ -16,18 +19,15 @@ export function Providers({ children }: { children: ReactNode }) {
       {children}
       <Toaster
         theme="dark"
-        position="top-right"
-        offset={{ top: 92, right: 20 }}
-        mobileOffset={{ top: 84, left: 12, right: 12 }}
+        position="bottom-center"
+        offset={{ bottom: 24 }}
+        mobileOffset={{ bottom: 90, left: 12, right: 12 }}
         toastOptions={{
           classNames: {
             toast:
-              "bg-ink-800/95! backdrop-blur-xl! border! border-blood-500/25! text-bone-50! rounded-xl! shadow-[0_10px_40px_-10px_rgba(255,42,71,0.45)]! font-sans!",
-            title: "font-tech! font-semibold! tracking-wide!",
-            description: "text-bone-400!",
+              "bg-ink-800! border! border-white/10! text-white! rounded-2xl! font-sans! text-[15px]! shadow-[0_12px_40px_rgba(0,0,0,0.5)]!",
             actionButton:
-              "bg-blood-600! text-white! font-tech! font-semibold! uppercase! tracking-wider! rounded-md!",
-            icon: "text-blood-500!",
+              "bg-brand-500! text-white! font-semibold! rounded-lg! px-3! h-8!",
           },
         }}
       />

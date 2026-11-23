@@ -1,12 +1,11 @@
+import { Accounts } from "@/components/sections/accounts";
 import { Faq } from "@/components/sections/faq";
-import { FeaturedAccounts } from "@/components/sections/featured-accounts";
 import { FinalCta } from "@/components/sections/final-cta";
 import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
+import { Proofs } from "@/components/sections/proofs";
 import { Services } from "@/components/sections/services";
-import { Testimonials } from "@/components/sections/testimonials";
-import { Ticker } from "@/components/sections/ticker";
-import { WhyUs } from "@/components/sections/why-us";
+import { Strip } from "@/components/sections/strip";
 import { siteConfig } from "@/config/site";
 import { faq } from "@/data/faq";
 import { products } from "@/data/products";
@@ -54,12 +53,11 @@ export default function HomePage() {
     <>
       <JsonLd />
       <Hero />
-      <Ticker />
-      <FeaturedAccounts />
+      <Strip />
+      <Accounts />
       <Services />
       <HowItWorks />
-      <WhyUs />
-      <Testimonials />
+      <Proofs />
       <Faq />
       <FinalCta />
     </>

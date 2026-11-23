@@ -3,8 +3,8 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import {
+  findVariant,
   getProduct,
-  getVariant,
   platforms,
   type Platform,
   type Product,
@@ -24,12 +24,18 @@ export interface ResolvedCartItem extends CartItem {
 
 const MAX_QTY = 10;
 
+/** localStorage só existe no navegador; no servidor fica sem armazenamento. */
+export const browserStorage = createJSONStorage(() => {
+  if (typeof window === "undefined") throw new Error("sem localStorage");
+  return window.localStorage;
+});
+
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
   /** Incrementa a cada item adicionado (usado para animar o ícone). */
   bump: number;
-  add: (slug: string, platform: Platform, qty?: number) => void;
+  add: (slug: string, platform: Platform) => void;
   remove: (slug: string, platform: Platform) => void;
   setQty: (slug: string, platform: Platform, qty: number) => void;
   clear: () => void;
@@ -46,16 +52,16 @@ export const useCart = create<CartState>()(
       items: [],
       isOpen: false,
       bump: 0,
-      add: (slug, platform, qty = 1) =>
+      add: (slug, platform) =>
         set((state) => {
           const existing = state.items.find((i) => sameItem(i, slug, platform));
           const items = existing
             ? state.items.map((i) =>
                 sameItem(i, slug, platform)
-                  ? { ...i, qty: Math.min(MAX_QTY, i.qty + qty) }
+                  ? { ...i, qty: Math.min(MAX_QTY, i.qty + 1) }
                   : i,
               )
-            : [...state.items, { slug, platform, qty }];
+            : [...state.items, { slug, platform, qty: 1 }];
           return { items, bump: state.bump + 1 };
         }),
       remove: (slug, platform) =>
@@ -78,15 +84,11 @@ export const useCart = create<CartState>()(
       close: () => set({ isOpen: false }),
     }),
     {
-      name: "freitas-modder-cart",
-      // Só existe no navegador; no servidor o carrinho fica sem armazenamento.
-      storage: createJSONStorage(() => {
-        if (typeof window === "undefined") throw new Error("sem localStorage");
-        return window.localStorage;
-      }),
+      name: "freitas-modder-carrinho",
+      storage: browserStorage,
       partialize: (state) => ({ items: state.items }),
-      // Hidratado manualmente no cliente (ver Providers) para evitar
-      // diferença entre o HTML do servidor e o do navegador.
+      // Hidratado no cliente (ver Providers) para o HTML do servidor
+      // e o do navegador começarem iguais.
       skipHydration: true,
     },
   ),
@@ -96,9 +98,8 @@ export const useCart = create<CartState>()(
 export function resolveCartItems(items: CartItem[]): ResolvedCartItem[] {
   return items.flatMap((item) => {
     const product = getProduct(item.slug);
-    if (!product) return [];
-    const variant = getVariant(product, item.platform);
-    if (variant.platform !== item.platform) return [];
+    const variant = product && findVariant(product, item.platform);
+    if (!product || !variant) return [];
     return [
       {
         ...item,

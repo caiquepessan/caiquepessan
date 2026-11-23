@@ -23,13 +23,13 @@ export function buildOrderMessage(lines: OrderLine[]) {
     .join("\n");
 
   return [
-    `Olá, ${siteConfig.name}! Quero fazer um pedido:`,
+    "Oi! Quero fazer este pedido:",
     "",
     items,
     "",
     `*Total: ${formatBRL(total)}*`,
     "",
-    "Como faço o pagamento?",
+    "Como faço pra pagar?",
   ].join("\n");
 }
 
@@ -37,4 +37,4 @@ export function buildProductMessage(name: string, platformLabel: string, price: 
   return buildOrderMessage([{ name, platformLabel, qty: 1, unitPrice: price }]);
 }
 
-export const defaultWhatsappMessage = `Olá, ${siteConfig.name}! Vim pelo site e queria tirar uma dúvida.`;
+export const defaultWhatsappMessage = "Oi! Vim pelo site e queria tirar uma dúvida.";
