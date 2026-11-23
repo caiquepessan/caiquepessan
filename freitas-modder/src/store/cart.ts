@@ -79,7 +79,11 @@ export const useCart = create<CartState>()(
     }),
     {
       name: "freitas-modder-cart",
-      storage: createJSONStorage(() => localStorage),
+      // Só existe no navegador; no servidor o carrinho fica sem armazenamento.
+      storage: createJSONStorage(() => {
+        if (typeof window === "undefined") throw new Error("sem localStorage");
+        return window.localStorage;
+      }),
       partialize: (state) => ({ items: state.items }),
       // Hidratado manualmente no cliente (ver Providers) para evitar
       // diferença entre o HTML do servidor e o do navegador.
