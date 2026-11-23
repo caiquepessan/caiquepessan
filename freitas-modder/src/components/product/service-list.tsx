@@ -21,11 +21,23 @@ export function ServiceList({ items }: { items: Product[] }) {
           <RevealItem key={product.slug}>
             <div
               className={
-                "group relative grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-4 p-4 transition-colors duration-200 hover:bg-white/[0.025] sm:p-5 md:grid-cols-[auto_1fr_auto_auto] md:gap-x-6" +
+                "group relative isolate grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-4 overflow-hidden p-4 sm:p-5 md:grid-cols-[auto_1fr_auto_auto] md:gap-x-6" +
                 (i > 0 ? " border-t border-white/[0.07]" : "")
               }
             >
-              <ProductSwatch product={product} className="size-16 sm:size-[72px]" />
+              {/* Destaque de seleção, como num menu de jogo */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 -z-10 origin-left scale-x-0 bg-linear-to-r from-brand-500/[0.16] via-brand-500/[0.05] to-transparent transition-transform duration-500 ease-out group-hover:scale-x-100"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-y-4 left-0 -z-10 w-1 scale-y-0 rounded-r-full bg-brand-500 transition-transform duration-300 ease-out group-hover:scale-y-100"
+              />
+              <ProductSwatch
+                product={product}
+                className="size-16 transition-transform duration-300 ease-out group-hover:-rotate-6 group-hover:scale-105 sm:size-[72px]"
+              />
               <div className="min-w-0">
                 <h3 className="text-lg font-semibold leading-tight">
                   <Link

@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { useId, useState } from "react";
 import { WhatsAppIcon } from "@/components/icons/brand-icons";
 import { EASE, Reveal } from "@/components/effects/reveal";
+import { SplitWords } from "@/components/effects/split-words";
 import { ButtonAnchor } from "@/components/ui/button";
 import { faq, type FaqItem } from "@/data/faq";
 import { whatsappLink } from "@/lib/whatsapp";
@@ -72,7 +73,7 @@ export function Faq() {
       <div className="mx-auto grid max-w-6xl gap-12 px-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <Reveal className="lg:sticky lg:top-28 lg:self-start">
           <h2 className="font-display text-5xl font-extrabold uppercase leading-[0.9] sm:text-6xl lg:text-7xl">
-            Dúvidas
+            <SplitWords text="Dúvidas" />
           </h2>
           <p className="mt-4 max-w-sm text-lg leading-relaxed text-stone-400">
             Não achou sua pergunta aqui? Chama no WhatsApp que a gente responde.

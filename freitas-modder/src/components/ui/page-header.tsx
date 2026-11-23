@@ -9,7 +9,7 @@ export function PageHeader({
   description,
 }: {
   breadcrumb: { href?: string; label: string }[];
-  title: ReactNode;
+  title: string;
   description?: ReactNode;
 }) {
   return (

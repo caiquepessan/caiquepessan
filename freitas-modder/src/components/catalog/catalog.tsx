@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useSearchParams } from "next/navigation";
-import { EASE } from "@/components/effects/reveal";
 import { ConsoleSwitch } from "@/components/product/console-switch";
 import { ProductCard } from "@/components/product/product-card";
 import { categories, products, type Category } from "@/data/products";
@@ -67,8 +66,14 @@ function CatalogView({
             <motion.div
               key={product.slug}
               layout
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0, transition: { delay: i * 0.03, duration: 0.45, ease: EASE } }}
+              initial={{ opacity: 0, y: 70, rotate: (i % 3) * 3 - 3, scale: 0.95 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                rotate: 0,
+                scale: 1,
+                transition: { delay: i * 0.05, type: "spring", stiffness: 150, damping: 19 },
+              }}
               exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.2 } }}
               className="h-full"
             >

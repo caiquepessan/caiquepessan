@@ -58,7 +58,7 @@ export function ProductPanel({
   const tone = toneStyles[product.tone];
 
   return (
-    <div className={cn("@container relative isolate overflow-hidden rounded-2xl", tone.panel, className)}>
+    <div className={cn("shine @container relative isolate overflow-hidden rounded-2xl", tone.panel, className)}>
       {product.image && (
         <>
           <Image
@@ -84,8 +84,12 @@ export function ProductPanel({
         </div>
         <div>
           <div
+            style={{
+              transform:
+                "translate3d(calc((var(--px, 0.5) - 0.5) * -18px), calc((var(--py, 0.5) - 0.5) * -12px), 0)",
+            }}
             className={cn(
-              "font-display font-extrabold italic leading-[0.85] tracking-[-0.01em] transition-transform duration-500 ease-out group-hover:-translate-y-0.5",
+              "font-display font-extrabold italic leading-[0.85] tracking-[-0.01em] transition-transform duration-300 ease-out",
               tone.value,
               size === "lg" ? "text-[19cqw]" : "text-[20cqw]",
             )}

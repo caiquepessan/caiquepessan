@@ -2,6 +2,8 @@ import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { Cursor } from "@/components/effects/cursor";
+import { Intro, IntroScript } from "@/components/effects/intro";
 import { SmoothScroll } from "@/components/effects/smooth-scroll";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { Footer } from "@/components/layout/footer";
@@ -60,8 +62,16 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${barlow.variable} ${barlowCondensed.variable}`}>
+    <html
+      lang="pt-BR"
+      className={`${barlow.variable} ${barlowCondensed.variable}`}
+      // O script da abertura marca o <html> antes de o React hidratar.
+      suppressHydrationWarning
+    >
       <body className="min-h-dvh bg-ink-950 font-sans text-[#f5f4f2] antialiased">
+        <IntroScript />
+        <Intro />
+        <div aria-hidden className="grain" />
         <Providers>
           <SmoothScroll />
           <a
@@ -77,6 +87,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Footer />
           <CartDrawer />
           <FloatingWhatsApp />
+          <Cursor />
         </Providers>
         <Analytics />
       </body>

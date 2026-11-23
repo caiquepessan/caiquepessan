@@ -5,6 +5,7 @@ import { Menu, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { WhatsAppIcon } from "@/components/icons/brand-icons";
+import { Scramble } from "@/components/effects/scramble";
 import { EASE } from "@/components/effects/reveal";
 import { ConsoleSwitch } from "@/components/product/console-switch";
 import { ButtonAnchor } from "@/components/ui/button";
@@ -47,13 +48,14 @@ function CartButton() {
       type="button"
       onClick={open}
       aria-label={`Abrir carrinho (${count} ${count === 1 ? "item" : "itens"})`}
+      data-cart-target
       className="relative grid size-10 place-items-center rounded-full bg-white/[0.06] text-white ring-1 ring-inset ring-white/10 transition-colors hover:bg-white/[0.12]"
     >
       <motion.span
         key={bump}
         initial={false}
-        animate={bump ? { scale: [1, 1.25, 1] } : undefined}
-        transition={{ duration: 0.35 }}
+        animate={bump ? { scale: [1, 1.4, 0.9, 1], rotate: [0, -12, 8, 0] } : undefined}
+        transition={{ duration: 0.5 }}
         className="grid place-items-center"
       >
         <ShoppingBag className="size-[18px]" strokeWidth={2} />
@@ -78,7 +80,7 @@ function CartButton() {
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { scrollY } = useScroll();
+  const { scrollY, scrollYProgress } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 12));
 
@@ -105,6 +107,14 @@ export function Navbar() {
             : "border-transparent bg-transparent",
         )}
       >
+        <motion.div
+          aria-hidden
+          style={{ scaleX: scrollYProgress }}
+          className={cn(
+            "absolute inset-x-0 -bottom-px h-0.5 origin-left bg-brand-500 transition-opacity duration-300",
+            scrolled ? "opacity-100" : "opacity-0",
+          )}
+        />
         <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-6 px-5">
           <Link href="/" onClick={handleLogoClick} aria-label={`${siteConfig.name}, início`}>
             <Logo />
@@ -116,9 +126,13 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleHashLink(e, link.href)}
-                className="text-[15px] font-medium text-stone-300 transition-colors hover:text-white"
+                className="group relative py-1 text-[15px] font-medium text-stone-300 transition-colors hover:text-white"
               >
-                {link.label}
+                <Scramble text={link.label} />
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 -bottom-0.5 h-0.5 origin-left scale-x-0 rounded-full bg-brand-500 transition-transform duration-300 ease-out group-hover:scale-x-100"
+                />
               </Link>
             ))}
           </nav>

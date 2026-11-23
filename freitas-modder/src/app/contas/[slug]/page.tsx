@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { Reveal, RevealGroup, RevealItem } from "@/components/effects/reveal";
+import { DealGroup, DealItem, Reveal } from "@/components/effects/reveal";
+import { Tilt } from "@/components/effects/tilt";
 import { Odometer } from "@/components/product/odometer";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductPanel } from "@/components/product/product-panel";
@@ -127,6 +128,7 @@ async function ProductContent({ params }: { params: PageProps<"/contas/[slug]">[
 
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
             <div className="animate-fade-up lg:sticky lg:top-28 lg:self-start">
+              <Tilt max={6} className="rounded-3xl">
               <ProductPanel
                 product={product}
                 size="lg"
@@ -137,6 +139,7 @@ async function ProductContent({ params }: { params: PageProps<"/contas/[slug]">[
                   ) : undefined
                 }
               />
+              </Tilt>
             </div>
 
             <div className="animate-fade-up [animation-delay:120ms]">
@@ -202,13 +205,13 @@ async function ProductContent({ params }: { params: PageProps<"/contas/[slug]">[
             <h2 className="font-display text-4xl font-extrabold uppercase leading-[0.9] sm:text-5xl">
               Veja também
             </h2>
-            <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((p) => (
-                <RevealItem key={p.slug} className="h-full">
+            <DealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((p, i) => (
+                <DealItem key={p.slug} index={i} className="h-full">
                   <ProductCard product={p} />
-                </RevealItem>
+                </DealItem>
               ))}
-            </RevealGroup>
+            </DealGroup>
           </div>
         </section>
       )}

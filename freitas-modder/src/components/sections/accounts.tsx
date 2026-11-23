@@ -1,4 +1,4 @@
-import { RevealGroup, RevealItem } from "@/components/effects/reveal";
+import { DealGroup, DealItem } from "@/components/effects/reveal";
 import { ConsoleSwitch } from "@/components/product/console-switch";
 import { ProductCard } from "@/components/product/product-card";
 import { Heading } from "@/components/ui/heading";
@@ -20,13 +20,13 @@ export function Accounts() {
             </div>
           }
         />
-        <RevealGroup className="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {accounts.map((product) => (
-            <RevealItem key={product.slug} className="h-full">
+        <DealGroup className="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {accounts.map((product, i) => (
+            <DealItem key={product.slug} index={i} className="h-full">
               <ProductCard product={product} />
-            </RevealItem>
+            </DealItem>
           ))}
-        </RevealGroup>
+        </DealGroup>
       </div>
     </section>
   );

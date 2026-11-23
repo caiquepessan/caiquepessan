@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Tilt } from "@/components/effects/tilt";
 import { findVariant, platforms, type Product } from "@/data/products";
 import { cn } from "@/lib/utils";
 import { useConsole } from "@/store/console";
@@ -19,9 +20,11 @@ export function ProductCard({
   const variant = findVariant(product, platform);
 
   return (
+    <Tilt max={7} className="h-full rounded-3xl">
     <article
+      data-cursor="view"
       className={cn(
-        "group relative flex h-full flex-col rounded-3xl border border-white/[0.07] bg-ink-850 p-2 transition-[border-color,transform] duration-300 ease-out hover:-translate-y-1 hover:border-white/[0.16]",
+        "group relative flex h-full flex-col rounded-3xl border border-white/[0.07] bg-ink-850 p-2 transition-[border-color,box-shadow] duration-300 ease-out hover:border-white/[0.18] hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)]",
         className,
       )}
     >
@@ -66,5 +69,6 @@ export function ProductCard({
         </div>
       </div>
     </article>
+    </Tilt>
   );
 }

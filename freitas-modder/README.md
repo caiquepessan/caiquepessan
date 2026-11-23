@@ -77,6 +77,22 @@ informe no produto, por exemplo `image: "/produtos/conta-elite.jpg"`.
 **Entregas:** a seção com prints de clientes só aparece quando houver imagens.
 Coloque os prints em `public/provas/` e liste em `src/data/proofs.ts`.
 
+## Efeitos
+
+Ficam em `src/components/effects/` e respeitam a opção "reduzir movimento" do
+sistema (nesse caso quase tudo fica parado):
+
+- Abertura com a marca e uma cortina vermelha (só na primeira visita da sessão)
+- Rastros de luz de carros passando no fundo do topo (canvas, pausa fora da tela)
+- Cursor em forma de mira no computador, que vira "Ver" em cima dos produtos
+- Título do topo com parallax e cards com inclinação 3D, reflexo e brilho
+- Contador de dinheiro que gira como um odômetro
+- Faixas cruzadas que aceleram e invertem com a rolagem
+- Cards que entram como cartas sendo distribuídas
+- Bolinha que voa do botão até o carrinho
+- Seção vermelha que se abre no scroll, com passos acendendo e selo girando
+- Marca gigante no rodapé e granulado de cinema em telas grandes
+
 ## Como funciona a compra
 
 1. O cliente adiciona produtos ao carrinho (fica salvo no navegador).

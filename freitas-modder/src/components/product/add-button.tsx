@@ -26,8 +26,8 @@ export function AddButton({
   const [added, setAdded] = useState(false);
   const available = Boolean(findVariant(product, platform));
 
-  function handleClick() {
-    addToCart(product, platform);
+  function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+    addToCart(product, platform, e.currentTarget);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1400);
   }
@@ -37,6 +37,7 @@ export function AddButton({
       type="button"
       onClick={handleClick}
       disabled={!available}
+      data-cursor="link"
       aria-label={
         compact
           ? `Adicionar ${product.name} (${platforms[platform].label}) ao carrinho`

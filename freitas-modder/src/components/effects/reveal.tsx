@@ -69,3 +69,56 @@ export function RevealItem({
     </motion.div>
   );
 }
+
+const deal: Variants = {
+  hidden: (i: number) => ({
+    opacity: 0,
+    y: 90,
+    rotate: (i % 4) * 3 - 5,
+    scale: 0.94,
+  }),
+  show: {
+    opacity: 1,
+    y: 0,
+    rotate: 0,
+    scale: 1,
+    transition: { type: "spring", stiffness: 140, damping: 18, mass: 0.9 },
+  },
+};
+
+/** Grade em que os itens entram como cartas sendo distribuídas. */
+export function DealGroup({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.15 }}
+      variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09 } } }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+export function DealItem({
+  children,
+  className,
+  index,
+}: {
+  children: ReactNode;
+  className?: string;
+  index: number;
+}) {
+  return (
+    <motion.div className={className} custom={index} variants={deal}>
+      {children}
+    </motion.div>
+  );
+}

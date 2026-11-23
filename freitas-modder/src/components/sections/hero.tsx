@@ -1,66 +1,70 @@
 import { ArrowRight } from "lucide-react";
-import type { ReactNode } from "react";
 import { WhatsAppIcon } from "@/components/icons/brand-icons";
+import { Magnetic } from "@/components/effects/magnetic";
+import { NightTraffic } from "@/components/effects/night-traffic";
+import { Scramble } from "@/components/effects/scramble";
 import { ButtonAnchor, ButtonLink } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import { defaultWhatsappMessage, whatsappLink } from "@/lib/whatsapp";
 import { HeroCards } from "./hero-cards";
+import { HeroTitle } from "./hero-title";
 
 const { business } = siteConfig;
 
-function Line({ children, delay }: { children: ReactNode; delay: number }) {
-  return (
-    <span className="-my-[0.12em] block overflow-hidden py-[0.12em]">
-      <span className="block animate-rise" style={{ animationDelay: `${delay}ms` }}>
-        {children}
-      </span>
-    </span>
-  );
+function delay(ms: number) {
+  return { ["--d" as string]: `${ms}ms` };
 }
 
 export function Hero() {
   return (
-    <section className="relative isolate pt-28 sm:pt-32 lg:pt-36">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-0 top-16 -z-10 size-[560px] translate-x-1/4 rounded-full bg-brand-600/15 blur-[120px]"
-      />
+    <section className="relative isolate overflow-hidden pb-24 pt-28 sm:pt-32 lg:pb-32 lg:pt-36">
+      {/* Fundo: luz vermelha + avenida à noite */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute right-[-10%] top-0 size-[620px] rounded-full bg-brand-600/20 blur-[130px]" />
+        <div className="after-intro absolute inset-x-0 bottom-0 h-[70%] animate-fade-up [mask-image:linear-gradient(to_bottom,transparent,#000_45%)]" style={delay(300)}>
+          <NightTraffic />
+        </div>
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-ink-950 to-transparent" />
+      </div>
 
       <div className="mx-auto grid max-w-6xl items-center gap-16 px-5 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
         <div>
-          <p className="animate-fade-up text-[15px] font-medium text-stone-400">
-            GTA V Online · PS4 e PS5
+          <p className="after-intro animate-fade-up text-[15px] font-medium text-stone-400" style={delay(0)}>
+            <Scramble text="GTA V Online · PS4 e PS5" onMount delay={200} />
           </p>
-          <h1 className="mt-5 font-display text-[3.4rem] font-extrabold uppercase leading-[0.86] xs:text-[4rem] sm:text-[5.5rem] lg:text-[5rem] xl:text-[6rem]">
-            <Line delay={80}>Conta modada</Line>
-            <Line delay={160}>de GTA V,</Line>
-            <Line delay={240}>pronta pra</Line>
-            <Line delay={320}>
-              <span className="text-brand-500">jogar.</span>
-            </Line>
-          </h1>
-          <p className="mt-7 max-w-md animate-fade-up text-pretty text-lg leading-relaxed text-stone-300 [animation-delay:400ms]">
+          <HeroTitle />
+          <p
+            className="after-intro mt-7 max-w-md animate-fade-up text-pretty text-lg leading-relaxed text-stone-300"
+            style={delay(420)}
+          >
             Dinheiro, nível alto, carros modificados e tudo desbloqueado. Você paga
             no Pix e recebe a conta no WhatsApp.
           </p>
-          <div className="mt-8 flex animate-fade-up flex-wrap gap-3 [animation-delay:480ms]">
-            <ButtonLink href="/contas" size="lg">
-              Ver contas
-              <ArrowRight className="size-5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
-            </ButtonLink>
-            <ButtonAnchor
-              href={whatsappLink(defaultWhatsappMessage)}
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="secondary"
-              size="lg"
-            >
-              <WhatsAppIcon size={19} />
-              Tirar dúvida
-            </ButtonAnchor>
+          <div className="after-intro mt-8 flex animate-fade-up flex-wrap gap-3" style={delay(500)}>
+            <Magnetic>
+              <ButtonLink href="/contas" size="lg">
+                Ver contas
+                <ArrowRight className="size-5 transition-transform duration-200 group-hover/btn:translate-x-1" />
+              </ButtonLink>
+            </Magnetic>
+            <Magnetic>
+              <ButtonAnchor
+                href={whatsappLink(defaultWhatsappMessage)}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="secondary"
+                size="lg"
+              >
+                <WhatsAppIcon size={19} />
+                Tirar dúvida
+              </ButtonAnchor>
+            </Magnetic>
           </div>
 
-          <dl className="mt-12 grid max-w-md animate-fade-up grid-cols-3 gap-4 border-t border-white/[0.08] pt-6 [animation-delay:560ms]">
+          <dl
+            className="after-intro mt-12 grid max-w-md animate-fade-up grid-cols-3 gap-4 border-t border-white/[0.08] pt-6"
+            style={delay(580)}
+          >
             <div>
               <dt className="text-sm text-stone-500">Entrega</dt>
               <dd className="mt-1 font-semibold">Até {business.avgDeliveryMinutes} min</dd>

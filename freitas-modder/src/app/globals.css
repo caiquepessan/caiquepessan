@@ -30,34 +30,36 @@
   /* Papel (faixa clara) */
   --color-paper: #f2efe9;
 
-  --animate-marquee: marquee var(--marquee-duration, 50s) linear infinite;
-  --animate-rise: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
-  --animate-fade-up: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-rise: rise 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-up: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-spin-slow: spin 18s linear infinite;
 
-  @keyframes marquee {
-    from {
-      transform: translate3d(0, 0, 0);
-    }
-    to {
-      transform: translate3d(-50%, 0, 0);
-    }
-  }
   @keyframes rise {
     from {
-      transform: translate3d(0, 105%, 0);
+      transform: translate3d(0, 108%, 0) skewY(4deg);
     }
     to {
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0) skewY(0);
     }
   }
   @keyframes fade-up {
     from {
       opacity: 0;
-      transform: translate3d(0, 16px, 0);
+      transform: translate3d(0, 18px, 0);
     }
     to {
       opacity: 1;
       transform: translate3d(0, 0, 0);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -10px, 0);
     }
   }
 }
@@ -69,6 +71,12 @@
 @layer base {
   :root {
     color-scheme: dark;
+    /* Atraso das animações do topo enquanto a abertura toca */
+    --intro: 0ms;
+  }
+
+  html[data-intro="on"] {
+    --intro: 1250ms;
   }
 
   html {
@@ -118,6 +126,214 @@ html[data-menu-open] .fab-whatsapp {
   visibility: hidden;
 }
 
+/* Cursor-mira: esconde a seta só quando o cursor próprio está ativo */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Abertura (toca uma vez por sessão)                                 */
+/* ------------------------------------------------------------------ */
+
+.intro {
+  display: none;
+}
+
+html[data-intro="on"] .intro {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  animation: intro-hide 0s linear 1.3s forwards;
+}
+
+.intro-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink-950);
+  animation: intro-bg-out 0s linear 0.82s forwards;
+}
+
+.intro-brand {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  animation: intro-bg-out 0s linear 0.82s forwards;
+}
+
+.intro-mark {
+  animation: intro-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.intro-word {
+  overflow: hidden;
+}
+
+.intro-word > span {
+  display: block;
+  animation: intro-word 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+.intro-wipe {
+  position: absolute;
+  inset: 0;
+  background: var(--color-brand-500);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  animation:
+    intro-wipe-in 0.32s cubic-bezier(0.7, 0, 0.3, 1) 0.5s forwards,
+    intro-wipe-out 0.45s cubic-bezier(0.7, 0, 0.3, 1) 0.84s forwards;
+}
+
+@keyframes intro-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.5) rotate(-12deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+@keyframes intro-word {
+  from {
+    transform: translate3d(0, 110%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes intro-wipe-in {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@keyframes intro-wipe-out {
+  from {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  to {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+}
+@keyframes intro-bg-out {
+  to {
+    visibility: hidden;
+  }
+}
+@keyframes intro-hide {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* Animações do topo esperam a abertura terminar */
+.after-intro {
+  animation-delay: calc(var(--intro) + var(--d, 0ms)) !important;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Granulado de cinema                                                */
+/* ------------------------------------------------------------------ */
+
+.grain {
+  position: fixed;
+  inset: -100%;
+  z-index: 150;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 0.9s steps(5) infinite;
+}
+
+/* No celular o granulado fica de fora (economiza bateria e GPU) */
+@media (max-width: 639px) {
+  .grain {
+    display: none;
+  }
+}
+
+@keyframes grain {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  20% {
+    transform: translate3d(-3%, 2%, 0);
+  }
+  40% {
+    transform: translate3d(2%, -3%, 0);
+  }
+  60% {
+    transform: translate3d(-2%, -1%, 0);
+  }
+  80% {
+    transform: translate3d(3%, 3%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Pequenos efeitos                                                   */
+/* ------------------------------------------------------------------ */
+
+/* Brilho que atravessa um painel (no hover ou em loop) */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: -50% auto -50% -60%;
+  width: 40%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgb(255 255 255 / 0.22),
+    transparent
+  );
+  transform: translateX(-100%) skewX(-18deg);
+  pointer-events: none;
+}
+.group:hover .shine::after {
+  animation: shine-once 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Em loop: passa a cada 6s (o brilho ocupa só o começo do ciclo) */
+.shine-loop::after {
+  animation: shine 6s cubic-bezier(0.22, 1, 0.36, 1) 2.4s infinite;
+}
+
+@keyframes shine-once {
+  from {
+    transform: translateX(-100%) skewX(-18deg);
+  }
+  to {
+    transform: translateX(420%) skewX(-18deg);
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) skewX(-18deg);
+  }
+  25%,
+  100% {
+    transform: translateX(420%) skewX(-18deg);
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /*  Menos movimento                                                    */
 /* ------------------------------------------------------------------ */
@@ -130,5 +346,8 @@ html[data-menu-open] .fab-whatsapp {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .grain {
+    display: none;
   }
 }

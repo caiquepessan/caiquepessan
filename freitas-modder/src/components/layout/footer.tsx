@@ -1,6 +1,7 @@
 import { cacheLife } from "next/cache";
 import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
+import { BigWordmark } from "./big-wordmark";
 import { siteConfig } from "@/config/site";
 import { defaultWhatsappMessage, whatsappLink } from "@/lib/whatsapp";
 
@@ -88,7 +89,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/[0.07] pt-6 text-[13px] leading-relaxed text-stone-500 md:flex-row md:justify-between md:gap-10">
+        <div className="mt-16">
+          <BigWordmark />
+        </div>
+
+        <div className="mt-8 flex flex-col gap-3 border-t border-white/[0.07] pt-6 text-[13px] leading-relaxed text-stone-500 md:flex-row md:justify-between md:gap-10">
           <p className="shrink-0">
             © <CurrentYear /> {siteConfig.name}
           </p>
