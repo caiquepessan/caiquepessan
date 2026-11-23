@@ -8,9 +8,10 @@ import { Services } from "@/components/sections/services";
 import { Strip } from "@/components/sections/strip";
 import { siteConfig } from "@/config/site";
 import { faq } from "@/data/faq";
-import { products } from "@/data/products";
+import { getCatalog } from "@/lib/catalog";
 
-function JsonLd() {
+async function JsonLd() {
+  const products = await getCatalog();
   const data = {
     "@context": "https://schema.org",
     "@graph": [

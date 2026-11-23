@@ -1,11 +1,13 @@
 import { ServiceList } from "@/components/product/service-list";
 import { Heading } from "@/components/ui/heading";
-import { products } from "@/data/products";
+import { getCatalog } from "@/lib/catalog";
 
 /** Up de level, combo Unlock All + Corrida Modder e conta pronta. */
-export function Services() {
-  const items = products.filter((p) => p.category === "level" || p.category === "servico");
-  const accounts = products.filter((p) => p.category === "conta");
+export async function Services() {
+  const catalog = await getCatalog();
+  const items = catalog.filter((p) => p.category === "level" || p.category === "servico");
+  const accounts = catalog.filter((p) => p.category === "conta");
+  if (items.length === 0 && accounts.length === 0) return null;
 
   return (
     <section id="servicos" className="border-t border-white/[0.06] py-24 sm:py-32">
@@ -14,9 +16,11 @@ export function Services() {
           title="Level e Unlock All"
           description="Suba de level sem farmar ou libere tudo de uma vez, com o personagem correndo muito mais rápido."
         />
-        <div className="mt-12">
-          <ServiceList items={items} />
-        </div>
+        {items.length > 0 && (
+          <div className="mt-12">
+            <ServiceList items={items} />
+          </div>
+        )}
 
         {accounts.length > 0 && (
           <div className="mt-16">

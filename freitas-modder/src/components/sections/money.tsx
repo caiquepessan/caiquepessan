@@ -2,11 +2,12 @@ import { DealGroup, DealItem } from "@/components/effects/reveal";
 import { ConsoleSwitch } from "@/components/product/console-switch";
 import { ProductCard } from "@/components/product/product-card";
 import { Heading } from "@/components/ui/heading";
-import { products } from "@/data/products";
+import { getCatalog } from "@/lib/catalog";
 
 /** Pacotes de dinheiro colocados no personagem do cliente. */
-export function Money() {
-  const packs = products.filter((p) => p.category === "dinheiro");
+export async function Money() {
+  const packs = (await getCatalog()).filter((p) => p.category === "dinheiro");
+  if (packs.length === 0) return null;
 
   return (
     <section id="dinheiro" className="py-24 sm:py-32">

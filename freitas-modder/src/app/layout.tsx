@@ -9,6 +9,7 @@ import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { Providers } from "@/components/providers";
+import { getCatalog } from "@/lib/catalog";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 
@@ -60,7 +61,9 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // Em cache: entra no HTML estático e só muda quando o painel salva.
+  const catalog = await getCatalog();
   return (
     <html
       lang="pt-BR"
@@ -72,7 +75,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <IntroScript />
         <Intro />
         <div aria-hidden className="grain" />
-        <Providers>
+        <Providers catalog={catalog}>
           <SmoothScroll />
           <a
             href="#conteudo"

@@ -10,24 +10,18 @@ import { ProductCard } from "@/components/product/product-card";
 import { ProductPanel } from "@/components/product/product-panel";
 import { ProductPurchase } from "@/components/product/product-purchase";
 import { siteConfig } from "@/config/site";
-import {
-  categories,
-  getProduct,
-  getRelatedProducts,
-  platforms,
-  priceOnRequest,
-  products,
-} from "@/data/products";
+import { categories, getRelatedProducts, platforms, priceOnRequest } from "@/data/products";
+import { getCatalog, getCatalogProduct } from "@/lib/catalog";
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await getCatalog()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/loja/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const product = await getCatalogProduct(slug);
   if (!product) notFound();
   const title = `${product.name} para PS4 e PS5`;
   return {
@@ -68,10 +62,11 @@ export default function ProductPage({ params }: PageProps<"/loja/[slug]">) {
 
 async function ProductContent({ params }: { params: PageProps<"/loja/[slug]">["params"] }) {
   const { slug } = await params;
-  const product = getProduct(slug);
+  const catalog = await getCatalog();
+  const product = catalog.find((p) => p.slug === slug);
   if (!product) notFound();
 
-  const related = getRelatedProducts(product, 3);
+  const related = getRelatedProducts(catalog, product, 3);
   const steps =
     product.category === "conta"
       ? [

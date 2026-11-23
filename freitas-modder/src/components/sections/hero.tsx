@@ -6,6 +6,7 @@ import { Scramble } from "@/components/effects/scramble";
 import { ButtonAnchor, ButtonLink } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import { defaultWhatsappMessage, whatsappLink } from "@/lib/whatsapp";
+import { getCatalog, pickFeatured } from "@/lib/catalog";
 import { HeroCards } from "./hero-cards";
 import { HeroTitle } from "./hero-title";
 
@@ -15,7 +16,8 @@ function delay(ms: number) {
   return { ["--d" as string]: `${ms}ms` };
 }
 
-export function Hero() {
+export async function Hero() {
+  const featured = pickFeatured(await getCatalog());
   return (
     <section className="relative isolate overflow-hidden pb-24 pt-28 sm:pt-32 lg:pb-32 lg:pt-36">
       {/* Fundo: luz vermelha + avenida à noite */}
@@ -80,7 +82,7 @@ export function Hero() {
           </dl>
         </div>
 
-        <HeroCards />
+        {featured && <HeroCards product={featured} />}
       </div>
     </section>
   );

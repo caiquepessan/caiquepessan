@@ -2,13 +2,7 @@
 
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import {
-  findVariant,
-  getProduct,
-  platforms,
-  type Platform,
-  type Product,
-} from "@/data/products";
+import { findVariant, platforms, type Platform, type Product } from "@/data/products";
 
 export interface CartItem {
   slug: string;
@@ -95,9 +89,9 @@ export const useCart = create<CartState>()(
 );
 
 /** Junta os itens do carrinho com os dados atuais do catálogo. */
-export function resolveCartItems(items: CartItem[]): ResolvedCartItem[] {
+export function resolveCartItems(items: CartItem[], catalog: Product[]): ResolvedCartItem[] {
   return items.flatMap((item) => {
-    const product = getProduct(item.slug);
+    const product = catalog.find((p) => p.slug === item.slug);
     const variant = product && findVariant(product, item.platform);
     if (!product || !variant) return [];
     return [

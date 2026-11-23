@@ -14,6 +14,7 @@ import { siteConfig } from "@/config/site";
 import { getLenis, lockScroll, scrollToTarget, unlockScroll } from "@/lib/lenis";
 import { cn } from "@/lib/utils";
 import { defaultWhatsappMessage, whatsappLink } from "@/lib/whatsapp";
+import { useCatalog } from "@/components/catalog-provider";
 import { cartTotals, resolveCartItems, useCart } from "@/store/cart";
 
 const links = [
@@ -42,7 +43,8 @@ function CartButton() {
   const items = useCart((s) => s.items);
   const bump = useCart((s) => s.bump);
   const open = useCart((s) => s.open);
-  const { count } = cartTotals(resolveCartItems(items));
+  const catalog = useCatalog();
+  const { count } = cartTotals(resolveCartItems(items, catalog));
 
   return (
     <button

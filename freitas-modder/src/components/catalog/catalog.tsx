@@ -4,7 +4,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { useSearchParams } from "next/navigation";
 import { ConsoleSwitch } from "@/components/product/console-switch";
 import { ProductCard } from "@/components/product/product-card";
-import { categories, categoryOrder, products, type Category } from "@/data/products";
+import { useCatalog } from "@/components/catalog-provider";
+import { categories, categoryOrder, type Category } from "@/data/products";
 import { cn } from "@/lib/utils";
 
 type CategoryFilter = Category | "all";
@@ -22,6 +23,7 @@ function CatalogView({
   category: CategoryFilter;
   onCategoryChange?: (value: CategoryFilter) => void;
 }) {
+  const products = useCatalog();
   const results =
     category === "all" ? products : products.filter((p) => p.category === category);
 

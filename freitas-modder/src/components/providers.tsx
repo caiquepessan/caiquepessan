@@ -3,10 +3,12 @@
 import { MotionConfig } from "motion/react";
 import { useEffect, type ReactNode } from "react";
 import { Toaster } from "sonner";
+import { CatalogProvider } from "@/components/catalog-provider";
+import type { Product } from "@/data/products";
 import { useCart } from "@/store/cart";
 import { useConsole } from "@/store/console";
 
-export function Providers({ children }: { children: ReactNode }) {
+export function Providers({ catalog, children }: { catalog: Product[]; children: ReactNode }) {
   useEffect(() => {
     // Carrinho e console salvos no navegador só carregam depois da
     // hidratação, para o HTML do servidor e o do navegador baterem.
@@ -16,7 +18,7 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      {children}
+      <CatalogProvider catalog={catalog}>{children}</CatalogProvider>
       <Toaster
         theme="dark"
         position="bottom-center"

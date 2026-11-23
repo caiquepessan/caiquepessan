@@ -16,17 +16,28 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ConsoleSwitch } from "@/components/product/console-switch";
 import { Odometer } from "@/components/product/odometer";
-import { findVariant, getProduct, platforms, type Platform } from "@/data/products";
+import { findVariant, platforms, type Platform, type Product } from "@/data/products";
 import { cn, formatBRL } from "@/lib/utils";
 import { useConsole } from "@/store/console";
 
-/** O pacote em destaque no topo. */
-const product = getProduct("dinheiro-500-milhoes")!;
-const specs = [
-  ...product.specs.filter((spec) => spec.label !== "Dinheiro"),
-  { label: "Onde entra", value: "No seu personagem" },
-].slice(0, 3);
-const money = `$${new Intl.NumberFormat("pt-BR").format(product.amount ?? 0)}`;
+/** O que o card do topo mostra do pacote em destaque. */
+interface Featured {
+  product: Product;
+  specs: { label: string; value: string }[];
+  money: string;
+}
+
+function toFeatured(product: Product): Featured {
+  return {
+    product,
+    specs: [
+      ...product.specs.filter((spec) => spec.label !== "Dinheiro"),
+      { label: "Onde entra", value: "No seu personagem" },
+    ].slice(0, 3),
+    money: `$${new Intl.NumberFormat("pt-BR").format(product.amount ?? 0)}`,
+  };
+}
+
 const ease = [0.22, 1, 0.36, 1] as const;
 
 /** Cada console tem o seu acabamento: PS5 vermelho, PS4 preto. */
@@ -82,7 +93,8 @@ function useConsoleReady() {
  * Dois cards em 3D: na frente o pacote de $500 milhões no console escolhido, atrás o
  * do outro console. Ao trocar de console, os dois giram e trocam de lado.
  */
-export function HeroCards() {
+export function HeroCards({ product }: { product: Product }) {
+  const featured = toFeatured(product);
   const platform = useConsole((s) => s.platform);
   const setPlatform = useConsole((s) => s.setPlatform);
   const reduce = useReducedMotion();
@@ -233,6 +245,7 @@ export function HeroCards() {
               }}
             >
               <Card
+                featured={featured}
                 faces={["ps4", "ps5"]}
                 rotateX={backRotateX}
                 rotateY={backRotateY}
@@ -259,6 +272,7 @@ export function HeroCards() {
               }}
             >
               <Card
+                featured={featured}
                 faces={["ps5", "ps4"]}
                 rotateX={frontRotateX}
                 rotateY={frontRotateY}
@@ -287,6 +301,7 @@ export function HeroCards() {
 
 /** Um card com duas faces (uma por console) e espessura de verdade. */
 function Card({
+  featured,
   faces,
   rotateX,
   rotateY,
@@ -295,6 +310,7 @@ function Card({
   active,
   rollDelay = 0,
 }: {
+  featured: Featured;
   faces: [Platform, Platform];
   rotateX: MotionValue<number>;
   rotateY: MotionValue<number>;
@@ -328,6 +344,7 @@ function Card({
           />
         ))}
         <Face
+          featured={featured}
           platform={a}
           side="a"
           rotateX={rotateX}
@@ -337,6 +354,7 @@ function Card({
           rollDelay={rollDelay}
         />
         <Face
+          featured={featured}
           platform={b}
           side="b"
           rotateX={rotateX}
@@ -351,6 +369,7 @@ function Card({
 }
 
 function Face({
+  featured,
   platform,
   side,
   rotateX,
@@ -359,6 +378,7 @@ function Face({
   active,
   rollDelay,
 }: {
+  featured: Featured;
   platform: Platform;
   side: "a" | "b";
   rotateX: MotionValue<number>;
@@ -367,6 +387,7 @@ function Face({
   active: boolean;
   rollDelay: number;
 }) {
+  const { product, specs, money } = featured;
   const red = finishOf[platform] === "red";
   const variant = findVariant(product, platform);
   const label = platforms[platform].label;

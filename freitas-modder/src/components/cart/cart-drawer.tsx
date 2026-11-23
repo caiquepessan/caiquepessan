@@ -12,6 +12,7 @@ import { siteConfig } from "@/config/site";
 import { lockScroll, unlockScroll } from "@/lib/lenis";
 import { formatBRL } from "@/lib/utils";
 import { buildOrderMessage, whatsappLink } from "@/lib/whatsapp";
+import { useCatalog } from "@/components/catalog-provider";
 import { cartTotals, resolveCartItems, useCart } from "@/store/cart";
 
 export function CartDrawer() {
@@ -22,7 +23,8 @@ export function CartDrawer() {
   const clear = useCart((s) => s.clear);
   const closeRef = useRef<HTMLButtonElement>(null);
 
-  const resolved = useMemo(() => resolveCartItems(items), [items]);
+  const catalog = useCatalog();
+  const resolved = useMemo(() => resolveCartItems(items, catalog), [items, catalog]);
   const { count, total } = cartTotals(resolved);
 
   const checkoutHref = useMemo(
