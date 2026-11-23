@@ -142,7 +142,7 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-2.5">
-            <AccountButton className="hidden sm:block" />
+            <AccountButton className="hidden sm:flex" />
             <ConsoleSwitch size="sm" className="hidden sm:inline-flex" />
             <CartButton />
             <button
