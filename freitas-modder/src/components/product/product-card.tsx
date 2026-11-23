@@ -49,16 +49,20 @@ export function ProductCard({
             </Link>
           )}
         </h3>
-        <p className="mt-1.5 text-[15px] leading-snug text-stone-400">{product.summary}</p>
+        {product.summary && (
+          <p className="mt-1.5 text-[15px] leading-snug text-stone-400">{product.summary}</p>
+        )}
 
-        <dl className="mt-5 border-t border-white/[0.07] text-[15px]">
-          {product.specs.slice(0, 3).map((spec) => (
-            <div key={spec.label} className="flex items-baseline justify-between gap-4 border-b border-white/[0.07] py-2.5">
-              <dt className="text-stone-400">{spec.label}</dt>
-              <dd className="text-right font-medium">{spec.value}</dd>
-            </div>
-          ))}
-        </dl>
+        {product.specs.length > 0 && (
+          <dl className="mt-5 border-t border-white/[0.07] text-[15px]">
+            {product.specs.slice(0, 3).map((spec) => (
+              <div key={spec.label} className="flex items-baseline justify-between gap-4 border-b border-white/[0.07] py-2.5">
+                <dt className="text-stone-400">{spec.label}</dt>
+                <dd className="text-right font-medium">{spec.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-5">
           <div className="min-w-0">

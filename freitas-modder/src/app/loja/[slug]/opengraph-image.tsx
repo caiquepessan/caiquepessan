@@ -30,13 +30,17 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     ? "preço no WhatsApp"
     : formatBRL(Math.min(...product.variants.map((v) => v.price)));
 
+  // Legenda e ficha são opcionais no painel: sem elas, a imagem usa o texto padrão.
+  const headline = [product.headline.value, product.headline.label].filter(Boolean).join(" ");
+  const specs = product.specs
+    .slice(0, 3)
+    .map((s) => `${s.label} ${s.value}`)
+    .join(" · ");
+
   return renderOgImage({
-    kicker: `${product.headline.value} ${product.headline.label} · ${price}`,
+    kicker: `${headline} · ${price}`,
     title: product.name,
-    footer: product.specs
-      .slice(0, 3)
-      .map((s) => `${s.label} ${s.value}`)
-      .join(" · "),
+    footer: specs || undefined,
     ...backgrounds[product.tone],
   });
 }

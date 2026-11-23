@@ -51,7 +51,9 @@ export function ServiceList({ items }: { items: Product[] }) {
                     <ArrowUpRight className="size-4 text-stone-500 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" />
                   </Link>
                 </h3>
-                <p className="mt-1 text-[15px] leading-snug text-stone-400">{product.summary}</p>
+                {product.summary && (
+                  <p className="mt-1 text-[15px] leading-snug text-stone-400">{product.summary}</p>
+                )}
               </div>
               <p className="col-span-2 text-sm text-stone-500 md:col-span-1 md:text-right">
                 Entrega: <span className="text-stone-300">{product.delivery.toLowerCase()}</span>

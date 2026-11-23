@@ -24,11 +24,14 @@ export async function generateMetadata({
   const product = await getCatalogProduct(slug);
   if (!product) notFound();
   const title = `${product.name} para PS4 e PS5`;
+  // Resumo e descrição podem ficar vazios no painel: aí vale a descrição padrão do site.
+  const description =
+    [product.summary, product.description].filter(Boolean).join(" ") || siteConfig.description;
   return {
     title,
-    description: `${product.summary} ${product.description}`,
+    description,
     alternates: { canonical: `/loja/${product.slug}` },
-    openGraph: { title, description: product.summary, url: `/loja/${product.slug}` },
+    openGraph: { title, description: product.summary || description, url: `/loja/${product.slug}` },
   };
 }
 
@@ -147,37 +150,44 @@ async function ProductContent({ params }: { params: PageProps<"/loja/[slug]">["p
               <h1 className="mt-3 font-display text-6xl font-extrabold uppercase leading-[0.9] sm:text-7xl">
                 {product.name}
               </h1>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-stone-300">
-                {product.description}
-              </p>
+              {product.description && (
+                <p className="mt-5 text-pretty text-lg leading-relaxed text-stone-300">
+                  {product.description}
+                </p>
+              )}
 
               <div className="mt-8">
                 <ProductPurchase product={product} />
               </div>
 
-              <Reveal className="mt-12">
-                <h2 className="text-xl font-semibold">Ficha</h2>
-                <dl className="mt-4 border-t border-white/[0.08]">
-                  {product.specs.map((spec) => (
-                    <div key={spec.label} className="flex items-baseline justify-between gap-6 border-b border-white/[0.08] py-3 text-[17px]">
-                      <dt className="text-stone-400">{spec.label}</dt>
-                      <dd className="text-right font-medium">{spec.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </Reveal>
+              {/* Ficha e "O que vem" são opcionais no painel: sem conteúdo, nem aparecem. */}
+              {product.specs.length > 0 && (
+                <Reveal className="mt-12">
+                  <h2 className="text-xl font-semibold">Ficha</h2>
+                  <dl className="mt-4 border-t border-white/[0.08]">
+                    {product.specs.map((spec) => (
+                      <div key={spec.label} className="flex items-baseline justify-between gap-6 border-b border-white/[0.08] py-3 text-[17px]">
+                        <dt className="text-stone-400">{spec.label}</dt>
+                        <dd className="text-right font-medium">{spec.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </Reveal>
+              )}
 
-              <Reveal className="mt-12">
-                <h2 className="text-xl font-semibold">O que vem</h2>
-                <ul className="mt-4 grid gap-3">
-                  {product.includes.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-[17px] text-stone-200">
-                      <Check className="mt-1 size-4 shrink-0 text-brand-500" strokeWidth={3} />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
+              {product.includes.length > 0 && (
+                <Reveal className="mt-12">
+                  <h2 className="text-xl font-semibold">O que vem</h2>
+                  <ul className="mt-4 grid gap-3">
+                    {product.includes.map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-[17px] text-stone-200">
+                        <Check className="mt-1 size-4 shrink-0 text-brand-500" strokeWidth={3} />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </Reveal>
+              )}
 
               <Reveal className="mt-12">
                 <h2 className="text-xl font-semibold">Como você recebe</h2>
