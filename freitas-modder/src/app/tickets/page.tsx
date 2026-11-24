@@ -7,6 +7,7 @@ import { listTicketsForUser } from "@/lib/tickets/repo";
 import { ticketsDb } from "@/lib/tickets/server";
 import { getViewer } from "@/lib/viewer";
 import { AutoRefresh } from "@/components/tickets/live";
+import { PushToggle } from "@/components/tickets/push-toggle";
 
 export default function MeusTicketsPage() {
   return (
@@ -42,6 +43,7 @@ async function MyTickets() {
           <Plus className="size-4" /> Outro assunto
         </ButtonLink>
       </header>
+      <PushToggle audience="cliente" className="mb-6" />
       <TicketList tickets={tickets} />
       <AutoRefresh every={30000} />
     </>

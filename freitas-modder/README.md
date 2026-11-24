@@ -149,6 +149,20 @@ e para o admin. Para ligar, conecte esse armazenamento ao projeto com o prefixo
 Enquanto não estiver ligado, os anexos vão para o armazenamento das fotos, com
 endereço aleatório.
 
+**Avisos no celular:** o Freitas ativa em `/painel/tickets` ("Ativar avisos") e
+recebe notificação de ticket novo e de resposta de cliente. O cliente ativa na
+página do ticket (ou em `/tickets`) e recebe quando o Freitas responde ou muda o
+andamento. Tocar na notificação abre o ticket. Funciona com o site fechado, em
+Android, computador e iPhone (no iPhone, a partir do iOS 16.4 e com o site
+adicionado à Tela de Início: Compartilhar → Adicionar à Tela de Início). Cada
+celular ou navegador ativa uma vez; dá para desligar no mesmo botão.
+
+Por trás é Web Push: `public/sw.js` mostra a notificação, os aparelhos ficam na
+tabela `push_subscriptions` e o envio está em `src/lib/push.ts`. As chaves
+(VAPID) são derivadas do `BETTER_AUTH_SECRET`, então não precisa configurar
+nada. Para usar chaves próprias, crie `NEXT_PUBLIC_VAPID_PUBLIC_KEY` e
+`VAPID_PRIVATE_KEY` na Vercel.
+
 **Avisos no Discord (opcionais):**
 
 | Variável | O que faz |
@@ -178,6 +192,13 @@ O símbolo é um F formado por três faixas inclinadas, como listras de carro de
 corrida. O nome usa Barlow Condensed itálico, com "FREITAS" grosso e "MODDER"
 mais leve, tudo convertido em contorno (não depende de fonte instalada).
 Cores: vermelho `#E8182C`, preto `#09090A` e papel `#F2EFE9`.
+
+## Interface
+
+Nada de controles com cara de navegador: no lugar de `<select>`, caixinha de
+marcar e caixa de texto com alça, use os componentes de `src/components/ui`:
+`Select` (lista de escolha, funciona no teclado), `Switch` (liga/desliga) e
+`AutoTextarea` (cresce sozinha enquanto a pessoa escreve).
 
 ## Efeitos
 

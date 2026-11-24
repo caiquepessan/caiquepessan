@@ -2,6 +2,7 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { PanelTabs } from "@/components/admin/panel-tabs";
 import { AutoRefresh } from "@/components/tickets/live";
+import { PushToggle } from "@/components/tickets/push-toggle";
 import { StatusBadge } from "@/components/tickets/status-badge";
 import { formatCents, formatWhen } from "@/lib/tickets/format";
 import type { AdminFilter, AdminTicketSummary } from "@/lib/tickets/repo";
@@ -41,6 +42,8 @@ export function AdminTicketsView({
           )}
         </p>
       </header>
+
+      <PushToggle audience="admin" className="mt-6" />
 
       <nav aria-label="Filtrar tickets" className="mt-6 flex flex-wrap gap-2">
         {order.map((f) => (

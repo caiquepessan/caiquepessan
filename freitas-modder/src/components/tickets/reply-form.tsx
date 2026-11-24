@@ -3,8 +3,15 @@
 import { SendHorizontal } from "lucide-react";
 import { useActionState, useRef, useState } from "react";
 import type { FormState } from "@/app/tickets/actions";
-import { LIMITS, statusInfo, TICKET_STATUSES, type TicketStatus } from "@/lib/tickets/status";
+import { AutoTextarea } from "@/components/ui/auto-textarea";
+import { Select, type SelectOption } from "@/components/ui/select";
+import { LIMITS, statusInfo, TICKET_STATUSES, toneDot, type TicketStatus } from "@/lib/tickets/status";
 import { AttachmentButton, AttachmentPreviews, useAttachments, type UploadedFile } from "./attachment-picker";
+
+const STATUS_OPTIONS: SelectOption<TicketStatus | "">[] = [
+  { value: "", label: "Não mudar" },
+  ...TICKET_STATUSES.map((s) => ({ value: s, label: statusInfo[s].adminLabel, dot: toneDot[statusInfo[s].tone] })),
+];
 
 export interface ReplyTemplate {
   label: string;
@@ -29,7 +36,7 @@ export function ReplyForm({
 }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [text, setText] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState<TicketStatus | "">("");
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const { add, remove } = useAttachments(ticketId, files, setFiles);
 
@@ -80,7 +87,7 @@ export function ReplyForm({
       <label className="sr-only" htmlFor={`mensagem-${ticketId}`}>
         Mensagem
       </label>
-      <textarea
+      <AutoTextarea
         id={`mensagem-${ticketId}`}
         name="mensagem"
         value={text}
@@ -100,7 +107,7 @@ export function ReplyForm({
         rows={3}
         maxLength={LIMITS.message}
         placeholder={placeholder}
-        className="block min-h-24 w-full resize-y rounded-2xl border border-white/10 bg-ink-950 px-4 py-3 text-[16px] leading-relaxed text-white outline-none transition-colors placeholder:text-stone-600 focus:border-brand-500"
+        className="block min-h-24 w-full rounded-2xl border border-white/10 bg-ink-950 px-4 py-3 text-[16px] leading-relaxed text-white outline-none transition-colors placeholder:text-stone-600 focus:border-brand-500"
       />
 
       {files.length > 0 && (
@@ -110,22 +117,16 @@ export function ReplyForm({
       )}
 
       {withStatus && (
-        <label className="mt-3 flex flex-wrap items-center gap-2 text-[15px] text-stone-400">
-          Depois de enviar, marcar como
-          <select
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 text-[15px] text-stone-400">
+          <span aria-hidden>Depois de enviar, marcar como</span>
+          <Select
             name="status"
+            label="Depois de enviar, marcar como"
             value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="h-10 rounded-xl border border-white/10 bg-ink-950 px-3 text-[15px] font-semibold text-white outline-none focus:border-brand-500"
-          >
-            <option value="">Não mudar</option>
-            {TICKET_STATUSES.map((s) => (
-              <option key={s} value={s}>
-                {statusInfo[s].adminLabel}
-              </option>
-            ))}
-          </select>
-        </label>
+            onChange={setStatus}
+            options={STATUS_OPTIONS}
+          />
+        </div>
       )}
 
       {state.error && (

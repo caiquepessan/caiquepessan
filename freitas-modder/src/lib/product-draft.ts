@@ -146,7 +146,7 @@ export function validateDraft(
       }
     }
     if (variants.length === 0 && !errors.pricePs4 && !errors.pricePs5) {
-      errors.pricePs4 = "Coloque o preço de pelo menos um console, ou marque “Preço no WhatsApp”.";
+      errors.pricePs4 = "Coloque o preço de pelo menos um console, ou ligue “Preço a combinar”.";
     }
   }
 

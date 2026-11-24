@@ -216,3 +216,22 @@ export const ticketMessages = pgTable(
 
 export type TicketRow = typeof tickets.$inferSelect;
 export type TicketMessageRow = typeof ticketMessages.$inferSelect;
+
+// ------------------------------------------------- avisos no celular
+
+/** Aparelhos que ativaram notificações (Web Push). Um por navegador. */
+export const pushSubscriptions = pgTable(
+  "push_subscriptions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    endpoint: text("endpoint").notNull().unique(),
+    p256dh: text("p256dh").notNull(),
+    auth: text("auth").notNull(),
+    userAgent: text("user_agent"),
+    ...timestamps,
+  },
+  (t) => [index("push_subscriptions_user_idx").on(t.userId)],
+);

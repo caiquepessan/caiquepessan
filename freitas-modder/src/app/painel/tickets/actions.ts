@@ -46,7 +46,7 @@ export async function adminReply(_prev: FormState, formData: FormData): Promise<
   await markSeen(db, ticket.id, "freitas");
 
   after(async () =>
-    notifyCustomer(await discordIdOf(db, ticket.userId), {
+    notifyCustomer({ userId: ticket.userId, discordId: await discordIdOf(db, ticket.userId) }, {
       title: `Ticket #${ticket.number}: ${changed && status ? statusInfo[status].label : "o Freitas respondeu"}`,
       description: body || (attachments.length > 0 ? "Mandou imagem na conversa." : status ? statusInfo[status].hint : ""),
       path: `/tickets/${ticket.number}`,
@@ -68,7 +68,7 @@ export async function adminSetStatus(formData: FormData) {
   await markSeen(db, ticket.id, "freitas");
   if (changed) {
     after(async () =>
-      notifyCustomer(await discordIdOf(db, ticket.userId), {
+      notifyCustomer({ userId: ticket.userId, discordId: await discordIdOf(db, ticket.userId) }, {
         title: `Ticket #${ticket.number}: ${statusInfo[status].label}`,
         description: statusInfo[status].hint,
         path: `/tickets/${ticket.number}`,

@@ -82,6 +82,16 @@ export const toneClasses: Record<Tone, string> = {
   closed: "bg-white/[0.06] text-stone-400 ring-white/10",
 };
 
+/** Bolinha sólida na cor do andamento (listas de escolha). */
+export const toneDot: Record<Tone, string> = {
+  new: "bg-sky-400",
+  money: "bg-amber-400",
+  access: "bg-violet-400",
+  work: "bg-brand-500",
+  done: "bg-emerald-400",
+  closed: "bg-stone-500",
+};
+
 export function isTicketStatus(value: unknown): value is TicketStatus {
   return typeof value === "string" && (TICKET_STATUSES as readonly string[]).includes(value);
 }

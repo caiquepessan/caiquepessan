@@ -1,9 +1,11 @@
 import "server-only";
 import { siteConfig } from "@/config/site";
 import { adminDiscordIds } from "@/lib/auth";
+import { sendPush, sendPushToAdmins } from "@/lib/push";
 
 /**
- * Avisos dos tickets pelo Discord. Os dois são opcionais (variáveis na Vercel):
+ * Avisos dos tickets. Notificação no celular (Web Push) para quem ativou no
+ * site, e pelo Discord. Os do Discord são opcionais (variáveis na Vercel):
  * - DISCORD_BOT_TOKEN: o bot manda mensagem no privado (para o Freitas quando
  *   o cliente escreve, e para o cliente quando o Freitas responde).
  * - DISCORD_TICKETS_WEBHOOK_URL: posta num canal (ex.: #tickets).
@@ -65,20 +67,27 @@ async function safely(task: () => Promise<unknown>) {
   try {
     await task();
   } catch (error) {
-    console.error("[tickets] aviso no Discord falhou", error);
+    console.error("[tickets] aviso falhou", error);
   }
+}
+
+function tagOf(path: string) {
+  return `ticket-${path.split("/").pop()}`;
 }
 
 /** Cliente abriu ou respondeu: avisa o Freitas. */
 export async function notifyAdmins(notice: Notice) {
   await Promise.all([
+    safely(() => sendPushToAdmins({ title: notice.title, body: notice.description, url: notice.path, tag: tagOf(notice.path) })),
     safely(() => webhook(notice)),
     ...adminDiscordIds().map((id) => safely(() => dm(id, notice))),
   ]);
 }
 
 /** Freitas respondeu ou mudou o andamento: avisa o cliente. */
-export async function notifyCustomer(discordId: string | null, notice: Notice) {
-  if (!discordId) return;
-  await safely(() => dm(discordId, notice));
+export async function notifyCustomer(customer: { userId: string; discordId: string | null }, notice: Notice) {
+  await Promise.all([
+    safely(() => sendPush([customer.userId], { title: notice.title, body: notice.description, url: notice.path, tag: tagOf(notice.path) })),
+    customer.discordId ? safely(() => dm(customer.discordId!, notice)) : Promise.resolve(),
+  ]);
 }

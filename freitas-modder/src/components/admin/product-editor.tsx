@@ -6,6 +6,8 @@ import { useActionState, useState, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { saveProduct, type SaveState } from "@/app/painel/actions";
 import { ProductCard } from "@/components/product/product-card";
+import { AutoTextarea } from "@/components/ui/auto-textarea";
+import { Switch } from "@/components/ui/switch";
 import { toneStyles } from "@/components/product/product-panel";
 import { categories, categoryOrder, type Category } from "@/data/products";
 import { draftPreview, slugify, tones, type Draft, type DraftErrors } from "@/lib/product-draft";
@@ -214,20 +216,12 @@ export function ProductEditor({ initial }: { initial: Draft }) {
           </Section>
 
           <Section title="Preço no Pix">
-            <label className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                checked={draft.onRequest}
-                onChange={(e) => set("onRequest", e.target.checked)}
-                className="mt-0.5 size-5 accent-[#e8182c]"
-              />
-              <span>
-                <span className="font-semibold">Preço no WhatsApp</span>
-                <span className="block text-sm text-stone-500">
-                  Sem preço fixo (ex.: conta única). O site mostra um botão pra perguntar.
-                </span>
-              </span>
-            </label>
+            <Switch
+              checked={draft.onRequest}
+              onChange={(on) => set("onRequest", on)}
+              label="Preço a combinar"
+              description="Sem preço fixo (ex.: conta única). O site mostra um botão pra perguntar o preço."
+            />
             {!draft.onRequest && (
               <>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -330,7 +324,7 @@ export function ProductEditor({ initial }: { initial: Draft }) {
               />
             </Field>
             <Field label="Descrição" hint="Texto da página do produto.">
-              <textarea
+              <AutoTextarea
                 className={cn(inputClass, "h-auto min-h-32 py-3 leading-relaxed")}
                 value={draft.description}
                 onChange={(e) => set("description", e.target.value)}
@@ -389,7 +383,7 @@ export function ProductEditor({ initial }: { initial: Draft }) {
 
           <Section title="O que vem">
             <Field label="Itens" hint="Um por linha. Aparece na página do produto com um ✓.">
-              <textarea
+              <AutoTextarea
                 className={cn(inputClass, "h-auto min-h-36 py-3 leading-relaxed")}
                 value={draft.includes}
                 onChange={(e) => set("includes", e.target.value)}
@@ -404,20 +398,12 @@ export function ProductEditor({ initial }: { initial: Draft }) {
           </Section>
 
           <Section title="No site">
-            <label className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                checked={draft.active}
-                onChange={(e) => set("active", e.target.checked)}
-                className="mt-0.5 size-5 accent-[#e8182c]"
-              />
-              <span>
-                <span className="font-semibold">Mostrar no site</span>
-                <span className="block text-sm text-stone-500">
-                  Desligue para esconder sem apagar (ex.: conta vendida).
-                </span>
-              </span>
-            </label>
+            <Switch
+              checked={draft.active}
+              onChange={(on) => set("active", on)}
+              label="Mostrar no site"
+              description="Desligue para esconder sem apagar (ex.: conta vendida)."
+            />
           </Section>
 
           <div className="sticky bottom-4 z-10 flex gap-3 rounded-2xl bg-ink-950/90 p-3 ring-1 ring-inset ring-white/10 backdrop-blur-lg">

@@ -8,6 +8,7 @@ import { statusInfo } from "@/lib/tickets/status";
 import { cn } from "@/lib/utils";
 import { Conversation } from "./conversation";
 import { AutoRefresh, ClearCartAfterOrder, MarkSeen } from "./live";
+import { PushToggle } from "./push-toggle";
 import { ReplyForm } from "./reply-form";
 import { StatusBadge } from "./status-badge";
 import { TicketItems } from "./ticket-items";
@@ -67,6 +68,7 @@ export function CustomerTicketView({
           </p>
         </div>
         <TicketItems items={ticket.items} total={ticket.total} psnId={ticket.psnId} />
+        {!closed && <PushToggle audience="cliente" />}
       </div>
 
       <section className="mt-10" aria-label="Conversa com o Freitas">

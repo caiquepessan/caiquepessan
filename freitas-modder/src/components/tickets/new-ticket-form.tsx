@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useActionState, useMemo, useState, useSyncExternalStore } from "react";
 import { openTicket, type FormState } from "@/app/tickets/actions";
 import { useCatalog } from "@/components/catalog-provider";
+import { AutoTextarea } from "@/components/ui/auto-textarea";
 import { platformOrder, platforms, type Category, type Platform } from "@/data/products";
 import type { OrderInput } from "@/lib/tickets/order";
 import { LIMITS } from "@/lib/tickets/status";
@@ -176,7 +177,7 @@ export function NewTicketForm({
         <span className="text-[15px] font-semibold text-stone-200">
           Mensagem{mode === "outro" ? "" : " (opcional)"}
         </span>
-        <textarea
+        <AutoTextarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           maxLength={LIMITS.message}
@@ -186,7 +187,7 @@ export function NewTicketForm({
               ? "Conte o que você precisa."
               : "Quer avisar algo? Ex.: melhor horário pra liberar o acesso."
           }
-          className={cn(field, "mt-2 min-h-28 resize-y py-3 leading-relaxed")}
+          className={cn(field, "mt-2 min-h-28 py-3 leading-relaxed")}
         />
       </label>
 

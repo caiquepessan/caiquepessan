@@ -7,6 +7,7 @@ import { PGlite } from "@electric-sql/pglite";
 import { drizzle } from "drizzle-orm/pglite";
 import { migrate } from "drizzle-orm/pglite/migrator";
 import * as schema from "../src/db/schema";
+import { adminUserIds, deletePushSubscription, savePushSubscription, subscriptionsForUsers } from "../src/lib/push-repo";
 import {
   addMessage,
   adminCounts,
@@ -117,6 +118,23 @@ async function main() {
   check(closed?.status === "fechado" && closed.closedAt instanceof Date, "fechar grava a data");
   check((await listTicketsForAdmin(db, "fechados")).length === 1, "filtro fechados");
   check((await listTicketsForAdmin(db, "todos")).length === 2, "filtro todos");
+
+  // ------------------------------------------- avisos no celular
+  const sub = { endpoint: "https://fcm.googleapis.com/fcm/send/abc", p256dh: "chave-p256dh-de-teste", auth: "auth-de-teste-123", userAgent: "teste" };
+  await savePushSubscription(db, { ...sub, userId: "u1" });
+  await savePushSubscription(db, { ...sub, userId: "u1", auth: "auth-nova-1234567" });
+  let subs = await subscriptionsForUsers(db, ["u1"]);
+  check(subs.length === 1 && subs[0].auth === "auth-nova-1234567", "ativar de novo no mesmo aparelho atualiza, sem duplicar");
+  await savePushSubscription(db, { ...sub, userId: "u2" });
+  check((await subscriptionsForUsers(db, ["u1"])).length === 0 && (await subscriptionsForUsers(db, ["u2"])).length === 1, "aparelho passa para quem ativou por último");
+  await pg.insert(schema.account).values({ id: "a-admin", accountId: "999999999999999999", providerId: "discord", userId: "admin" });
+  const admins = await adminUserIds(db, ["999999999999999999"]);
+  check(admins.length === 1 && admins[0] === "admin", "acha a conta do admin pelo ID do Discord");
+  await deletePushSubscription(db, sub.endpoint, "u1");
+  check((await subscriptionsForUsers(db, ["u2"])).length === 1, "outra pessoa não consegue apagar o aparelho");
+  await deletePushSubscription(db, sub.endpoint, "u2");
+  subs = await subscriptionsForUsers(db, ["u2"]);
+  check(subs.length === 0, "desligar apaga o aparelho");
 
   console.log("\nOK: tickets funcionando no banco.");
 }

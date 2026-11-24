@@ -20,7 +20,7 @@ import { PanelTabs } from "./panel-tabs";
 import { RowActions } from "./row-actions";
 
 function priceLabel(product: Product) {
-  if (priceOnRequest(product)) return "Preço no WhatsApp";
+  if (priceOnRequest(product)) return "Preço a combinar";
   if (samePriceEverywhere(product)) return `${formatBRL(product.variants[0].price)} · PS4 e PS5`;
   return product.variants
     .map((v) => `${v.platform.toUpperCase()} ${formatBRL(v.price)}`)
