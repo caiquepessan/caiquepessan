@@ -17,18 +17,23 @@ function resolveSiteUrl() {
 
 export const siteConfig = {
   name: "Freitas Modder",
-  title: "Freitas Modder | Dinheiro, level e Unlock All no GTA V para PS4 e PS5",
+  title: "Freitas Modder | Dinheiro, level e Unlock All no GTA 5 Online (PS4 e PS5)",
   description:
-    "Dinheiro, up de level e Unlock All com Corrida Modder no GTA V Online para PS4 e PS5, direto no seu personagem. Pagamento no Pix e entrega rápida pelo WhatsApp.",
+    "Dinheiro, level e Unlock All com Corrida Modder no GTA 5 Online (PS4 e PS5), feito pelo Freitas direto na sua conta. Pix e acesso por QR Code, sem senha.",
   url: resolveSiteUrl(),
   locale: "pt_BR",
   keywords: [
-    "dinheiro gta 5 online ps4",
-    "dinheiro gta 5 online ps5",
+    "dinheiro gta 5 online",
+    "dinheiro gta 5 ps4",
+    "dinheiro gta 5 ps5",
+    "comprar dinheiro gta 5",
     "up de level gta 5",
-    "unlock all gta ps5",
+    "unlock all gta 5",
+    "unlock all gta 5 ps5",
     "corrida modder gta",
     "conta modada gta 5",
+    "modder gta 5 ps4",
+    "gta v online",
     "freitas modder",
   ],
 

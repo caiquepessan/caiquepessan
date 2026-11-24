@@ -7,44 +7,22 @@ import { Proofs } from "@/components/sections/proofs";
 import { Services } from "@/components/sections/services";
 import { Strip } from "@/components/sections/strip";
 import { siteConfig } from "@/config/site";
+import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/json-ld";
 import { faq } from "@/data/faq";
 import { getCatalog } from "@/lib/catalog";
+import { faqLd, graph, itemListLd, storeLd, websiteLd } from "@/lib/seo";
 
-async function JsonLd() {
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
+/** Loja, site, dúvidas e lista de produtos para o Google. */
+async function HomeJsonLd() {
   const products = await getCatalog();
-  const data = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Store",
-        name: siteConfig.name,
-        description: siteConfig.description,
-        url: siteConfig.url,
-      },
-      {
-        "@type": "FAQPage",
-        mainEntity: faq.map((item) => ({
-          "@type": "Question",
-          name: item.question,
-          acceptedAnswer: { "@type": "Answer", text: item.answer },
-        })),
-      },
-      {
-        "@type": "ItemList",
-        itemListElement: products.map((p, i) => ({
-          "@type": "ListItem",
-          position: i + 1,
-          url: `${siteConfig.url}/loja/${p.slug}`,
-          name: p.name,
-        })),
-      },
-    ],
-  };
-
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }}
+    <JsonLd
+      data={graph(storeLd(), websiteLd(), faqLd(faq), itemListLd(products, `Preços do ${siteConfig.name}`))}
     />
   );
 }
@@ -52,7 +30,7 @@ async function JsonLd() {
 export default function HomePage() {
   return (
     <>
-      <JsonLd />
+      <HomeJsonLd />
       <Hero />
       <Strip />
       <Money />

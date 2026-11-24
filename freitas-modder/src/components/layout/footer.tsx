@@ -27,10 +27,11 @@ const columns = [
   {
     title: "Loja",
     links: [
-      { href: "/loja?categoria=dinheiro", label: "Dinheiro na conta" },
-      { href: "/loja?categoria=level", label: "Up de level" },
-      { href: "/loja?categoria=servico", label: "Unlock All + Corrida" },
-      { href: "/loja?categoria=conta", label: "Conta pronta" },
+      { href: "/dinheiro-gta-5-online", label: "Dinheiro no GTA 5" },
+      { href: "/up-de-level-gta-5", label: "Up de level" },
+      { href: "/unlock-all-gta-5", label: "Unlock All + Corrida" },
+      { href: "/conta-modada-gta-5", label: "Conta modada" },
+      { href: "/loja", label: "Tabela de preços" },
     ],
   },
   {

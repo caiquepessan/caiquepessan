@@ -4,11 +4,13 @@ import { del } from "@vercel/blob";
 import { and, asc, eq, max, ne } from "drizzle-orm";
 import { refresh, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { getDb } from "@/db";
 import { productToRow } from "@/db/mappers";
 import { products } from "@/db/schema";
 import { isProductId } from "@/lib/admin-products";
 import { CATALOG_TAG } from "@/lib/catalog";
+import { pathsForProduct, pingIndexNow } from "@/lib/indexnow";
 import { validateDraft, type Draft, type DraftErrors } from "@/lib/product-draft";
 import { requireAdmin } from "@/lib/viewer";
 
@@ -90,6 +92,8 @@ export async function saveProduct(_prev: SaveState, formData: FormData): Promise
   }
 
   updateTag(CATALOG_TAG);
+  // Avisa os buscadores que a página do produto mudou
+  after(() => pingIndexNow(pathsForProduct(product.slug, product.category)));
   redirect(`/painel?salvo=${encodeURIComponent(product.name)}`);
 }
 
@@ -100,9 +104,10 @@ export async function deleteProduct(formData: FormData) {
   const [removed] = await getDb()
     .delete(products)
     .where(eq(products.id, id))
-    .returning({ name: products.name, image: products.image });
+    .returning({ name: products.name, image: products.image, slug: products.slug, category: products.category });
   if (removed) await removeImage(removed.image);
   updateTag(CATALOG_TAG);
+  if (removed) after(() => pingIndexNow(pathsForProduct(removed.slug, removed.category)));
   redirect(`/painel?apagado=${encodeURIComponent(removed?.name ?? "")}`);
 }
 
@@ -111,11 +116,13 @@ export async function setProductActive(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("id") ?? "");
   if (!isProductId(id)) return;
-  await getDb()
+  const [changed] = await getDb()
     .update(products)
     .set({ active: formData.get("active") === "1" })
-    .where(eq(products.id, id));
+    .where(eq(products.id, id))
+    .returning({ slug: products.slug, category: products.category });
   updateTag(CATALOG_TAG);
+  if (changed) after(() => pingIndexNow(pathsForProduct(changed.slug, changed.category)));
   refresh();
 }
 

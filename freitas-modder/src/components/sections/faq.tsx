@@ -65,15 +65,24 @@ function FaqRow({
   );
 }
 
-export function Faq() {
+export function Faq({
+  items = faq,
+  title = "Dúvidas",
+  id = "duvidas",
+}: {
+  /** Perguntas (por padrão, as da home). */
+  items?: FaqItem[];
+  title?: string;
+  id?: string;
+} = {}) {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="duvidas" className="py-24 sm:py-32">
+    <section id={id} className="py-24 sm:py-32">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
         <Reveal className="lg:sticky lg:top-28 lg:self-start">
           <h2 className="font-display text-5xl font-extrabold uppercase leading-[0.9] sm:text-6xl lg:text-7xl">
-            <SplitWords text="Dúvidas" />
+            <SplitWords text={title} />
           </h2>
           <p className="mt-4 max-w-sm text-lg leading-relaxed text-stone-400">
             Não achou sua pergunta aqui? Chama no WhatsApp que a gente responde.
@@ -91,7 +100,7 @@ export function Faq() {
         </Reveal>
 
         <Reveal delay={0.1} className="border-t border-white/[0.08]">
-          {faq.map((item, i) => (
+          {items.map((item, i) => (
             <FaqRow
               key={item.question}
               item={item}

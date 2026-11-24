@@ -24,6 +24,19 @@ export async function getCatalog(): Promise<Product[]> {
   return sortCatalog(rows).map(rowToProduct);
 }
 
+/** Quando cada produto à venda mudou pela última vez (para o sitemap). */
+export async function getCatalogDates(): Promise<Record<string, string>> {
+  "use cache";
+  cacheTag(CATALOG_TAG);
+  cacheLife("max");
+  if (!hasDatabase()) return {};
+  const rows = await getDb()
+    .select({ slug: products.slug, updatedAt: products.updatedAt })
+    .from(products)
+    .where(eq(products.active, true));
+  return Object.fromEntries(rows.map((r) => [r.slug, r.updatedAt.toISOString()]));
+}
+
 export async function getCatalogProduct(slug: string) {
   return (await getCatalog()).find((p) => p.slug === slug);
 }

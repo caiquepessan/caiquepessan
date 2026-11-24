@@ -39,7 +39,19 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   applicationName: siteConfig.name,
   keywords: [...siteConfig.keywords],
-  alternates: { canonical: "/" },
+  category: "games",
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  formatDetection: { telephone: false },
+  // Instalado na Tela de Início (iPhone): abre como app e recebe notificações
+  appleWebApp: { capable: true, title: siteConfig.name, statusBarStyle: "black-translucent" },
+  // Códigos de verificação do Google Search Console e do Bing (opcionais, pela Vercel)
+  verification: {
+    ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+    ...(process.env.BING_SITE_VERIFICATION
+      ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } }
+      : {}),
+  },
   openGraph: {
     type: "website",
     locale: siteConfig.locale,
@@ -53,7 +65,11 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+  },
 };
 
 export const viewport: Viewport = {

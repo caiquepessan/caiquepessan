@@ -9,9 +9,14 @@ import { Odometer } from "@/components/product/odometer";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductPanel } from "@/components/product/product-panel";
 import { ProductPurchase } from "@/components/product/product-purchase";
+import { ShareButton } from "@/components/product/share-button";
+import { JsonLd } from "@/components/seo/json-ld";
 import { siteConfig } from "@/config/site";
-import { categories, getRelatedProducts, platforms, priceOnRequest } from "@/data/products";
+import { landingForCategory } from "@/data/landings";
+import { categories, getRelatedProducts, priceOnRequest } from "@/data/products";
 import { getCatalog, getCatalogProduct } from "@/lib/catalog";
+import { breadcrumbLd, clampDescription, graph, productLd } from "@/lib/seo";
+import { formatBRL } from "@/lib/utils";
 
 export async function generateStaticParams() {
   return (await getCatalog()).map((p) => ({ slug: p.slug }));
@@ -23,15 +28,18 @@ export async function generateMetadata({
   const { slug } = await params;
   const product = await getCatalogProduct(slug);
   if (!product) notFound();
-  const title = `${product.name} para PS4 e PS5`;
+  const title = `${product.name} no GTA 5 Online (PS4 e PS5)`;
+  const prices = product.variants.map((v) => v.price);
+  const price = prices.length > 0 ? `${formatBRL(Math.min(...prices))} no Pix, PS4 e PS5.` : "Preço a combinar.";
   // Resumo e descrição podem ficar vazios no painel: aí vale a descrição padrão do site.
-  const description =
-    [product.summary, product.description].filter(Boolean).join(" ") || siteConfig.description;
+  const text = [product.summary, product.description].filter(Boolean).join(" ") || siteConfig.description;
+  const description = clampDescription(`${price} ${text}`);
   return {
     title,
     description,
     alternates: { canonical: `/loja/${product.slug}` },
-    openGraph: { title, description: product.summary || description, url: `/loja/${product.slug}` },
+    openGraph: { type: "website", title, description, url: `/loja/${product.slug}` },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
@@ -87,29 +95,17 @@ async function ProductContent({ params }: { params: PageProps<"/loja/[slug]">["p
           "Ele faz o serviço na sua conta, manda as provas e marca como entregue.",
         ];
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    description: product.description,
-    category: categories[product.category].label,
-    brand: { "@type": "Brand", name: siteConfig.name },
-    offers: product.variants.length === 0 ? undefined : product.variants.map((v) => ({
-      "@type": "Offer",
-      name: `${product.name} (${platforms[v.platform].label})`,
-      price: v.price.toFixed(2),
-      priceCurrency: "BRL",
-      availability: "https://schema.org/InStock",
-      url: `${siteConfig.url}/loja/${product.slug}`,
-    })),
-  };
+  // Migalhas pela página da categoria (ajuda o Google a ligar o produto a ela)
+  const landing = landingForCategory(product.category);
+  const crumbs = [
+    { name: "Início", path: "/" },
+    landing ? { name: landing.short, path: `/${landing.slug}` } : { name: "Loja", path: "/loja" },
+    { name: product.name, path: `/loja/${product.slug}` },
+  ];
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
-      />
+      <JsonLd data={graph(productLd(product), breadcrumbLd(crumbs))} />
 
       <section className="pb-20 pt-28 sm:pt-36">
         <div className="mx-auto max-w-6xl px-5">
@@ -120,7 +116,9 @@ async function ProductContent({ params }: { params: PageProps<"/loja/[slug]">["p
               </li>
               <li aria-hidden>/</li>
               <li>
-                <Link href="/loja" className="transition-colors hover:text-white">Loja</Link>
+                <Link href={crumbs[1].path} className="transition-colors hover:text-white">
+                  {crumbs[1].name}
+                </Link>
               </li>
               <li aria-hidden>/</li>
               <li aria-current="page" className="text-stone-300">{product.name}</li>
@@ -144,9 +142,16 @@ async function ProductContent({ params }: { params: PageProps<"/loja/[slug]">["p
             </div>
 
             <div className="animate-fade-up [animation-delay:120ms]">
-              <p className="text-[15px] font-medium text-stone-400">
-                {categories[product.category].label} · PS4 e PS5
-              </p>
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-[15px] font-medium text-stone-400">
+                  {categories[product.category].label} · PS4 e PS5
+                </p>
+                <ShareButton
+                  title={`${product.name} no GTA 5 Online`}
+                  text={`${product.name} no GTA 5 Online (PS4 e PS5), feito pelo Freitas direto na conta.`}
+                  path={`/loja/${product.slug}`}
+                />
+              </div>
               <h1 className="mt-3 font-display text-6xl font-extrabold uppercase leading-[0.9] sm:text-7xl">
                 {product.name}
               </h1>

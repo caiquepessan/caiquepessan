@@ -193,6 +193,38 @@ corrida. O nome usa Barlow Condensed itálico, com "FREITAS" grosso e "MODDER"
 mais leve, tudo convertido em contorno (não depende de fonte instalada).
 Cores: vermelho `#E8182C`, preto `#09090A` e papel `#F2EFE9`.
 
+## SEO (Google, Bing e assistentes de IA)
+
+- **Páginas por busca:** `/dinheiro-gta-5-online`, `/up-de-level-gta-5`,
+  `/unlock-all-gta-5` e `/conta-modada-gta-5`, com texto, preços atuais,
+  vantagens e dúvidas próprios (conteúdo em `src/data/landings.ts`). O rodapé, a
+  tabela de preços e as migalhas dos produtos apontam para elas.
+- **Títulos e descrições** com "GTA 5" e "GTA V", PS4 e PS5, com até 160
+  caracteres; os produtos mostram o preço na descrição. Cada página tem
+  endereço oficial (canonical) e imagem de compartilhamento.
+- **Dados estruturados** (`src/lib/seo.ts`): loja (`OnlineStore`, com logo,
+  WhatsApp e Instagram), site, produtos com preço por console, migalhas,
+  listas de produtos e perguntas frequentes.
+- **Sitemap** (`/sitemap.xml`) com a data real da última mudança de cada
+  produto e as imagens; **robots** liberado para tudo menos `/api/`. Painel e
+  tickets ficam fora do Google pela marcação `noindex`.
+- **IndexNow:** quando o Freitas salva, apaga, esconde ou mostra um produto, o
+  site avisa Bing, Yandex e outros na hora (`src/lib/indexnow.ts`; a chave
+  pública fica em `public/<chave>.txt`). O Bing também alimenta o ChatGPT e o
+  Copilot.
+- **`/llms.txt`:** resumo da loja e dos preços para assistentes de IA,
+  gerado do catálogo.
+- **Compartilhar:** botão nas páginas de produto (no celular abre o menu de
+  compartilhar; no computador copia o link).
+
+**Google Search Console (fazer uma vez):** em search.google.com/search-console,
+adicione a propriedade de **Domínio** `freitasmodder.com`. A verificação é por
+registro TXT no DNS (Cloudflare): escolha a verificação automática com o
+Cloudflare ou copie o código TXT e crie o registro. Depois, em Sitemaps, envie
+`https://freitasmodder.com/sitemap.xml`. No Bing Webmaster Tools dá para
+importar tudo direto do Search Console. Se preferir verificar por meta tag, crie
+`GOOGLE_SITE_VERIFICATION` (e `BING_SITE_VERIFICATION`) na Vercel.
+
 ## Interface
 
 Nada de controles com cara de navegador: no lugar de `<select>`, caixinha de
