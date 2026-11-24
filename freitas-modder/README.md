@@ -2,7 +2,7 @@
 
 Loja online de dinheiro, up de level, Unlock All com Corrida Modder e contas
 prontas de GTA V para PS4 e PS5: tema vermelho, carrinho e pedido pelo
-WhatsApp. Publicada na Vercel.
+WhatsApp. Publicada na Vercel em <https://freitasmodder.com>.
 
 ## Stack
 
@@ -107,7 +107,8 @@ Para ligar, o projeto na Vercel precisa destas variáveis de ambiente:
 | `ADMIN_DISCORD_IDS` | ID do Discord de quem pode usar o painel (vários: separe por vírgula) |
 
 No Discord Developer Portal, em OAuth2, o endereço de retorno (Redirect) é
-`https://freitas-modder.vercel.app/api/auth/callback/discord`.
+`https://freitasmodder.com/api/auth/callback/discord`. Se o domínio do site
+mudar, adicione o novo endereço lá também, senão o login para de funcionar.
 
 Quem entra sem estar liberado vê o próprio ID do Discord na tela, e é só
 colocar esse número em `ADMIN_DISCORD_IDS` e publicar de novo.
@@ -172,18 +173,29 @@ exemplo) usando um Route Handler do Next.js, sem mudar o visual.
 ## Publicando na Vercel
 
 O projeto `freitas-modder` já existe na Vercel e o site está em
-<https://freitas-modder.vercel.app>. Ele não está ligado a um repositório, então
+<https://freitasmodder.com>. Ele não está ligado a um repositório, então
 cada atualização é publicada manualmente. Para ligar a um repositório próprio:
 
 1. Na Vercel, clique em **Add New → Project** e importe o repositório.
 2. Em **Root Directory**, escolha `freitas-modder`.
 3. O framework (Next.js) é detectado sozinho. Clique em **Deploy**.
-4. Depois de ligar um domínio próprio, crie a variável de ambiente
-   `NEXT_PUBLIC_SITE_URL` (ex.: `https://freitasmodder.com.br`) e faça um novo
-   deploy, para o sitemap e as imagens de compartilhamento usarem o domínio certo.
-5. Opcional: ative **Analytics** no painel do projeto para ver as visitas.
+4. Opcional: ative **Analytics** no painel do projeto para ver as visitas.
 
-Sem a variável, o site usa automaticamente o domínio `.vercel.app` do projeto.
+### Domínio
+
+| O quê | Como está |
+| --- | --- |
+| Registro | `freitasmodder.com`, comprado na Hostinger, usando os nameservers do Cloudflare |
+| DNS (Cloudflare) | Dois registros A em `freitasmodder.com` (`216.198.79.1` e `64.29.17.1`) e um CNAME em `www` para `6fae131fe588211d.vercel-dns-017.com`, com a nuvem cinza (sem o proxy do Cloudflare) |
+| HTTPS | Certificado feito e renovado pela Vercel |
+| `www.freitasmodder.com` | Redireciona para `freitasmodder.com` (configurado na Vercel) |
+| `freitas-modder.vercel.app` | Redireciona para `freitasmodder.com` (regra em `next.config.ts`) |
+| Variável `NEXT_PUBLIC_SITE_URL` | `https://freitasmodder.com` (produção). Sitemap, imagens de compartilhamento e login usam esse endereço |
+
+Para trocar de domínio: adicione o novo no projeto da Vercel, aponte o DNS,
+mude `NEXT_PUBLIC_SITE_URL`, coloque o novo endereço de retorno no app do
+Discord e publique de novo. Sem a variável, o site usa o domínio de produção
+que a Vercel informar.
 
 ## Antes de publicar (checklist)
 

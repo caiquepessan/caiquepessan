@@ -7,6 +7,25 @@ const securityHeaders = [
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
 ];
 
+/**
+ * Domínio oficial (variável NEXT_PUBLIC_SITE_URL, ex.: https://freitasmodder.com).
+ * Quando é um domínio próprio, o endereço antigo da Vercel leva para ele: assim
+ * o Google vê um endereço só e o login com Discord acontece sempre no mesmo lugar.
+ */
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "");
+const OLD_VERCEL_HOST = "freitas-modder.vercel.app";
+const moveToSiteDomain =
+  siteUrl && !siteUrl.endsWith(".vercel.app")
+    ? [
+        {
+          source: "/:path*",
+          has: [{ type: "host" as const, value: OLD_VERCEL_HOST }],
+          destination: `${siteUrl}/:path*`,
+          permanent: true,
+        },
+      ]
+    : [];
+
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
@@ -34,9 +53,11 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
-  // A loja ficava em /contas antes de ter dinheiro, level e Unlock All.
   async redirects() {
     return [
+      // Primeiro o domínio, para quem vem do endereço antigo dar um pulo só.
+      ...moveToSiteDomain,
+      // A loja ficava em /contas antes de ter dinheiro, level e Unlock All.
       { source: "/contas", destination: "/loja", permanent: true },
       { source: "/contas/:slug", destination: "/loja/:slug", permanent: true },
     ];
