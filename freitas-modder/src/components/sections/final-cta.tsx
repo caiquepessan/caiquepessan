@@ -18,7 +18,8 @@ export function FinalCta() {
             </h2>
             <p className="mt-4 max-w-md text-lg leading-relaxed text-stone-600">
               Escolhe no site ou chama no WhatsApp que a gente te ajuda a decidir.
-              Atendimento {siteConfig.business.supportHours.toLowerCase()}.
+              {siteConfig.business.supportHours &&
+                ` Atendimento ${siteConfig.business.supportHours.toLowerCase()}.`}
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">

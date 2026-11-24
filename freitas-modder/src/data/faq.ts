@@ -47,8 +47,13 @@ export const faq: FaqItem[] = [
     answer:
       "Toda modificação vai contra as regras do jogo, então ninguém consegue garantir risco zero. O que a gente faz é usar métodos que já foram testados muitas vezes e cobrir qualquer problema com a garantia.",
   },
-  {
-    question: "Qual o horário de atendimento?",
-    answer: `${supportHours}. Pedido feito fora desse horário é entregue assim que o atendimento volta.`,
-  },
+  // Só aparece quando o horário estiver preenchido em src/config/site.ts
+  ...(supportHours
+    ? [
+        {
+          question: "Qual o horário de atendimento?",
+          answer: `${supportHours}. Pedido feito fora desse horário é entregue assim que o atendimento volta.`,
+        },
+      ]
+    : []),
 ];

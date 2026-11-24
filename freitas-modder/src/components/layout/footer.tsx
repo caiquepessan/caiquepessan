@@ -12,10 +12,11 @@ async function CurrentYear() {
 }
 
 const { contact } = siteConfig;
+const instagramHandle = contact.instagram.split("/").filter(Boolean).pop();
 
 const contactLinks = [
   { href: whatsappLink(defaultWhatsappMessage), label: `WhatsApp ${contact.whatsappDisplay}` },
-  { href: contact.instagram, label: "Instagram" },
+  { href: contact.instagram, label: `Instagram @${instagramHandle}` },
   { href: contact.discord, label: "Discord" },
   { href: contact.tiktok, label: "TikTok" },
   { href: contact.youtube, label: "YouTube" },
@@ -85,7 +86,9 @@ export function Footer() {
                   </a>
                 </li>
               ))}
-              <li className="text-[15px] text-stone-500">{siteConfig.business.supportHours}</li>
+              {siteConfig.business.supportHours && (
+                <li className="text-[15px] text-stone-500">{siteConfig.business.supportHours}</li>
+              )}
             </ul>
           </div>
         </div>

@@ -9,6 +9,8 @@ export const metadata: Metadata = {
 };
 
 const { warrantyDays, supportHours } = siteConfig.business;
+const { contact } = siteConfig;
+const instagramHandle = contact.instagram.split("/").filter(Boolean).pop();
 
 /**
  * ⚠️ Texto-base. Revise com o dono da loja (prazos, reembolso e regras)
@@ -33,7 +35,9 @@ const sections = [
     title: "Entrega",
     body: [
       "Nas contas prontas, você recebe o e-mail e a senha da conta PSN pelo WhatsApp. Nos serviços feitos na sua conta, o prazo é o que aparece na página de cada produto.",
-      `Atendimento: ${supportHours.toLowerCase()}. Pedido feito fora desse horário é entregue quando o atendimento volta.`,
+      ...(supportHours
+        ? [`Atendimento: ${supportHours.toLowerCase()}. Pedido feito fora desse horário é entregue quando o atendimento volta.`]
+        : []),
     ],
   },
   {
@@ -58,7 +62,15 @@ const sections = [
   },
   {
     title: "Contato",
-    body: [`WhatsApp ${siteConfig.contact.whatsappDisplay} · ${siteConfig.contact.email}`],
+    body: [
+      [
+        `WhatsApp ${contact.whatsappDisplay}`,
+        contact.instagram && `Instagram @${instagramHandle}`,
+        contact.email,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+    ],
   },
 ];
 

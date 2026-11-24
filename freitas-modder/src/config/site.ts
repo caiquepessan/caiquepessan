@@ -3,8 +3,8 @@
  *  CONFIGURAÇÃO DA LOJA: edite aqui os dados do Freitas Modder
  * ============================================================
  *  Contato, redes, garantia e horário que aparecem no site saem
- *  deste arquivo. Os valores abaixo são EXEMPLOS: troque pelos
- *  dados reais antes de divulgar o site.
+ *  deste arquivo. WhatsApp e Instagram são os reais. O que estiver
+ *  vazio ("") não aparece em lugar nenhum do site.
  */
 
 function resolveSiteUrl() {
@@ -34,11 +34,12 @@ export const siteConfig = {
 
   contact: {
     /** Número no formato internacional, só dígitos (55 + DDD + número). */
-    whatsappNumber: "5511999999999",
-    whatsappDisplay: "(11) 99999-9999",
-    email: "contato@freitasmodder.com.br",
+    whatsappNumber: "553190948425",
+    whatsappDisplay: "(31) 9094-8425",
+    /** E-mail de contato. Deixe "" para esconder. */
+    email: "" as string,
     /** Links das redes. Deixe "" para esconder. */
-    discord: "https://discord.gg/SEU-CONVITE",
+    discord: "" as string,
     instagram: "https://instagram.com/freitasmodder",
     tiktok: "",
     youtube: "",
@@ -46,7 +47,8 @@ export const siteConfig = {
 
   business: {
     warrantyDays: 30,
-    supportHours: "Todo dia, das 9h às 23h",
+    /** Horário de atendimento (ex.: "Todo dia, das 9h às 23h"). Deixe "" para esconder. */
+    supportHours: "" as string,
     /** Tempo médio de entrega, em minutos (hoje o site só diz "rápida"). */
     avgDeliveryMinutes: 10,
   },

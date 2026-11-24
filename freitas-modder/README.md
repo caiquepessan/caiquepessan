@@ -220,9 +220,10 @@ que a Vercel informar.
 
 Os dados abaixo são **exemplos** e precisam ser trocados pelos reais:
 
-- [ ] Número do WhatsApp, link do Discord, redes e e-mail (`src/config/site.ts`)
+- [x] WhatsApp e Instagram (`src/config/site.ts`). Discord, e-mail e horário
+      ficaram vazios e não aparecem; é só preencher no mesmo arquivo
 - [ ] Preços, números e descrições dos produtos (no painel, `/painel`)
-- [ ] Prazo de garantia, tempo de entrega e horário (`src/config/site.ts`)
+- [ ] Prazo de garantia e forma de pagamento (`src/config/site.ts` e textos)
 - [ ] Texto dos termos (`src/app/termos/page.tsx`)
 - [ ] Opcional: prints reais de entregas (`src/data/proofs.ts`)
 
