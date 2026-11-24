@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { vapidKeys } from "./src/lib/vapid";
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -37,8 +36,6 @@ const nextConfig: NextConfig = {
       process.env.DISCORD_CLIENT_ID && process.env.BETTER_AUTH_SECRET ? "1" : "",
     // Anexos dos tickets no armazenamento privado (se ele estiver ligado ao projeto)
     NEXT_PUBLIC_TICKETS_PRIVATE: process.env.TICKETS_BLOB_READ_WRITE_TOKEN ? "1" : "",
-    // Chave pública das notificações no celular (a privada fica só no servidor)
-    NEXT_PUBLIC_VAPID_PUBLIC_KEY: vapidKeys()?.publicKey ?? "",
   },
   images: {
     remotePatterns: [

@@ -1,5 +1,6 @@
 /**
- * Chaves das notificações no celular (Web Push, padrão VAPID).
+ * Chaves das notificações no celular (Web Push, padrão VAPID). A pública
+ * chega ao navegador por /api/push/chave.
  *
  * Se existirem NEXT_PUBLIC_VAPID_PUBLIC_KEY e VAPID_PRIVATE_KEY na Vercel,
  * usa essas. Se não, deriva um par fixo a partir do BETTER_AUTH_SECRET

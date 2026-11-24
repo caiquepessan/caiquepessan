@@ -5,8 +5,6 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { removePush, savePush, testPush } from "@/app/tickets/push-actions";
 import { cn } from "@/lib/utils";
 
-const PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "";
-
 type Support = "server" | "ok" | "iphone" | "unsupported";
 
 function readSupport(): Support {
@@ -18,7 +16,7 @@ function readSupport(): Support {
     (navigator as Navigator & { standalone?: boolean }).standalone === true;
   const ready = "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
   if (ios && !installed) return "iphone";
-  return ready && PUBLIC_KEY ? "ok" : "unsupported";
+  return ready ? "ok" : "unsupported";
 }
 
 const noop = () => () => {};
@@ -35,7 +33,8 @@ function keyBytes(base64url: string) {
  */
 export function PushToggle({ audience, className }: { audience: "cliente" | "admin"; className?: string }) {
   const support = useSyncExternalStore(noop, readSupport, () => "server" as Support);
-  const [status, setStatus] = useState<"loading" | "on" | "off" | "denied">("loading");
+  const [status, setStatus] = useState<"loading" | "on" | "off" | "denied" | "off-site">("loading");
+  const [publicKey, setPublicKey] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -43,6 +42,13 @@ export function PushToggle({ audience, className }: { audience: "cliente" | "adm
     if (support !== "ok") return;
     let alive = true;
     (async () => {
+      // A chave vem do servidor: sem ela, as notificações não estão ligadas no site
+      const { publicKey: key } = (await (await fetch("/api/push/chave")).json()) as { publicKey: string | null };
+      if (!key) {
+        if (alive) setStatus("off-site");
+        return;
+      }
+      if (alive) setPublicKey(key);
       if (Notification.permission === "denied") {
         if (alive) setStatus("denied");
         return;
@@ -71,7 +77,7 @@ export function PushToggle({ audience, className }: { audience: "cliente" | "adm
         (await registration.pushManager.getSubscription()) ??
         (await registration.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: keyBytes(PUBLIC_KEY),
+          applicationServerKey: keyBytes(publicKey),
         }));
       const json = subscription.toJSON();
       const result = await savePush({
@@ -107,7 +113,11 @@ export function PushToggle({ audience, className }: { audience: "cliente" | "adm
     }
   }
 
-  if (support === "server" || support === "unsupported" || (support === "ok" && status === "loading")) {
+  if (
+    support === "server" ||
+    support === "unsupported" ||
+    (support === "ok" && (status === "loading" || status === "off-site"))
+  ) {
     return null;
   }
 
