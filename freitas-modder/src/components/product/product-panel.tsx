@@ -86,7 +86,9 @@ export function ProductPanel({
           <div
             style={{
               transform:
-                "translate3d(calc((var(--px, 0.5) - 0.5) * -18px), calc((var(--py, 0.5) - 0.5) * -12px), 0)",
+                // 2D de propósito: translate3d deixaria cada card numa camada
+                // própria da placa de vídeo o tempo todo (pesa no celular).
+                "translate(calc((var(--px, 0.5) - 0.5) * -18px), calc((var(--py, 0.5) - 0.5) * -12px))",
             }}
             className={cn(
               "font-display font-extrabold italic leading-[0.85] tracking-[-0.01em] transition-transform duration-300 ease-out",

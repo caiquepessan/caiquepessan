@@ -5,6 +5,12 @@ import type { ReactNode } from "react";
 
 export const EASE = [0.22, 1, 0.36, 1] as const;
 
+/*
+ * As entradas usam "transform" inteiro (e não x/y/scale soltos): assim o
+ * Motion entrega a animação para a placa de vídeo, sem recalcular a página
+ * a cada quadro. No celular, durante a rolagem, isso faz diferença.
+ */
+
 /** Sobe e aparece quando entra na tela (uma vez). */
 export function Reveal({
   children,
@@ -18,8 +24,8 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, transform: "translateY(18px)" }}
+      whileInView={{ opacity: 1, transform: "translateY(0px)" }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.7, delay, ease: EASE }}
     >
@@ -29,8 +35,8 @@ export function Reveal({
 }
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 22 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: EASE } },
+  hidden: { opacity: 0, transform: "translateY(22px)" },
+  show: { opacity: 1, transform: "translateY(0px)", transition: { duration: 0.65, ease: EASE } },
 };
 
 /** Container que faz os <RevealItem> aparecerem em sequência. */
@@ -73,15 +79,11 @@ export function RevealItem({
 const deal: Variants = {
   hidden: (i: number) => ({
     opacity: 0,
-    y: 90,
-    rotate: (i % 4) * 3 - 5,
-    scale: 0.94,
+    transform: `translateY(90px) rotate(${(i % 4) * 3 - 5}deg) scale(0.94)`,
   }),
   show: {
     opacity: 1,
-    y: 0,
-    rotate: 0,
-    scale: 1,
+    transform: "translateY(0px) rotate(0deg) scale(1)",
     transition: { type: "spring", stiffness: 140, damping: 18, mass: 0.9 },
   },
 };

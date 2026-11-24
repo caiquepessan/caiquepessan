@@ -22,7 +22,11 @@ export async function Hero() {
     <section className="relative isolate overflow-hidden pb-24 pt-28 sm:pt-32 lg:pb-32 lg:pt-36">
       {/* Fundo: luz vermelha + avenida à noite */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute right-[-10%] top-0 size-[620px] rounded-full bg-brand-600/20 blur-[130px]" />
+        {/* Gradiente no lugar de um círculo com blur: mesma luz, sem filtro pesado */}
+        <div
+          className="absolute -top-[260px] size-[1140px] bg-[radial-gradient(closest-side,rgb(201_18_42/0.2)_30%,rgb(201_18_42/0.1)_54%,transparent)]"
+          style={{ right: "calc(-10% - 260px)" }}
+        />
         <div className="after-intro absolute inset-x-0 bottom-0 h-[70%] animate-fade-up [mask-image:linear-gradient(to_bottom,transparent,#000_45%)]" style={delay(300)}>
           <NightTraffic />
         </div>

@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { ButtonLink } from "@/components/ui/button";
 import { SplitWords } from "@/components/effects/split-words";
 import { siteConfig } from "@/config/site";
+import { useRichEffects } from "@/lib/device";
 
 const { business } = siteConfig;
 
@@ -28,11 +29,14 @@ function Step({
   progress,
   title,
   text,
+  rich,
 }: {
   index: number;
   progress: MotionValue<number>;
   title: string;
   text: string;
+  /** No celular os passos já aparecem acesos (sem acompanhar a rolagem). */
+  rich: boolean;
 }) {
   const start = index / steps.length;
   const fill = useTransform(progress, [start, start + 0.18], [0, 1]);
@@ -42,11 +46,11 @@ function Step({
     <li className="pt-8">
       <span className="relative block font-display text-8xl font-extrabold italic leading-none">
         <span className="text-transparent [-webkit-text-stroke:2px_rgba(255,255,255,0.45)]">{index + 1}</span>
-        <motion.span style={{ opacity: fill }} className="absolute inset-0 text-ink-950">
+        <motion.span style={rich ? { opacity: fill } : undefined} className="absolute inset-0 text-ink-950">
           {index + 1}
         </motion.span>
       </span>
-      <motion.div style={{ y: lift }}>
+      <motion.div style={rich ? { y: lift } : undefined}>
         <h3 className="mt-5 text-2xl font-semibold">{title}</h3>
         <p className="mt-2 max-w-xs text-[17px] leading-relaxed text-white/85">{text}</p>
       </motion.div>
@@ -75,10 +79,12 @@ function Seal() {
 }
 
 export function HowItWorks() {
+  const rich = useRichEffects();
   const sectionRef = useRef<HTMLElement>(null);
   const stepsRef = useRef<HTMLOListElement>(null);
 
-  // A faixa vermelha "abre" enquanto entra na tela.
+  // A faixa vermelha "abre" enquanto entra na tela (só no computador: no
+  // celular, recortar a seção a cada quadro de rolagem trava).
   const { scrollYProgress: enter } = useScroll({
     target: sectionRef,
     offset: ["start end", "start 0.2"],
@@ -100,7 +106,7 @@ export function HowItWorks() {
     <motion.section
       ref={sectionRef}
       id="como-funciona"
-      style={{ clipPath }}
+      style={rich ? { clipPath } : undefined}
       className="bg-brand-500 text-white"
     >
       <div className="mx-auto max-w-6xl px-5 py-24 sm:py-28">
@@ -112,12 +118,19 @@ export function HowItWorks() {
           <div aria-hidden className="absolute inset-x-0 top-0 h-0.5 bg-white/25" />
           <motion.div
             aria-hidden
-            style={{ scaleX: progress }}
+            style={rich ? { scaleX: progress } : undefined}
             className="absolute inset-x-0 top-0 h-0.5 origin-left bg-ink-950"
           />
           <ol ref={stepsRef} className="grid gap-10 md:grid-cols-3 md:gap-8">
             {steps.map((step, i) => (
-              <Step key={step.title} index={i} progress={progress} title={step.title} text={step.text} />
+              <Step
+                key={step.title}
+                index={i}
+                progress={progress}
+                title={step.title}
+                text={step.text}
+                rich={rich}
+              />
             ))}
           </ol>
         </div>

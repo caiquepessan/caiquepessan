@@ -26,8 +26,11 @@ export function BigWordmark() {
                 <motion.span
                   className="inline-block"
                   variants={{
-                    hidden: { y: "105%" },
-                    show: { y: "0%", transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+                    hidden: { transform: "translateY(105%)" },
+                    show: {
+                      transform: "translateY(0%)",
+                      transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+                    },
                   }}
                 >
                   {letter}

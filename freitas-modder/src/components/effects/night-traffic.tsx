@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { isLiteDevice } from "@/lib/device";
 import { cn } from "@/lib/utils";
 
 interface Trail {
@@ -23,17 +24,23 @@ const LANES = [
 /**
  * Rastros de luz de carros passando à noite (como foto de longa
  * exposição de uma avenida). Canvas leve, pausa fora da tela.
+ * No celular fica parado (desenha uma vez só): redesenhar o canvas a cada
+ * quadro obriga o navegador a atualizar a página inteira junto.
  */
 export function NightTraffic({ className }: { className?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = ref.current;
-    const ctx = canvas?.getContext("2d");
+    const lite = isLiteDevice();
+    // Parado, o canvas pode ficar na memória comum: assim ele é pintado como
+    // uma imagem, em vez de ganhar uma camada da placa de vídeo (que faria
+    // o texto e os cards por cima dele virarem camadas também).
+    const ctx = canvas?.getContext("2d", lite ? { willReadFrequently: true } : undefined);
     if (!canvas || !ctx) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const reduce = lite || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const dpr = Math.min(window.devicePixelRatio || 1, lite ? 1.5 : 2);
     let width = 0;
     let height = 0;
     let trails: Trail[] = [];

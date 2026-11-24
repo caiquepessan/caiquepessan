@@ -12,9 +12,10 @@ function Digit({ digit, delay }: { digit: number; delay: number }) {
       <motion.span
         className="flex flex-col"
         // Começa já mostrando o dígito certo (bom para o HTML do servidor)
-        // e dá uma volta completa até parar nele de novo.
-        initial={{ y: `-${digit * 5}%` }}
-        animate={{ y: `-${(10 + digit) * 5}%` }}
+        // e dá uma volta completa até parar nele de novo. "transform"
+        // inteiro para a placa de vídeo animar sozinha.
+        initial={{ transform: `translateY(-${digit * 5}%)` }}
+        animate={{ transform: `translateY(-${(10 + digit) * 5}%)` }}
         transition={{ duration: 1.8, delay, ease: [0.16, 1, 0.3, 1] }}
       >
         {ROWS.map((n, i) => (

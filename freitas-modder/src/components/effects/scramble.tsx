@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import { isLiteDevice } from "@/lib/device";
 import { cn } from "@/lib/utils";
 
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#%&";
@@ -46,7 +47,8 @@ export function Scramble({
   }, [text]);
 
   useEffect(() => {
-    if (!onMount) return;
+    // No celular o texto já aparece pronto: a página está carregando nessa hora.
+    if (!onMount || isLiteDevice()) return;
     const id = window.setTimeout(run, delay);
     return () => {
       window.clearTimeout(id);

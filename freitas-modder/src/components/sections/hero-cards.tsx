@@ -217,7 +217,7 @@ export function HeroCards({ product }: { product: Product }) {
             <motion.div
               aria-hidden
               style={{ scale: shadowScale, opacity: shadowOpacity }}
-              className="pointer-events-none absolute inset-x-[10%] -bottom-12 h-14 rounded-[50%] bg-black/75 blur-2xl"
+              className="pointer-events-none absolute inset-x-[2%] -bottom-16 h-24 bg-[radial-gradient(closest-side,rgba(0,0,0,0.75),rgba(0,0,0,0.35)_55%,transparent)]"
             />
 
             {/* Card de trás: a edição do outro console. Clicar troca. */}
@@ -227,19 +227,13 @@ export function HeroCards({ product }: { product: Product }) {
               onClick={() => setPlatform(otherOf(platform))}
               className="absolute inset-0 cursor-pointer transform-3d"
               variants={{
-                hidden: { x: 0, y: 0, z: 0, rotate: 0 },
+                hidden: { transform: "translate3d(0px, 0px, 0px) rotate(0deg)" },
                 show: {
-                  x: -14,
-                  y: -66,
-                  z: -60,
-                  rotate: 4,
+                  transform: "translate3d(-14px, -66px, -60px) rotate(4deg)",
                   transition: { delay: 0.55 + wait, duration: 1, ease },
                 },
                 hover: {
-                  x: -18,
-                  y: -86,
-                  z: -60,
-                  rotate: 6,
+                  transform: "translate3d(-18px, -86px, -60px) rotate(6deg)",
                   transition: { duration: 0.5, ease },
                 },
               }}
@@ -258,15 +252,13 @@ export function HeroCards({ product }: { product: Product }) {
             <motion.div
               className="relative transform-3d"
               variants={{
-                hidden: { rotate: 0, z: 0 },
+                hidden: { transform: "translateZ(0px) rotate(0deg)" },
                 show: {
-                  rotate: -2,
-                  z: 0,
+                  transform: "translateZ(0px) rotate(-2deg)",
                   transition: { delay: 0.55 + wait, duration: 1, ease },
                 },
                 hover: {
-                  rotate: -1,
-                  z: 24,
+                  transform: "translateZ(24px) rotate(-1deg)",
                   transition: { duration: 0.5, ease },
                 },
               }}
@@ -332,7 +324,7 @@ function Card({
           <div
             key={ez}
             aria-hidden
-            className="absolute inset-0 rounded-[28px]"
+            className="card-edge absolute inset-0 rounded-[28px]"
             style={{
               transform: `translateZ(${ez}px)`,
               background: mix(
@@ -407,7 +399,7 @@ function Face({
   return (
     <div
       inert={front && !active}
-      className={cn("transform-3d", side === "a" ? "relative" : "absolute inset-0")}
+      className={cn("card-face transform-3d", side === "a" ? "relative" : "absolute inset-0")}
       style={{
         transform: side === "a" ? `translateZ(${HALF}px)` : `rotateY(180deg) translateZ(${HALF}px)`,
       }}
@@ -423,13 +415,13 @@ function Face({
       {/* Conteúdo em camadas, cada uma numa altura */}
       <div className="relative p-6 transform-3d sm:p-7">
         <div className="flex items-center justify-between gap-3 transform-3d">
-          <span className="card-chip backface-hidden" style={depth(30)}>
+          <span className="card-chip card-depth backface-hidden" style={depth(30)}>
             <motion.span aria-hidden className="card-holo" style={{ x: holoX }} />
             <span className="relative">{label}</span>
           </span>
           <p
             className={cn(
-              "text-[13px] font-semibold uppercase tracking-[0.12em] backface-hidden",
+              "card-depth text-[13px] font-semibold uppercase tracking-[0.12em] backface-hidden",
               red ? "text-white/85" : "text-stone-300",
             )}
             style={depth(16)}
@@ -438,7 +430,7 @@ function Face({
           </p>
         </div>
 
-        <div className="mt-9 backface-hidden" style={depth(46)}>
+        <div className="card-depth mt-9 backface-hidden" style={depth(46)}>
           <p className={cn("text-[15px] font-medium", red ? "text-white/80" : "text-stone-400")}>
             Dinheiro na sua conta
           </p>
@@ -458,7 +450,7 @@ function Face({
 
         <dl
           className={cn(
-            "mt-7 grid grid-cols-3 gap-3 border-t pt-5 backface-hidden",
+            "card-depth mt-7 grid grid-cols-3 gap-3 border-t pt-5 backface-hidden",
             red ? "border-white/25" : "border-white/10",
           )}
           style={depth(22)}
@@ -474,7 +466,7 @@ function Face({
         </dl>
 
         <div className="mt-7 flex items-end justify-between gap-4 transform-3d">
-          <div className="backface-hidden" style={depth(30)}>
+          <div className="card-depth backface-hidden" style={depth(30)}>
             <p className={cn("text-[13px]", red ? "text-white/70" : "text-stone-500")}>no Pix</p>
             <p className="font-display text-4xl font-extrabold leading-none text-white tabular-nums">
               {variant ? formatBRL(variant.price) : "Consulte"}
@@ -487,7 +479,7 @@ function Face({
               data-cursor="link"
               style={depth(52)}
               className={cn(
-                "group/link inline-flex h-11 items-center gap-1.5 rounded-xl px-4 text-[15px] font-semibold text-white transition-colors backface-hidden",
+                "card-depth group/link inline-flex h-11 items-center gap-1.5 rounded-xl px-4 text-[15px] font-semibold text-white transition-colors backface-hidden",
                 red
                   ? "bg-ink-950 shadow-[0_10px_24px_-10px_rgba(0,0,0,0.8)] hover:bg-ink-800"
                   : "bg-brand-500 shadow-[0_10px_28px_-10px_rgba(232,24,44,0.9)] hover:bg-brand-600",

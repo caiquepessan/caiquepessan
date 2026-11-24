@@ -4,9 +4,10 @@ import { motion, type Variants } from "motion/react";
 import { cn } from "@/lib/utils";
 import { EASE } from "./reveal";
 
+// "transform" inteiro: a placa de vídeo anima sozinha (ver reveal.tsx)
 const word: Variants = {
-  hidden: { y: "110%" },
-  show: { y: "0%", transition: { duration: 0.85, ease: EASE } },
+  hidden: { transform: "translateY(110%)" },
+  show: { transform: "translateY(0%)", transition: { duration: 0.85, ease: EASE } },
 };
 
 /** Título que sobe palavra por palavra, saindo de uma máscara. */

@@ -160,6 +160,25 @@ sistema (nesse caso quase tudo fica parado):
 - Seção vermelha que se abre no scroll, com passos acendendo e selo girando
 - Marca gigante no rodapé e granulado de cinema em telas grandes
 
+**Celular e tablet (toque):** a página usa uma versão mais leve, decidida
+por CSS (`@media (hover: none), (pointer: coarse)`) e por
+`src/lib/device.ts`. O visual é o mesmo, mas fica de fora o que obriga o
+navegador a recalcular a página a cada quadro:
+
+- Cards do topo com cada face numa camada só (sem espessura e sem os brilhos
+  que andam). O giro ao trocar de console e o balanço continuam
+- Rastros de luz parados, sem rolagem suave (Lenis), sem desfoque atrás da
+  barra do topo e sem os efeitos que acompanham a rolagem (título, seção
+  vermelha, barra de progresso, card final)
+- As faixas correm com animação da placa de vídeo (no computador ainda
+  aceleram com a rolagem)
+
+Para conferir: com o Chrome simulando um celular e o processador 4x mais
+lento, a rolagem da home foi de cerca de 30 para 60 quadros por segundo, e
+as camadas da placa de vídeo caíram de 114 para 30. Ao mexer em efeitos,
+evite `translate3d` parado e `animation-fill-mode: both` em entradas: os
+dois deixam o elemento numa camada própria para sempre.
+
 ## Como funciona a compra
 
 1. O cliente adiciona produtos ao carrinho (fica salvo no navegador).

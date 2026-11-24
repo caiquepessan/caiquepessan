@@ -30,17 +30,27 @@
   /* Papel (faixa clara) */
   --color-paper: #f2efe9;
 
-  --animate-rise: rise 1s cubic-bezier(0.22, 1, 0.36, 1) both;
-  --animate-fade-up: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  /*
+   * "backwards" (e não "both"): a entrada segura o começo durante a espera,
+   * mas some quando termina. Com "both" o navegador mantinha cada elemento
+   * numa camada própria da placa de vídeo para sempre.
+   */
+  --animate-rise: rise 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  --animate-fade-up: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) backwards;
   --animate-float: float 7s ease-in-out infinite;
   --animate-spin-slow: spin 18s linear infinite;
 
+  /*
+   * As entradas terminam em "transform: none" (e não translate3d(0,0,0)):
+   * assim, depois que acabam, o elemento deixa de ocupar uma camada
+   * própria na placa de vídeo. No celular isso pesa muito.
+   */
   @keyframes rise {
     from {
       transform: translate3d(0, 108%, 0) skewY(4deg);
     }
     to {
-      transform: translate3d(0, 0, 0) skewY(0);
+      transform: none;
     }
   }
   @keyframes fade-up {
@@ -50,7 +60,7 @@
     }
     to {
       opacity: 1;
-      transform: translate3d(0, 0, 0);
+      transform: none;
     }
   }
   @keyframes float {
@@ -256,8 +266,8 @@ html[data-intro="on"] .intro {
   animation: grain 0.9s steps(5) infinite;
 }
 
-/* No celular o granulado fica de fora (economiza bateria e GPU) */
-@media (max-width: 639px) {
+/* No celular e no tablet o granulado fica de fora (economiza bateria e GPU) */
+@media (max-width: 639px), (hover: none), (pointer: coarse) {
   .grain {
     display: none;
   }
@@ -583,6 +593,34 @@ html[data-intro="on"] .intro {
   }
   to {
     translate: -19px 0;
+  }
+}
+
+/*
+ * Celular e tablet: o mesmo card, mais leve. No computador cada pedaço do
+ * card fica numa altura diferente (e vira uma camada na placa de vídeo);
+ * aqui cada face é uma camada só, sem a espessura e sem os brilhos que
+ * andam. O giro ao trocar de console e o balanço continuam.
+ */
+@media (hover: none), (pointer: coarse) {
+  .card-edge,
+  .card-gloss,
+  .card-glint,
+  .card-holo {
+    display: none;
+  }
+  .card-face,
+  .card-face .transform-3d {
+    transform-style: flat;
+  }
+  .card-face {
+    backface-visibility: hidden;
+  }
+  .card-face * {
+    backface-visibility: visible;
+  }
+  .card-face .card-depth {
+    transform: none !important;
   }
 }
 

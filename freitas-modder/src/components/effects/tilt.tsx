@@ -9,6 +9,7 @@ import {
   useTransform,
 } from "motion/react";
 import { useRef, type ReactNode } from "react";
+import { useRichEffects } from "@/lib/device";
 import { cn } from "@/lib/utils";
 
 const spring = { stiffness: 170, damping: 18, mass: 0.5 };
@@ -30,6 +31,7 @@ export function Tilt({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const rich = useRichEffects();
   const px = useMotionValue(0.5);
   const py = useMotionValue(0.5);
   const sx = useSpring(px, spring);
@@ -67,11 +69,11 @@ export function Tilt({
       ref={ref}
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
-      style={{ rotateX, rotateY, transformPerspective: 1000 }}
+      style={rich ? { rotateX, rotateY, transformPerspective: 1000 } : undefined}
       className={cn("relative", className)}
     >
       {children}
-      {glare && (
+      {glare && rich && (
         <motion.div
           aria-hidden
           className="pointer-events-none absolute inset-0 z-20 rounded-[inherit]"

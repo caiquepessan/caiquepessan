@@ -11,6 +11,7 @@ import { ConsoleSwitch } from "@/components/product/console-switch";
 import { ButtonAnchor } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import { siteConfig } from "@/config/site";
+import { useRichEffects } from "@/lib/device";
 import { getLenis, lockScroll, scrollToTarget, unlockScroll } from "@/lib/lenis";
 import { cn } from "@/lib/utils";
 import { defaultWhatsappMessage, whatsappLink } from "@/lib/whatsapp";
@@ -85,6 +86,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { scrollY, scrollYProgress } = useScroll();
+  const rich = useRichEffects();
 
   useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 12));
 
@@ -107,18 +109,23 @@ export function Navbar() {
         className={cn(
           "fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color] duration-300",
           scrolled || menuOpen
-            ? "border-white/[0.07] bg-ink-950/85 backdrop-blur-lg"
+            ? // Desfoque atrás da barra só no computador: no celular ele
+              // é refeito a cada quadro da rolagem e pesa.
+              "border-white/[0.07] bg-ink-950/95 pointer-fine:bg-ink-950/85 pointer-fine:backdrop-blur-lg"
             : "border-transparent bg-transparent",
         )}
       >
-        <motion.div
-          aria-hidden
-          style={{ scaleX: scrollYProgress }}
-          className={cn(
-            "absolute inset-x-0 -bottom-px h-0.5 origin-left bg-brand-500 transition-opacity duration-300",
-            scrolled ? "opacity-100" : "opacity-0",
-          )}
-        />
+        {/* Barra de progresso da página: só no computador */}
+        {rich && (
+          <motion.div
+            aria-hidden
+            style={{ scaleX: scrollYProgress }}
+            className={cn(
+              "absolute inset-x-0 -bottom-px h-0.5 origin-left bg-brand-500 transition-opacity duration-300",
+              scrolled ? "opacity-100" : "opacity-0",
+            )}
+          />
+        )}
         <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-6 px-5">
           <Link href="/" onClick={handleLogoClick} aria-label={`${siteConfig.name}, início`}>
             <Logo className="h-6 sm:h-7" />
