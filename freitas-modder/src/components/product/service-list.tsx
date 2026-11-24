@@ -61,7 +61,7 @@ export function ServiceList({ items }: { items: Product[] }) {
               <div className="col-span-2 flex items-center justify-between gap-4 md:col-span-1 md:justify-end">
                 {onRequest ? (
                   <span className="font-display text-2xl font-extrabold leading-none">
-                    Preço no WhatsApp
+                    Preço a combinar
                   </span>
                 ) : variant ? (
                   <AnimatedPrice

@@ -43,8 +43,9 @@ export async function Hero() {
             className="after-intro mt-7 max-w-md animate-fade-up text-pretty text-lg leading-relaxed text-stone-300"
             style={delay(420)}
           >
-            Milhões no banco, level alto e Unlock All com Corrida Modder, direto no
-            seu personagem. Você paga no Pix e combina tudo pelo WhatsApp.
+            Milhões no banco, level alto e Unlock All com Corrida Modder. O Freitas
+            entra na sua conta e faz tudo por você: o acesso é liberado por QR Code,
+            sem passar senha.
           </p>
           <div className="after-intro mt-8 flex animate-fade-up flex-wrap gap-3" style={delay(500)}>
             <Magnetic>

@@ -11,9 +11,12 @@ import {
   type Product,
 } from "@/data/products";
 import { listAllProducts, type AdminProduct } from "@/lib/admin-products";
+import { adminCounts } from "@/lib/tickets/repo";
+import { ticketsDb } from "@/lib/tickets/server";
 import { formatBRL } from "@/lib/utils";
 import { getViewer } from "@/lib/viewer";
 import { SignOutButton } from "./gate-cards";
+import { PanelTabs } from "./panel-tabs";
 import { RowActions } from "./row-actions";
 
 function priceLabel(product: Product) {
@@ -30,9 +33,15 @@ export async function Dashboard({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const [query, viewer, items] = await Promise.all([searchParams, getViewer(), listAllProducts()]);
+  const [query, viewer, items, counts] = await Promise.all([
+    searchParams,
+    getViewer(),
+    listAllProducts(),
+    adminCounts(ticketsDb()),
+  ]);
   return (
     <DashboardView
+      attention={counts.attention}
       items={items}
       viewerName={viewer?.name ?? ""}
       saved={typeof query.salvo === "string" ? query.salvo : null}
@@ -43,11 +52,14 @@ export async function Dashboard({
 
 /** A tela em si, sem buscar nada (facilita testar com dados de exemplo). */
 export function DashboardView({
+  attention = 0,
   items,
   viewerName,
   saved,
   removed,
 }: {
+  /** Tickets esperando resposta (aparece na aba). */
+  attention?: number;
   items: AdminProduct[];
   viewerName: string;
   saved: string | null;
@@ -57,6 +69,7 @@ export function DashboardView({
 
   return (
     <>
+      <PanelTabs active="produtos" attention={attention} />
       <header className="flex flex-col gap-6 border-b border-white/[0.08] pb-8 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.12em] text-brand-400">

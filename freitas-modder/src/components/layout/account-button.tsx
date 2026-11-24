@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { LayoutDashboard, LogOut } from "lucide-react";
+import { LayoutDashboard, LogOut, MessagesSquare } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -32,6 +32,42 @@ function Avatar({ name, image, className }: { name: string; image?: string | nul
   );
 }
 
+/** Quantos tickets têm novidade (cliente) e quantos esperam o Freitas (admin). */
+function useTicketNews(enabled: boolean) {
+  const [news, setNews] = useState({ customer: 0, admin: 0 });
+  useEffect(() => {
+    if (!enabled) return;
+    let alive = true;
+    const load = () =>
+      fetch("/api/tickets/novidades", { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => {
+          if (alive && data) setNews({ customer: Number(data.customer) || 0, admin: Number(data.admin) || 0 });
+        })
+        .catch(() => {});
+    void load();
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === "visible") void load();
+    }, 60000);
+    window.addEventListener("focus", load);
+    return () => {
+      alive = false;
+      window.clearInterval(timer);
+      window.removeEventListener("focus", load);
+    };
+  }, [enabled]);
+  return news;
+}
+
+function Count({ value }: { value: number }) {
+  if (value <= 0) return null;
+  return (
+    <span className="ml-auto grid h-5 min-w-5 place-items-center rounded-full bg-brand-500 px-1.5 text-[11px] font-bold tabular-nums text-white">
+      {value}
+    </span>
+  );
+}
+
 /** Botão "Entrar com Discord" ou foto de quem está logado (com menu). */
 export function AccountButton({ className }: { className?: string }) {
   if (!loginEnabled) return null;
@@ -42,6 +78,7 @@ function Account({ className }: { className?: string }) {
   const { data, isPending } = authClient.useSession();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const news = useTicketNews(Boolean(data));
 
   useEffect(() => {
     if (!open) return;
@@ -84,10 +121,13 @@ function Account({ className }: { className?: string }) {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        aria-label={`Sua conta: ${user.name}`}
-        className="block rounded-full ring-2 ring-white/10 transition-shadow hover:ring-white/30"
+        aria-label={`Sua conta: ${user.name}${news.customer + news.admin > 0 ? " (tickets com novidade)" : ""}`}
+        className="relative block rounded-full ring-2 ring-white/10 transition-shadow hover:ring-white/30"
       >
         <Avatar name={user.name} image={user.image} className="size-10 text-sm" />
+        {news.customer + news.admin > 0 && (
+          <span aria-hidden className="absolute -right-0.5 -top-0.5 size-3 rounded-full bg-brand-500 ring-2 ring-ink-950" />
+        )}
       </button>
       <AnimatePresence>
         {open && (
@@ -101,14 +141,24 @@ function Account({ className }: { className?: string }) {
             <p className="truncate px-3 pb-2 pt-1.5 text-sm text-stone-400">
               Logado como <span className="font-semibold text-white">{user.name}</span>
             </p>
+            <Link
+              href="/tickets"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors hover:bg-white/[0.06]"
+            >
+              <MessagesSquare className="size-4 text-brand-400" />
+              Seus tickets
+              <Count value={news.customer} />
+            </Link>
             {user.isAdmin && (
               <Link
-                href="/painel"
+                href="/painel/tickets"
                 onClick={() => setOpen(false)}
                 className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors hover:bg-white/[0.06]"
               >
                 <LayoutDashboard className="size-4 text-brand-400" />
                 Painel
+                <Count value={news.admin} />
               </Link>
             )}
             <button
@@ -134,6 +184,7 @@ export function MobileAccount({ onNavigate }: { onNavigate: () => void }) {
 
 function MobileAccountInner({ onNavigate }: { onNavigate: () => void }) {
   const { data, isPending } = authClient.useSession();
+  const news = useTicketNews(Boolean(data));
   if (isPending) return null;
   if (!data) {
     return (
@@ -149,16 +200,25 @@ function MobileAccountInner({ onNavigate }: { onNavigate: () => void }) {
   }
   const { user } = data;
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-white/[0.04] p-3 ring-1 ring-inset ring-white/10">
+    <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-white/[0.04] p-3 ring-1 ring-inset ring-white/10">
       <Avatar name={user.name} image={user.image} className="size-11 shrink-0 text-base" />
       <p className="min-w-0 flex-1 truncate font-semibold">{user.name}</p>
+      <Link
+        href="/tickets"
+        onClick={onNavigate}
+        className="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-white/10"
+      >
+        Tickets
+        {news.customer > 0 && <span className="size-2 rounded-full bg-brand-500" />}
+      </Link>
       {user.isAdmin && (
         <Link
-          href="/painel"
+          href="/painel/tickets"
           onClick={onNavigate}
-          className="rounded-xl bg-brand-500 px-3.5 py-2 text-sm font-semibold"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-brand-500 px-3.5 py-2 text-sm font-semibold"
         >
           Painel
+          {news.admin > 0 && <span className="tabular-nums">({news.admin})</span>}
         </Link>
       )}
       <button

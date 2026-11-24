@@ -11,16 +11,20 @@ const { business } = siteConfig;
 
 const steps = [
   {
-    title: "Escolha",
-    text: "Escolha o pacote e o seu console, PS4 ou PS5. O preço é o mesmo.",
+    title: "Peça pelo site",
+    text: "Escolha o pacote e o console. O pedido vira um ticket, onde você fala direto com o Freitas.",
   },
   {
     title: "Pague no Pix",
-    text: "Finalize pelo WhatsApp e pague no Pix ou no cartão.",
+    text: "O Freitas responde com o valor e a chave Pix. Você manda o comprovante no ticket.",
+  },
+  {
+    title: "Libere o acesso",
+    text: "Ele manda um QR Code. Você escaneia no app da PlayStation e libera a entrada dele na sua conta, sem passar senha.",
   },
   {
     title: "Receba e jogue",
-    text: "A gente faz no seu personagem e te avisa no WhatsApp quando estiver pronto.",
+    text: "Ele faz o serviço na sua conta, manda os prints como prova e marca como entregue.",
   },
 ];
 
@@ -113,6 +117,10 @@ export function HowItWorks() {
         <h2 className="font-display text-5xl font-extrabold uppercase leading-[0.9] sm:text-7xl">
           <SplitWords text="Como funciona" />
         </h2>
+        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/85">
+          Dinheiro, level e Unlock All são feitos pelo Freitas dentro da sua conta da PSN.
+          Por isso o atendimento é por ticket, passo a passo, com prova no final.
+        </p>
 
         <div className="relative mt-14">
           <div aria-hidden className="absolute inset-x-0 top-0 h-0.5 bg-white/25" />
@@ -121,7 +129,7 @@ export function HowItWorks() {
             style={rich ? { scaleX: progress } : undefined}
             className="absolute inset-x-0 top-0 h-0.5 origin-left bg-ink-950"
           />
-          <ol ref={stepsRef} className="grid gap-10 md:grid-cols-3 md:gap-8">
+          <ol ref={stepsRef} className="grid gap-10 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
             {steps.map((step, i) => (
               <Step
                 key={step.title}

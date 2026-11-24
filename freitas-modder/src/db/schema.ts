@@ -122,3 +122,97 @@ export const verification = pgTable(
   },
   (t) => [index("verification_identifier_idx").on(t.identifier)],
 );
+
+// ------------------------------------------------------------------ tickets
+
+/**
+ * Andamento de um ticket. A maior parte dos serviços é feita pelo Freitas
+ * dentro da conta do jogador: paga, libera o acesso (QR Code no app da
+ * PlayStation), ele faz, manda as provas e marca como entregue.
+ */
+export const ticketStatusEnum = pgEnum("ticket_status", [
+  "aberto",
+  "aguardando_pagamento",
+  "pago",
+  "aguardando_acesso",
+  "em_andamento",
+  "entregue",
+  "fechado",
+]);
+
+/** servico = feito na conta do jogador; conta = compra de conta pronta; outro = dúvida/pedido livre. */
+export const ticketKindEnum = pgEnum("ticket_kind", ["servico", "conta", "outro"]);
+
+export const ticketRoleEnum = pgEnum("ticket_message_role", ["cliente", "freitas", "sistema"]);
+
+export interface TicketItem {
+  slug: string;
+  name: string;
+  platform: "ps4" | "ps5";
+  qty: number;
+  /** Preço unitário em centavos na hora do pedido; null = preço a combinar. */
+  unitPrice: number | null;
+}
+
+export interface TicketAttachment {
+  /** Endereço no Vercel Blob. */
+  url: string;
+  pathname: string;
+  contentType: string;
+  size: number;
+  name: string;
+  /** No armazenamento privado: só abre pelo site, para quem pode ver o ticket. */
+  private: boolean;
+}
+
+export const tickets = pgTable(
+  "tickets",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** Número que as pessoas veem (#1001). */
+    number: integer("number").generatedAlwaysAsIdentity({ startWith: 1001 }).notNull().unique(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    kind: ticketKindEnum("kind").notNull().default("servico"),
+    subject: text("subject").notNull(),
+    /** "ps4" | "ps5" (vazio em assunto livre). */
+    platform: text("platform"),
+    /** ID da PSN informado pelo cliente (opcional). */
+    psnId: text("psn_id"),
+    items: jsonb("items").$type<TicketItem[]>().notNull().default([]),
+    /** Total em centavos dos itens com preço; null quando é a combinar. */
+    total: integer("total_cents"),
+    status: ticketStatusEnum("status").notNull().default("aberto"),
+    /** Tem resposta nova que o cliente ainda não viu. */
+    unreadByCustomer: boolean("unread_by_customer").notNull().default(false),
+    /** Tem mensagem nova do cliente que o Freitas ainda não viu. */
+    unreadByAdmin: boolean("unread_by_admin").notNull().default(true),
+    lastMessageAt: timestamp("last_message_at", { withTimezone: true }).notNull().defaultNow(),
+    closedAt: timestamp("closed_at", { withTimezone: true }),
+    ...timestamps,
+  },
+  (t) => [
+    index("tickets_user_idx").on(t.userId, t.lastMessageAt),
+    index("tickets_status_idx").on(t.status, t.lastMessageAt),
+  ],
+);
+
+export const ticketMessages = pgTable(
+  "ticket_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    ticketId: uuid("ticket_id")
+      .notNull()
+      .references(() => tickets.id, { onDelete: "cascade" }),
+    authorId: text("author_id").references(() => user.id, { onDelete: "set null" }),
+    role: ticketRoleEnum("role").notNull(),
+    body: text("body").notNull().default(""),
+    attachments: jsonb("attachments").$type<TicketAttachment[]>().notNull().default([]),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("ticket_messages_ticket_idx").on(t.ticketId, t.createdAt)],
+);
+
+export type TicketRow = typeof tickets.$inferSelect;
+export type TicketMessageRow = typeof ticketMessages.$inferSelect;

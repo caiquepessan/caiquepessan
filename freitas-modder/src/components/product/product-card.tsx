@@ -70,7 +70,7 @@ export function ProductCard({
               {onRequest ? "Preço" : `${platforms[platform].label} · no Pix`}
             </p>
             {onRequest ? (
-              <p className="pt-1 font-display text-2xl font-extrabold leading-none">No WhatsApp</p>
+              <p className="pt-1 font-display text-2xl font-extrabold leading-none">A combinar</p>
             ) : variant ? (
               <AnimatedPrice
                 value={variant.price}

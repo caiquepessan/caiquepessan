@@ -49,6 +49,8 @@ export const siteConfig = {
     warrantyDays: 30,
     /** Horário de atendimento (ex.: "Todo dia, das 9h às 23h"). Deixe "" para esconder. */
     supportHours: "" as string,
+    /** Chave Pix que aparece na resposta pronta do painel. Deixe "" para escrever na hora. */
+    pixKey: "" as string,
     /** Tempo médio de entrega, em minutos (hoje o site só diz "rápida"). */
     avgDeliveryMinutes: 10,
   },

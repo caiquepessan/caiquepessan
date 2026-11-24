@@ -117,6 +117,48 @@ colocar esse número em `ADMIN_DISCORD_IDS` e publicar de novo.
 deploy (`scripts/db-setup.ts`). O site guarda o catálogo em cache e atualiza na
 hora quando alguém salva no painel.
 
+## Tickets (pedidos)
+
+Dinheiro, level e Unlock All são feitos pelo Freitas dentro da conta do
+jogador, então a compra não é "pagou, recebeu": todo pedido vira um ticket.
+
+1. O cliente entra com o Discord e faz o pedido: pelo carrinho ("Fazer pedido"),
+   pela página do produto ("Pedir agora") ou por "Outro assunto". O preço sai do
+   catálogo na hora do pedido.
+2. O Freitas responde em `/painel/tickets`: valor e Pix, confirma o pagamento,
+   manda o QR Code (o cliente escaneia no app da PlayStation e libera o acesso
+   sem passar senha), faz o serviço, manda os prints de prova e marca como
+   entregue.
+3. O cliente acompanha em `/tickets` (no menu da conta), com a linha do tempo
+   Pedido → Pagamento → Acesso → Serviço → Entregue e a conversa.
+
+Andamentos: Novo, Esperando pagamento, Pago, Esperando acesso, Fazendo, Entregue
+e Fechado. Cada mudança fica registrada na conversa. No painel há respostas
+prontas (Valor e Pix, Pagamento ok, QR Code, Comecei, Entregue) que já escolhem
+o andamento; a chave Pix delas vem de `business.pixKey` em `src/config/site.ts`.
+
+As páginas atualizam sozinhas a cada poucos segundos, e o menu da conta mostra
+uma bolinha quando há resposta nova. Limites: 5 tickets em andamento por pessoa,
+6 imagens por mensagem, 10 MB por imagem. O banco fica em `tickets` e
+`ticket_messages` (teste: `npm run db:test`).
+
+**Anexos (comprovante, QR Code, provas):** ficam no armazenamento privado
+`freitas-modder-tickets` da Vercel e só abrem pelo site, para o dono do ticket
+e para o admin. Para ligar, conecte esse armazenamento ao projeto com o prefixo
+`TICKETS_BLOB` (cria `TICKETS_BLOB_READ_WRITE_TOKEN`) e publique de novo.
+Enquanto não estiver ligado, os anexos vão para o armazenamento das fotos, com
+endereço aleatório.
+
+**Avisos no Discord (opcionais):**
+
+| Variável | O que faz |
+| --- | --- |
+| `DISCORD_BOT_TOKEN` | O bot manda mensagem no privado: para o Freitas (IDs de `ADMIN_DISCORD_IDS`) quando o cliente abre ou responde, e para o cliente quando o Freitas responde ou muda o andamento. O bot precisa estar no mesmo servidor que a pessoa |
+| `DISCORD_TICKETS_WEBHOOK_URL` | Webhook de um canal (ex.: `#tickets`) que recebe um aviso a cada ticket aberto ou resposta de cliente |
+
+**Pagamento automático (depois):** dá para ligar o Mercado Pago para gerar o Pix
+de cada ticket e marcar como "Pago" sozinho, sem mudar o resto do fluxo.
+
 ## Logo
 
 Os arquivos da marca ficam em `public/brand/` (também publicados em

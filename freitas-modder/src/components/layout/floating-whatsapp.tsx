@@ -1,11 +1,16 @@
 "use client";
 
 import { motion } from "motion/react";
+import { usePathname } from "next/navigation";
 import { WhatsAppIcon } from "@/components/icons/brand-icons";
 import { defaultWhatsappMessage, whatsappLink } from "@/lib/whatsapp";
 
 /** Botão flutuante do WhatsApp (verde, como todo mundo reconhece). */
 export function FloatingWhatsApp() {
+  // Nos tickets e no painel o atendimento já está na tela (e o botão
+  // ficaria por cima da caixa de resposta no celular).
+  const pathname = usePathname();
+  if (pathname.startsWith("/tickets") || pathname.startsWith("/painel")) return null;
   return (
     <motion.a
       href={whatsappLink(defaultWhatsappMessage)}

@@ -111,7 +111,7 @@ export function Navbar() {
           scrolled || menuOpen
             ? // Desfoque atrás da barra só no computador: no celular ele
               // é refeito a cada quadro da rolagem e pesa.
-              "border-white/[0.07] bg-ink-950/95 pointer-fine:bg-ink-950/85 pointer-fine:backdrop-blur-lg"
+              "border-white/[0.07] bg-ink-950 pointer-fine:bg-ink-950/85 pointer-fine:backdrop-blur-lg"
             : "border-transparent bg-transparent",
         )}
       >

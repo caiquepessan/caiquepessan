@@ -1,14 +1,15 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { Minus, Plus, ShoppingBag, X } from "lucide-react";
+import { ArrowRight, Minus, Plus, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef } from "react";
 import { toast } from "sonner";
 import { WhatsAppIcon } from "@/components/icons/brand-icons";
 import { ProductSwatch } from "@/components/product/product-panel";
-import { ButtonAnchor } from "@/components/ui/button";
+import { ButtonAnchor, ButtonLink } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
+import { loginEnabled } from "@/lib/auth-client";
 import { lockScroll, unlockScroll } from "@/lib/lenis";
 import { formatBRL } from "@/lib/utils";
 import { buildOrderMessage, whatsappLink } from "@/lib/whatsapp";
@@ -178,20 +179,38 @@ export function CartDrawer() {
                     {formatBRL(total)}
                   </span>
                 </div>
-                <p className="mt-1 text-sm text-stone-500">
-                  Pagamento no Pix ou cartão, combinado no WhatsApp. Garantia de{" "}
-                  {siteConfig.business.warrantyDays} dias.
+                <p className="mt-1 text-sm leading-relaxed text-stone-500">
+                  O pedido vira um ticket: o Freitas combina o Pix e faz tudo direto na sua
+                  conta. Garantia de {siteConfig.business.warrantyDays} dias.
                 </p>
-                <ButtonAnchor
-                  href={checkoutHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  size="lg"
-                  className="mt-5 w-full"
-                >
-                  <WhatsAppIcon size={20} />
-                  Finalizar no WhatsApp
-                </ButtonAnchor>
+                {loginEnabled ? (
+                  <>
+                    <ButtonLink href="/tickets/novo?de=carrinho" onClick={close} size="lg" className="mt-5 w-full">
+                      Fazer pedido
+                      <ArrowRight className="size-5" />
+                    </ButtonLink>
+                    <a
+                      href={checkoutHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 flex items-center justify-center gap-2 text-sm font-semibold text-stone-400 hover:text-white"
+                    >
+                      <WhatsAppIcon size={16} />
+                      Prefiro finalizar no WhatsApp
+                    </a>
+                  </>
+                ) : (
+                  <ButtonAnchor
+                    href={checkoutHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    size="lg"
+                    className="mt-5 w-full"
+                  >
+                    <WhatsAppIcon size={20} />
+                    Finalizar no WhatsApp
+                  </ButtonAnchor>
+                )}
                 <div className="mt-3 flex items-center justify-between text-sm">
                   <button type="button" onClick={close} className="font-medium text-stone-400 hover:text-white">
                     Continuar comprando

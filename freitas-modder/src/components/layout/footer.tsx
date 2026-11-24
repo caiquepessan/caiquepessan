@@ -52,7 +52,7 @@ export function Footer() {
             <Logo className="h-8" />
             <p className="mt-4 text-[15px] leading-relaxed text-stone-400">
               Dinheiro, level e Unlock All no GTA V pra PS4 e PS5. Pagamento no
-              Pix, entrega pelo WhatsApp.
+              Pix, feito direto na sua conta.
             </p>
           </div>
 

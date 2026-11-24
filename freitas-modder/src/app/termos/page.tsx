@@ -27,14 +27,16 @@ const sections = [
   {
     title: "Pedido e pagamento",
     body: [
-      "Os pedidos são fechados pelo WhatsApp. O pagamento é no Pix ou no cartão de crédito, com os dados enviados na conversa.",
+      "Os pedidos são feitos por ticket aqui no site (ou pelo WhatsApp). O pagamento é no Pix ou no cartão de crédito, com os dados enviados no ticket.",
       "O pedido só vale depois que o pagamento é confirmado.",
     ],
   },
   {
     title: "Entrega",
     body: [
-      "Nas contas prontas, você recebe o e-mail e a senha da conta PSN pelo WhatsApp. Nos serviços feitos na sua conta, o prazo é o que aparece na página de cada produto.",
+      "Dinheiro, level, Unlock All e os outros serviços são feitos pelo Freitas dentro da sua conta da PSN. Para isso, depois do pagamento, você libera o acesso dele escaneando um QR Code com o app da PlayStation: você não passa e-mail nem senha.",
+      "Quando termina, ele manda prints como prova no ticket e marca o pedido como entregue. O prazo é o que aparece na página de cada produto.",
+      "Nas contas prontas, você recebe o e-mail e a senha da conta PSN pelo ticket.",
       ...(supportHours
         ? [`Atendimento: ${supportHours.toLowerCase()}. Pedido feito fora desse horário é entregue quando o atendimento volta.`]
         : []),
@@ -56,7 +58,8 @@ const sections = [
   {
     title: "Segurança",
     body: [
-      "Assim que receber uma conta, troque o e-mail e a senha. Nos serviços feitos na sua conta, troque a senha quando a gente avisar que terminou.",
+      "Nos serviços feitos na sua conta, a gente nunca pede sua senha: o acesso é liberado por QR Code. Enquanto o Freitas estiver na sua conta, evite entrar no jogo.",
+      "Assim que receber uma conta pronta, troque o e-mail e a senha.",
       "A gente nunca pede dados de cartão pelo chat. Os únicos canais oficiais são os que estão neste site.",
     ],
   },

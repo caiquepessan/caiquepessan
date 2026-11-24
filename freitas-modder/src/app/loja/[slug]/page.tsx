@@ -74,17 +74,17 @@ async function ProductContent({ params }: { params: PageProps<"/loja/[slug]">["p
     product.category === "conta"
       ? [
           priceOnRequest(product)
-            ? "Você chama no WhatsApp e combina o preço."
-            : "Você finaliza o pedido pelo carrinho ou direto no WhatsApp.",
-          "Paga no Pix (ou cartão) e a gente confirma.",
-          "O e-mail e a senha da conta chegam no seu WhatsApp.",
+            ? "Você pergunta o preço pelo ticket (ou no WhatsApp)."
+            : "Você faz o pedido pelo site e o ticket abre na hora.",
+          "Paga no Pix (ou cartão) e manda o comprovante no ticket.",
+          "O e-mail e a senha da conta chegam no ticket.",
           "Você troca o e-mail e a senha, e a conta é sua.",
         ]
       : [
-          "Você finaliza o pedido pelo carrinho ou direto no WhatsApp.",
-          "Paga no Pix (ou cartão) e a gente confirma.",
-          "A gente combina com você no WhatsApp como fazer no seu personagem.",
-          "Quando terminar, a gente avisa e você já pode jogar.",
+          "Você faz o pedido pelo site e o ticket abre na hora.",
+          "Paga no Pix (ou cartão) e manda o comprovante no ticket.",
+          "O Freitas manda um QR Code: você escaneia no app da PlayStation e libera o acesso à sua conta, sem passar senha.",
+          "Ele faz o serviço na sua conta, manda as provas e marca como entregue.",
         ];
 
   const jsonLd = {

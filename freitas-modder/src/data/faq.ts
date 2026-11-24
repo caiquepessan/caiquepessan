@@ -11,7 +11,22 @@ export const faq: FaqItem[] = [
   {
     question: "Como funciona a compra?",
     answer:
-      "Você escolhe o pacote no site, finaliza pelo WhatsApp e paga no Pix. A gente faz no seu personagem e avisa quando estiver pronto.",
+      "Você escolhe o pacote e faz o pedido pelo site. O pedido vira um ticket, onde o Freitas responde com o valor e a chave Pix. Depois do pagamento, ele entra na sua conta, faz o serviço e manda as provas.",
+  },
+  {
+    question: "O Freitas precisa entrar na minha conta?",
+    answer:
+      "Precisa. Dinheiro, level e Unlock All são feitos por ele dentro da sua conta da PSN. Por isso, depois do pagamento, você libera o acesso dele pelo ticket.",
+  },
+  {
+    question: "Preciso passar minha senha?",
+    answer:
+      "Não. O Freitas manda um QR Code no ticket e você escaneia com o app da PlayStation no celular. Isso libera a entrada dele na sua conta sem você passar e-mail nem senha.",
+  },
+  {
+    question: "Como acompanho meu pedido?",
+    answer:
+      "Pelo ticket, em \"Seus tickets\" no menu da sua conta. Lá aparece em que etapa está (pagamento, acesso, serviço, entregue), as mensagens do Freitas e as provas da entrega.",
   },
   {
     question: "Serve no PS4 e no PS5?",
@@ -21,7 +36,7 @@ export const faq: FaqItem[] = [
   {
     question: "Quanto tempo demora?",
     answer:
-      "A entrega é rápida. Antes de você pagar, a gente já te passa o prazo certinho no WhatsApp.",
+      "A entrega é rápida. O Freitas passa o prazo certinho no ticket antes de você pagar, e o serviço começa assim que você libera o acesso.",
   },
   {
     question: "O que é a Corrida Modder?",
@@ -31,12 +46,12 @@ export const faq: FaqItem[] = [
   {
     question: "Vocês vendem conta pronta?",
     answer:
-      "Às vezes. Quando tem, ela aparece na loja com level, dinheiro e o que mais vem nela. O preço você pergunta no WhatsApp, e depois de pagar recebe o e-mail e a senha pra trocar na hora.",
+      "Às vezes. Quando tem, ela aparece na loja com level, dinheiro e o que mais vem nela. O preço você pergunta pelo ticket, e depois de pagar recebe o e-mail e a senha da conta pra trocar na hora.",
   },
   {
     question: "Quais são as formas de pagamento?",
     answer:
-      "Pix ou cartão de crédito. Você fecha o pedido no WhatsApp e recebe os dados de pagamento na mesma conversa.",
+      "Pix ou cartão de crédito. Os dados de pagamento chegam no ticket, e você manda o comprovante lá mesmo.",
   },
   {
     question: "Tem garantia?",
